@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Fluent;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ namespace flop.net
    /// <summary>
    /// Логика взаимодействия для MainWindow.xaml
    /// </summary>
-   public partial class MainWindow : Window
+   public partial class MainWindow : RibbonWindow
    {
       public MainWindow()
       {
