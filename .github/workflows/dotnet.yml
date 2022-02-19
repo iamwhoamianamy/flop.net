@@ -25,5 +25,5 @@ jobs:
       uses: actions/upload-artifact@v2.3.1
       with:
         name: artifactsFlopNet
-        path: path/to/artifact/
+        path: flop.net
         retention-days: 14
