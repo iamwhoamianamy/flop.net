@@ -14,10 +14,9 @@ namespace flop.net.Model
       void Move(Vector delta);
       void Rotate(double angle);
       void Scale(Point scale);
-      PointCollection GetPoints(double minstep);
       PointCollection Points { get; }
       bool IsClosed { get; }
-      string TypeName { get; }
+      Point Center { get; }
       bool IsIn(Point position, double eps);
    }
 }
