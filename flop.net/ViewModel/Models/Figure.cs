@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Media;
 using flop.net.Model;
 
 namespace flop.net.ViewModel.Models
@@ -8,7 +9,7 @@ namespace flop.net.ViewModel.Models
     {
         public event PropertyChangedEventHandler PropertyChanged;
         
-        private PointsCollection Points { get; }
+        private PointCollection Points { get; }
         private IGeometric Geometric { get; }
         private DrawingParameters DrawingParameters { get; }
 
@@ -16,7 +17,7 @@ namespace flop.net.ViewModel.Models
         {
         }
         
-        public Figure(IGeometric geometric, DrawingParameters drawingParameters, PointsCollection points)
+        public Figure(IGeometric geometric, DrawingParameters drawingParameters, PointCollection points)
         {
             Points = points;
             Geometric = geometric;
