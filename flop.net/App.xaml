@@ -2,8 +2,18 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:flop.net"
-             StartupUri="MainWindow.xaml">
+             StartupUri="/View/MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Fluent Package-->
+                <ResourceDictionary Source="/Fluent;Component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Fluent;component/Themes/Themes/Dark.Teal.xaml" />
+
+                <!-- Local Dictionaries -->
+                <ResourceDictionary Source="/Styles/MenuButton.xaml" />
+                <ResourceDictionary Source="/Styles/EditorTextElements.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
