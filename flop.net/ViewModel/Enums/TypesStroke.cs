@@ -1,4 +1,4 @@
-﻿namespace flop.net.Enums
+﻿namespace flop.net.ViewModel.Enums
 {
     public enum TypesStroke
     {

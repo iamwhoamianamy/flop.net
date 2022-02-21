@@ -1,8 +1,8 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using flop.net.Model;
 
-namespace flop.net.Models
+namespace flop.net.ViewModel.Models
 {
     public class Figure : INotifyPropertyChanged
     {

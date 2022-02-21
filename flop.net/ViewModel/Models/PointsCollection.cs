@@ -1,4 +1,4 @@
-﻿namespace flop.net.Models
+﻿namespace flop.net.ViewModel.Models
 {
     public class PointsCollection
     {

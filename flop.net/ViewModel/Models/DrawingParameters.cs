@@ -1,7 +1,7 @@
 ﻿using System.Windows.Media;
-using flop.net.Enums;
+using flop.net.ViewModel.Enums;
 
-namespace flop.net.Models
+namespace flop.net.ViewModel.Models
 {
     public abstract class DrawingParameters
     {
