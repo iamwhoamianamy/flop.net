@@ -1,23 +1,31 @@
-﻿namespace flop.net.Models
+﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace flop.net.Models
 {
-    public class Figure
+    public class Figure : INotifyPropertyChanged
     {
-        private IGeometric _geometric;
-        private DrawingParameters _drawingParameters;
+        public event PropertyChangedEventHandler PropertyChanged;
+        
+        private PointsCollection Points { get; }
+        private IGeometric Geometric { get; }
+        private DrawingParameters DrawingParameters { get; }
 
         public Figure()
         {
         }
         
-        public Figure(IGeometric geometric, DrawingParameters drawingParameters)
+        public Figure(IGeometric geometric, DrawingParameters drawingParameters, PointsCollection points)
         {
-            _geometric = geometric;
-            _drawingParameters = drawingParameters;
+            Points = points;
+            Geometric = geometric;
+            DrawingParameters = drawingParameters;
         }
-        
-        public void Draw()
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            // TODO: функционал отрисовки от бригады GUI
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

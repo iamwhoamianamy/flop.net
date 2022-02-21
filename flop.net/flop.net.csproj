@@ -74,6 +74,7 @@
     <Compile Include="Models\DrawingParameters.cs" />
     <Compile Include="Models\Figure.cs" />
     <Compile Include="Models\IGeometric.cs" />
+    <Compile Include="Models\PointsCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
