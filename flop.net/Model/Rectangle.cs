@@ -8,8 +8,6 @@ namespace flop.net.Model
    {
       public PointCollection Points { get; }
       public Point Center => new ((Points[0].X + Points[2].X) / 2, (Points[0].Y + Points[2].Y) / 2);
-      public double EdgeA => Math.Sqrt((Points[1].X - Points[0].X) * (Points[1].X - Points[0].X) + (Points[1].Y - Points[0].Y) * (Points[1].Y - Points[0].Y));
-      public double EdgeB => Math.Sqrt((Points[2].X - Points[1].X) * (Points[2].X - Points[1].X) + (Points[2].Y - Points[1].Y) * (Points[2].Y - Points[1].Y));
 
       public Rectangle(Point pointA, Point pointB)
       {  
