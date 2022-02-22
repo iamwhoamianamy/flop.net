@@ -8,7 +8,7 @@ namespace flop.net.Model
    {
       public PointCollection Points { get; }
       public Point Center => new ((Points[0].X + Points[2].X) / 2, (Points[0].Y + Points[2].Y) / 2);
-
+      public Rectangle() { Points = new PointCollection(); }
       public Rectangle(Point pointA, Point pointB)
       {  
          // Точки хранятся начиная с точки А по порядку следования
