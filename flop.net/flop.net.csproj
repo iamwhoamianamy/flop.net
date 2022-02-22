@@ -75,6 +75,10 @@
     </ApplicationDefinition>
     <Compile Include="Model\IGeometric.cs" />
     <Compile Include="Model\Rectangle.cs" />
+    <Compile Include="ViewModel\Enums\TypesFill.cs" />
+    <Compile Include="ViewModel\Enums\TypesStroke.cs" />
+    <Compile Include="ViewModel\Models\DrawingParameters.cs" />
+    <Compile Include="ViewModel\Models\Figure.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModel\MainWindowVM.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
