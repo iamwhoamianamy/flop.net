@@ -44,19 +44,28 @@ namespace flop.net.Model
 
       public void Rotate(double angle)
       {
-         throw new NotImplementedException();
+         var shift = Center;
+         var degToRad = angle * Math.PI / 180;
+         for (var i = 0; i < Points.Count; i++)
+         {
+            var point = Point.Subtract(Points[i], (Vector)shift);
+            var oldX = point.X;
+            var oldY = point.Y;
+            point.X = oldX * Math.Cos(degToRad) - oldY * Math.Sin(degToRad);
+            point.Y = oldX * Math.Sin(degToRad) + oldY * Math.Cos(degToRad);
+            Points[i] = Point.Add(point, (Vector)shift);
+         }
       }
 
       public void Scale(Point scale)
       {
-         var n = Points.Count;
-         var saved_Center = Center;
-         for (var i = 0; i < n; i++)
+         var shift = Center;
+         for (var i = 0; i < Points.Count; i++)
          {
-            var point = Point.Subtract(Points[i], (Vector)saved_Center);
+            var point = Point.Subtract(Points[i], (Vector)shift);
             point.X *= scale.X;
             point.Y *= scale.Y;
-            point = Point.Add(point, (Vector)saved_Center);
+            point = Point.Add(point, (Vector)shift);
             Points[i] = point;
          }
       }
