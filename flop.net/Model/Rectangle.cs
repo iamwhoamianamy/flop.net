@@ -7,9 +7,7 @@ namespace flop.net.Model
    public class Rectangle : IGeometric
    {
       public PointCollection Points { get; }
-      public Point Center { get; }
-      public double Height { get; }
-      public double Width { get; }
+      public Point Center => new ((Points[0].X + Points[2].X) / 2, (Points[0].Y + Points[2].Y) / 2);
 
       public Rectangle(Point pointA, Point pointB)
       {  
@@ -21,10 +19,6 @@ namespace flop.net.Model
             pointB,
             new Point(pointA.X, pointB.Y)
          };
-
-         Center = new Point((pointA.X + pointB.X) / 2, (pointA.Y + pointB.Y) / 2);
-         Height = Math.Abs(pointA.Y - pointB.Y);
-         Width = Math.Abs(pointA.X - pointB.X);
       }
 
       public bool IsClosed => true;
@@ -48,12 +42,30 @@ namespace flop.net.Model
 
       public void Rotate(double angle)
       {
-         throw new NotImplementedException();
+         var shift = Center;
+         var degToRad = angle * Math.PI / 180;
+         for (var i = 0; i < Points.Count; i++)
+         {
+            var point = Point.Subtract(Points[i], (Vector)shift);
+            var oldX = point.X;
+            var oldY = point.Y;
+            point.X = oldX * Math.Cos(degToRad) - oldY * Math.Sin(degToRad);
+            point.Y = oldX * Math.Sin(degToRad) + oldY * Math.Cos(degToRad);
+            Points[i] = Point.Add(point, (Vector)shift);
+         }
       }
 
       public void Scale(Point scale)
       {
-         throw new NotImplementedException();
+         var shift = Center;
+         for (var i = 0; i < Points.Count; i++)
+         {
+            var point = Point.Subtract(Points[i], (Vector)shift);
+            point.X *= scale.X;
+            point.Y *= scale.Y;
+            point = Point.Add(point, (Vector)shift);
+            Points[i] = point;
+         }
       }
    }
 }
