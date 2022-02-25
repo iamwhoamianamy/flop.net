@@ -11,7 +11,8 @@ namespace flop.net.ViewModel
 
         public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
         {
-            _execute = execute ?? throw new ArgumentNullException("execute"); _canExecute = canExecute;
+            _execute = execute ?? throw new ArgumentNullException("execute"); 
+            _canExecute = canExecute;
         }
 
         [DebuggerStepThrough]
@@ -24,6 +25,9 @@ namespace flop.net.ViewModel
             add => CommandManager.RequerySuggested += value;
             remove => CommandManager.RequerySuggested -= value;
         }
-        public void Execute(object parameter) { _execute(parameter); }
+        public void Execute(object parameter) 
+        {
+            _execute(parameter);
+        }
     }
 }
