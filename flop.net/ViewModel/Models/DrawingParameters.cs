@@ -13,6 +13,5 @@ namespace flop.net.ViewModel.Models
         public List<double> StrokeDashArray { get; set; }
         public double Opacity { get; set; }
         public int ZIndex { get; set; }
-
     }
 }
