@@ -23,6 +23,12 @@ namespace flop.net.View
         {
             this.canvas = canvas;
         }
+
+        public void CleanCanvas()
+        {
+            canvas.Children.Clear();
+        }
+
         public void DrawPolygon(PointCollection points)
         {
             Polygon polygon = new Polygon();

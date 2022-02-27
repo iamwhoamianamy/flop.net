@@ -1,45 +1,119 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using flop.net.Annotations;
 using flop.net.Model;
 using flop.net.View;
+using System.Windows.Input;
+using flop.net.ViewModel.Models;
+using System.Diagnostics;
 
 namespace flop.net.ViewModel;
 
+public class UserCommands
+{
+    private Action<object> execute;
+    private Action<object> unexecute;
+    public UserCommands(Action<object> execute, Action<object> unexecute)
+    {
+        this.execute = execute;
+        this.unexecute = unexecute;
+    }
+
+    public RelayCommand Execute
+    {
+       get => new RelayCommand(execute);
+    }
+
+    public RelayCommand UnExecute
+    {
+        get => new RelayCommand(unexecute);
+    }
+}
+
 public class MainWindowVM : INotifyPropertyChanged
-{ 
-    public ObservableCollection<Rectangle> Rectangles { get; set; }
-    private RelayCommand drawRectangle;
+{
+    public ObservableCollection<Figure> Figures { get; set; }
+    public Stack<UserCommands> undoStack;
+    public Stack<UserCommands> redoStack;
+
+
     public RelayCommand DrawRectangle
     {
         get
         {
-            return drawRectangle ?? (
-                drawRectangle = new RelayCommand(obj =>
-                {
-                    Point a = new Point(200, 200);
-                    Point b = new Point(600, 400);
-
-                    Rectangle rectangle = new Rectangle(a, b);
-
-                    Rectangles.Insert(0, rectangle);
-                }));
+            return new RelayCommand( _ =>
+            {
+                redoStack.Clear();
+                Random r = new Random();
+                int lwidth = r.Next(0, 500);
+                int lheight = r.Next(0, 500);
+                Point a = new Point(lwidth, lheight);
+                Point b = new Point(lwidth + 20, lheight + 20);
+                Rectangle rectangle = new Rectangle(a, b);
+                Figure figure = new Figure(rectangle, null, null);
+                Figures.Add(figure);
+                undoStack.Push(new UserCommands( _ => { figure.CreateFigure(); }, _ => { figure.DeleteFigure(); }));
+            });
         }
     }
 
+    private void undoFunc()
+    {
+        if (undoStack.Count > 0)
+        {
+            var undoCommand = undoStack.Pop();
+            redoStack.Push(undoCommand);
+            undoCommand.UnExecute.Execute(null);
+            Figures.Move(0, 0); // simulation of a collection change 
+        }
+    }
+
+    private void redoFunc()
+    {
+        if (redoStack.Count > 0)
+        {
+            var redoCommand = redoStack.Pop();
+            undoStack.Push(redoCommand);
+            redoCommand.Execute.Execute(null);
+            Figures.Move(0, 0); // simulation of a collection change 
+        }
+    }
+
+    public RelayCommand Undo
+    {
+        get
+        {
+            return new RelayCommand( _ => undoFunc());
+        }
+        set
+        {
+            OnPropertyChanged();
+        }
+    }
+
+    public RelayCommand Redo
+    {
+        get
+        {
+            return new RelayCommand( _ => redoFunc());
+        }
+        set
+        {
+            OnPropertyChanged();
+        }
+    }
+
+
     public MainWindowVM()
     {
-        Rectangles = new ObservableCollection<Rectangle>();
+        Figures = new ObservableCollection<Figure>();
+        redoStack = new Stack<UserCommands>();
+        undoStack = new Stack<UserCommands>();
 
-        Point a = new Point(0, 0);
-        Point b = new Point(100, 100);
-
-        Rectangle rectangle = new Rectangle(a, b);
-
-        Rectangles.Insert(0, rectangle);
     }
     public event PropertyChangedEventHandler PropertyChanged;
 

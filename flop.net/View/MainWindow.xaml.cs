@@ -40,7 +40,10 @@ namespace flop.net
         private Graphic graphic;
         public Graphic Graphic
         {
-            get { return graphic; }
+            get 
+            {
+                return graphic; 
+            }
             set
             {
                 graphic = value;
@@ -54,9 +57,14 @@ namespace flop.net
             MainWindowVM = new MainWindowVM();
 
             DataContext = MainWindowVM;
-
+            MainWindowVM.Figures.CollectionChanged += Figures_CollectionChanged;
             Graphic = new Graphic(MainCanvas);
 
+            DrawAll();
+        }
+
+        private void Figures_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
             DrawAll();
         }
 
@@ -69,9 +77,10 @@ namespace flop.net
         }
         public void DrawAll()
         {
-            foreach (var x in MainWindowVM.Rectangles)
+            Graphic.CleanCanvas();
+            foreach (var x in MainWindowVM.Figures)
             {
-                Graphic.DrawPolygon(x.Points);
+                Graphic.DrawPolygon(x.Geometric.Points);
             }
         }
         private void MainCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

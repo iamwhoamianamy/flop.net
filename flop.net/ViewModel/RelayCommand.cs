@@ -6,19 +6,19 @@ namespace flop.net.ViewModel
 {
     public class RelayCommand : ICommand
     {
-        readonly Action<object> _execute;
-        readonly Predicate<object> _canExecute;
+        protected Action<object> execute;
+        protected Predicate<object> canExecute;
 
         public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
         {
-            _execute = execute ?? throw new ArgumentNullException("execute"); 
-            _canExecute = canExecute;
+            this.execute = execute ?? throw new ArgumentNullException("execute"); 
+            this.canExecute = canExecute;
         }
 
         [DebuggerStepThrough]
         public bool CanExecute(object parameter)
         {
-            return _canExecute?.Invoke(parameter) ?? true;
+            return canExecute?.Invoke(parameter) ?? true;
         }
         public event EventHandler CanExecuteChanged
         {
@@ -27,7 +27,7 @@ namespace flop.net.ViewModel
         }
         public void Execute(object parameter) 
         {
-            _execute(parameter);
+            execute(parameter);
         }
     }
 }
