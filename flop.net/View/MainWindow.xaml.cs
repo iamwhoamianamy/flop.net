@@ -80,7 +80,7 @@ namespace flop.net
             Graphic.CleanCanvas();
             foreach (var x in MainWindowVM.Figures)
             {
-                Graphic.DrawPolygon(x.Geometric.Points);
+                Graphic.DrawPolygon(x.Geometric.Points, x.DrawingParameters);
             }
         }
     }

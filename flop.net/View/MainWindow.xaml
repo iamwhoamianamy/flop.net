@@ -46,12 +46,25 @@
                 <r:QuickAccessMenuItem Header="Вернуть"
                                        IsChecked="True"
                                        Target="{Binding ElementName=redoButton}"/>
-                <r:QuickAccessMenuItem Header="Копировать" r:KeyTip.Keys="C" ToolTip="Alt + C" />
-                <r:QuickAccessMenuItem Header="Вставить" r:KeyTip.Keys="V" ToolTip="Alt + V" />
-                <r:QuickAccessMenuItem Header="Text" KeyTip="T"/>
+                <r:QuickAccessMenuItem Header="Копировать" r:KeyTip="C" ToolTip="Alt + C" />
+                <r:QuickAccessMenuItem Header="Вставить" r:KeyTip="V" ToolTip="Alt + V" />
             </r:Ribbon.QuickAccessItems>
 
             <r:RibbonTabItem Header="Главная">
+                <r:RibbonGroupBox Header="Правка">
+                    <r:Button x:Name="undoButton" 
+                              Header="Отменить" 
+                              Command="{Binding Undo}"
+                              Icon="/Images/undo.png"
+                              r:KeyTip="Z"
+                              ToolTip="Alt + Z"/>
+                    <r:Button x:Name="redoButton"
+                              Header="Redo" 
+                              Command="{Binding Redo}" 
+                              Icon="/Images/redo.png"
+                              r:KeyTip="Y"
+                              ToolTip="Alt + Y"/>
+                </r:RibbonGroupBox>
                 <r:RibbonGroupBox Header="Рисование">
                     <r:ToggleButton Header="Линия" Style="{StaticResource RibbonMenuButton}" />
                     <r:ToggleButton Header="Ломанная линия" Style="{StaticResource RibbonMenuButton}" />
@@ -75,19 +88,8 @@
                 </r:RibbonGroupBox>
 
                 <r:RibbonGroupBox Header="Режим трансформации">
-                    <r:ToggleButton Header="Добавление вершины" />
-                    <r:Button x:Name="undoButton" 
-                              Header="Отменить" 
-                              Command="{Binding Undo}"
-                              Icon="/Images/undo.png"
-                              r:KeyTip.Keys="Z"
-                              ToolTip="Alt + Z"/>
-                    <r:Button x:Name="redoButton"
-                              Header="Redo" 
-                              Command="{Binding Redo}" 
-                              Icon="/Images/redo.png"
-                              r:KeyTip.Keys="Y"
-                              ToolTip="Alt + Y"/>
+                    <r:ToggleButton Header="Добавление вершины" />        
+                    <r:ToggleButton Header="Удаление вершины" />        
                 </r:RibbonGroupBox>
             </r:RibbonTabItem>
         </r:Ribbon>
