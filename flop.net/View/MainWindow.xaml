@@ -22,7 +22,11 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <r:Ribbon Grid.Row="0" Grid.ColumnSpan="2">
+        <r:Ribbon Grid.Row="0" Grid.ColumnSpan="2" AutomaticStateManagement="False">
+            <r:Ribbon.KeyTipKeys>
+                <Key>Ctrl</Key>
+            </r:Ribbon.KeyTipKeys>
+            
             <r:Ribbon.Menu>
                 <r:Backstage>
                     <r:BackstageTabControl>
@@ -36,10 +40,15 @@
             </r:Ribbon.Menu>
 
             <r:Ribbon.QuickAccessItems>
-                <r:QuickAccessMenuItem Header="Отменить" Command="{Binding Undo}" />
-                <r:QuickAccessMenuItem Header="Вернуть" Command="{Binding Redo}"/>
-                <r:QuickAccessMenuItem Header="Копировать" />
-                <r:QuickAccessMenuItem Header="Вставить" />
+                <r:QuickAccessMenuItem Header="Отменить"
+                                       IsChecked="True"
+                                       Target="{Binding ElementName=undoButton}"/>
+                <r:QuickAccessMenuItem Header="Вернуть"
+                                       IsChecked="True"
+                                       Target="{Binding ElementName=redoButton}"/>
+                <r:QuickAccessMenuItem Header="Копировать" r:KeyTip.Keys="C" ToolTip="Alt + C" />
+                <r:QuickAccessMenuItem Header="Вставить" r:KeyTip.Keys="V" ToolTip="Alt + V" />
+                <r:QuickAccessMenuItem Header="Text" KeyTip="T"/>
             </r:Ribbon.QuickAccessItems>
 
             <r:RibbonTabItem Header="Главная">
@@ -67,8 +76,18 @@
 
                 <r:RibbonGroupBox Header="Режим трансформации">
                     <r:ToggleButton Header="Добавление вершины" />
-                    <r:ToggleButton Header="Undo" Command="{Binding Undo}" />
-                    <r:ToggleButton Header="Redo" Command="{Binding Redo}" />
+                    <r:Button x:Name="undoButton" 
+                              Header="Отменить" 
+                              Command="{Binding Undo}"
+                              Icon="/Images/undo.png"
+                              r:KeyTip.Keys="Z"
+                              ToolTip="Alt + Z"/>
+                    <r:Button x:Name="redoButton"
+                              Header="Redo" 
+                              Command="{Binding Redo}" 
+                              Icon="/Images/redo.png"
+                              r:KeyTip.Keys="Y"
+                              ToolTip="Alt + Y"/>
                 </r:RibbonGroupBox>
             </r:RibbonTabItem>
         </r:Ribbon>

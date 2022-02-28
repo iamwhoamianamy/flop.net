@@ -5,5 +5,5 @@
         <Setter Property="FontSize" Value="13" />
         <Setter Property="Header" Value="{Binding Header, RelativeSource={RelativeSource TemplatedParent}}" />
         <Setter Property="Icon" Value="/Images/icon.ico" />
-    </Style>    
+    </Style>
 </ResourceDictionary>
