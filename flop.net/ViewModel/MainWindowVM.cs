@@ -91,7 +91,7 @@ public class MainWindowVM : INotifyPropertyChanged
                 Point a = new Point(lwidth, lheight);
                 Point b = new Point(lwidth + 20, lheight + 20);
                 Polygon rectangle = PolygonBuilder.CreateRectangle(a, b);
-                Figure figure = new Figure(rectangle, null, null);
+                Figure figure = new Figure(rectangle, null, null); 
                 Figures.Add(figure);
                 undoStack.Push(new UserCommands( _ => { figure.CreateFigure(); }, _ => { figure.DeleteFigure(); }));
             });
