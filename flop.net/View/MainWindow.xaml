@@ -42,10 +42,10 @@
 
             <r:RibbonTabItem Header="Главная">
                 <r:RibbonGroupBox Header="Рисование">
-                    <r:Button Header="Линия" Command="{Binding DrawLine}" Style="{StaticResource RibbonMenuButton}" />
+                    <r:Button Header="Линия" Style="{StaticResource RibbonMenuButton}" />
                     <r:Button Header="Ломанная линия" Style="{StaticResource RibbonMenuButton}" />
                     <r:Button Header="Эллипс" Style="{StaticResource RibbonMenuButton}" />
-                    <r:Button Header="Прямоугольник" Command="{Binding AddCommand}" Style="{StaticResource RibbonMenuButton}" />
+                    <r:Button Header="Прямоугольник" Command="{Binding DrawRectangle}" Style="{StaticResource RibbonMenuButton}" />
                 </r:RibbonGroupBox>
 
                 <r:RibbonGroupBox Header="Масштабирование">
@@ -71,7 +71,8 @@
             </r:RibbonTabItem>
         </r:Ribbon>
 
-        <Canvas x:Name="MainCanvas" Grid.Row="1" Grid.Column="0" Background="White" >
+        <Canvas x:Name="MainCanvas" Grid.Row="1" Grid.Column="0" Background="White"
+                MouseLeftButtonDown="MainCanvas_MouseLeftButtonDown">
             <!--Место для вашей рекламы-->           
 
         </Canvas>
