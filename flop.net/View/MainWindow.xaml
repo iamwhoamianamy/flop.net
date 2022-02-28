@@ -49,7 +49,7 @@
                 </r:RibbonGroupBox>
 
                 <r:RibbonGroupBox Header="Масштабирование">
-                    <r:Button Header="Приблизить" Style="{StaticResource RibbonMenuButton}" />
+                    <r:Button Header="Приблизить"  Style="{StaticResource RibbonMenuButton}" />
                     <r:Button Header="Отдалить" Style="{StaticResource RibbonMenuButton}" />
                     <r:Button Header="Сбросить" Style="{StaticResource RibbonMenuButton}" />
                 </r:RibbonGroupBox>
@@ -57,16 +57,16 @@
 
             <r:RibbonTabItem Header="Фигура">
                 <r:RibbonGroupBox Header="Объектный режим">
-                    <r:Button Header="Перемещение" Style="{StaticResource RibbonMenuButton}" />
-                    <r:Button Header="Масштабирование" Style="{StaticResource RibbonMenuButton}" />
-                    <r:Button Header="Поворот" Style="{StaticResource RibbonMenuButton}" />
-                    <r:Button Header="Удаление" Style="{StaticResource RibbonMenuButton}" />
+                    <r:Button Header="Перемещение" Command="{Binding DoMove}" Style="{StaticResource RibbonMenuButton}" />
+                    <r:Button Header="Масштабирование" Command="{Binding DoScale}" Style="{StaticResource RibbonMenuButton}" />
+                    <r:Button Header="Поворот" Command="{Binding DoRotate}" Style="{StaticResource RibbonMenuButton}" />
+                    <r:Button Header="Удаление" Command="{Binding DeleteFigure}" Style="{StaticResource RibbonMenuButton}" />
                 </r:RibbonGroupBox>
 
                 <r:RibbonGroupBox Header="Режим трансформации">
                     <r:Button Header="Добавление вершины" />
-                    <r:Button Header="Удаление вершины" />
-                    <r:Button Header="Выделение вершины" />
+                    <r:Button Header="Undo" Command="{Binding Undo}" />
+                    <r:Button Header="Redo" Command="{Binding Redo}" />
                 </r:RibbonGroupBox>
             </r:RibbonTabItem>
         </r:Ribbon>
