@@ -10,6 +10,7 @@ using flop.net.View;
 using System.Windows.Input;
 using flop.net.ViewModel.Models;
 using System.Diagnostics;
+using System.Windows.Media;
 
 namespace flop.net.ViewModel;
 
@@ -89,8 +90,8 @@ public class MainWindowVM : INotifyPropertyChanged
                 int lheight = r.Next(0, 500);
                 Point a = new Point(lwidth, lheight);
                 Point b = new Point(lwidth + 20, lheight + 20);
-                Rectangle rectangle = new Rectangle(a, b);
-                Figure figure = new Figure(rectangle, null, null);
+                Polygon rectangle = PolygonBuilder.CreateRectangle(a, b);
+                Figure figure = new Figure(rectangle, null, null); 
                 Figures.Add(figure);
                 undoStack.Push(new UserCommands( _ => { figure.CreateFigure(); }, _ => { figure.DeleteFigure(); }));
             });

@@ -33,7 +33,7 @@ namespace flop.net.ViewModel.Models
         }
         static Figure()
         {
-            EmptyGeometric = new Rectangle(new System.Windows.Point(-1, -1), new System.Windows.Point(-1, -1));
+            EmptyGeometric = new Polygon(new PointCollection(){ new Point(-1, -1), new Point(-1, -1) }, true);
         }
         public Figure(IGeometric geometric, DrawingParameters drawingParameters, PointCollection points)
         {
