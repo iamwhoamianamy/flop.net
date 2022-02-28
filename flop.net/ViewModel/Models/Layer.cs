@@ -25,7 +25,7 @@ namespace flop.net.ViewModel.Models
         // TODO: Добавить св-ва необходимые бригаде GUI
         public Stack<UserCommands> UndoStack { get; set; }
         public Stack<UserCommands> RedoStack { get; set; }
-        private void UndoFunc()
+        public void UndoFunc()
         {
             if (UndoStack.Count > 0)
             {
@@ -37,7 +37,7 @@ namespace flop.net.ViewModel.Models
             }
         }
 
-        private void RedoFunc()
+        public void RedoFunc()
         {
             if (RedoStack.Count > 0)
             {
@@ -47,18 +47,6 @@ namespace flop.net.ViewModel.Models
                 if (Figures.Count != 0)
                     Figures.Move(0, 0); // simulation of a collection change 
             }
-        }
-
-        public RelayCommand Undo
-        {
-            get => new RelayCommand(_ => UndoFunc());
-            set => OnPropertyChanged();
-        }
-
-        public RelayCommand Redo
-        {
-            get => new RelayCommand(_ => RedoFunc());
-            set => OnPropertyChanged();
         }
 
         public void GetFigure()

@@ -44,6 +44,17 @@ public class MainWindowVM : INotifyPropertyChanged
     public Layer ActiveLayer { get; set; }
     public int NumActiveLayer { get; set; }
     public ObservableCollection<Layer> Layers { get; set; }
+    public RelayCommand Undo
+    {
+        get => new RelayCommand(_ => ActiveLayer.UndoFunc());
+        set => OnPropertyChanged();
+    }
+
+    public RelayCommand Redo
+    {
+        get => new RelayCommand(_ => ActiveLayer.RedoFunc());
+        set => OnPropertyChanged();
+    }
 
     public RelayCommand DrawRectangle
     {
@@ -148,6 +159,7 @@ public class MainWindowVM : INotifyPropertyChanged
 
     public MainWindowVM()
     {
+        ActiveLayer = new Layer();
         ActiveLayer.Figures = new ObservableCollection<Figure>();
         ActiveLayer.RedoStack = new Stack<UserCommands>();
         ActiveLayer.UndoStack = new Stack<UserCommands>();
