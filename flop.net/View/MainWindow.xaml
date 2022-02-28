@@ -71,11 +71,13 @@
             </r:RibbonTabItem>
         </r:Ribbon>
 
-        <Canvas x:Name="MainCanvas" Grid.Row="1" Grid.Column="0" Background="White"
-                MouseLeftButtonDown="MainCanvas_MouseLeftButtonDown">
-            <!--Место для вашей рекламы-->           
+        <Canvas x:Name="MainCanvas" Grid.Row="1" Grid.Column="0" 
+                Background="White"
+                ClipToBounds="True">
+            <!--Место для вашей рекламы-->
 
         </Canvas>
+
 
         <StackPanel Grid.Column="1" Grid.Row="1" Background="DarkGray">
             <Border>

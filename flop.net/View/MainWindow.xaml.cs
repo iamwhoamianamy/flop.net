@@ -83,9 +83,5 @@ namespace flop.net
                 Graphic.DrawPolygon(x.Geometric.Points);
             }
         }
-        private void MainCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            DrawAll();
-        }
     }
 }
