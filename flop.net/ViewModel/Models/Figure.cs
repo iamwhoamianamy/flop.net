@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using flop.net.Model;
+using System.Windows;
 using System.Diagnostics;
 namespace flop.net.ViewModel.Models
 {
@@ -9,6 +10,8 @@ namespace flop.net.ViewModel.Models
     {
         public event PropertyChangedEventHandler PropertyChanged;
         
+        public enum FigureAction { MOVE, ROTATE, SCALE };
+
         public PointCollection Points { get; set; }
         private IGeometric geometric;
         public IGeometric Geometric 
@@ -58,9 +61,26 @@ namespace flop.net.ViewModel.Models
             Geometric = EmptyGeometric;
         }
 
-        public void ModifyFigure()
+        public void ModifyFigure(FigureAction action, object parameter)
         {
-
+            if (action == FigureAction.MOVE)
+            {
+                Vector vector = (Vector)parameter;
+                if (vector != null)
+                    Geometric.Move(vector);
+            }
+            if (action == FigureAction.ROTATE)
+            {
+                double angle;
+                double.TryParse(parameter.ToString(), out angle);
+                Geometric.Rotate(angle);
+            }
+            if (action == FigureAction.SCALE)
+            {
+                Point p = (Point)parameter;
+                if (p != null)
+                    Geometric.Scale(p);
+            }
         }
     }
 }
