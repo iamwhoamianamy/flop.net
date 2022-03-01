@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ControlzEx.Theming;
+using flop.net.Properties;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +15,12 @@ namespace flop.net
    /// </summary>
    public partial class App : Application
    {
-   }
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            // now set the Green color scheme and dark base color
+            ThemeManager.Current.ChangeTheme(Application.Current, (string)Settings.Default["Theme"]);
+
+            base.OnStartup(e);
+        }
+    }
 }

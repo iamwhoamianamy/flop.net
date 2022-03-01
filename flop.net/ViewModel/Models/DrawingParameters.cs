@@ -9,7 +9,7 @@ namespace flop.net.ViewModel.Models
         public Brush Fill { get; set; }
         public Brush Stroke { get; set; }
         public int StrokeThickness { get; set; }
-        public PenLineCap PenLineCap { get; set; }
+        public PenLineCap StrokeDashCap { get; set; }
         public List<double> StrokeDashArray { get; set; }
         public double Opacity { get; set; }
         public int ZIndex { get; set; }

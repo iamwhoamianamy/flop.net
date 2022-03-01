@@ -80,12 +80,8 @@ namespace flop.net
             Graphic.CleanCanvas();
             foreach (var x in MainWindowVM.ActiveLayer.Figures)
             {
-                Graphic.DrawPolygon(x.Geometric.Points);
+                Graphic.DrawPolygon(x.Geometric.Points, x.DrawingParameters);
             }
-        }
-        private void MainCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            DrawAll();
         }
     }
 }
