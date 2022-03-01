@@ -65,106 +65,106 @@ public class MainWindowVM : INotifyPropertyChanged
         }
     }
 
-    public RelayCommand Undo
-    {
-        get => new RelayCommand( _ => undoFunc());
-        set => OnPropertyChanged();
-    }
+    //public RelayCommand Undo
+    //{
+    //    get => new RelayCommand( _ => undoFunc());
+    //    set => OnPropertyChanged();
+    //}
 
-    public RelayCommand Redo
-    {
-        get => new RelayCommand( _ => redoFunc());
-        set => OnPropertyChanged();
-    }
+    //public RelayCommand Redo
+    //{
+    //    get => new RelayCommand( _ => redoFunc());
+    //    set => OnPropertyChanged();
+    //}
 
 
-    public RelayCommand DrawRectangle
-    {
-        get
-        {
-            return new RelayCommand( _ =>
-            {
-                redoStack.Clear();
-                Random r = new Random();
-                int lwidth = r.Next(0, 500);
-                int lheight = r.Next(0, 500);
-                Point a = new Point(lwidth, lheight);
-                Point b = new Point(lwidth + 20, lheight + 20);
-                Polygon rectangle = PolygonBuilder.CreateRectangle(a, b);
-                Figure figure = new Figure(rectangle, null, null); 
-                Figures.Add(figure);
-                undoStack.Push(new UserCommands( _ => { figure.CreateFigure(); }, _ => { figure.DeleteFigure(); }));
-            });
-        }
-    }
+    //public RelayCommand DrawRectangle
+    //{
+    //    get
+    //    {
+    //        return new RelayCommand( _ =>
+    //        {
+    //            redoStack.Clear();
+    //            Random r = new Random();
+    //            int lwidth = r.Next(0, 500);
+    //            int lheight = r.Next(0, 500);
+    //            Point a = new Point(lwidth, lheight);
+    //            Point b = new Point(lwidth + 20, lheight + 20);
+    //            Polygon rectangle = PolygonBuilder.CreateRectangle(a, b);
+    //            Figure figure = new Figure(rectangle, null, null); 
+    //            Figures.Add(figure);
+    //            undoStack.Push(new UserCommands( _ => { figure.CreateFigure(); }, _ => { figure.DeleteFigure(); }));
+    //        });
+    //    }
+    //}
 
-    public RelayCommand DoRotate
-    {
-        get
-        {
-            return new RelayCommand( _ =>
-            {
-                redoStack.Clear();
-                Figure figure = Figures[Figures.Count - 1];
-                figure.ModifyFigure(Figure.FigureAction.ROTATE, 30);
-                Figures[Figures.Count - 1] = figure;
-                undoStack.Push(new UserCommands( _ => { figure.ModifyFigure(Figure.FigureAction.ROTATE, 30); }, 
-                                                 _ => { figure.ModifyFigure(Figure.FigureAction.ROTATE, -30); }));
-            });
-        }
-    }
+    //public RelayCommand DoRotate
+    //{
+    //    get
+    //    {
+    //        return new RelayCommand( _ =>
+    //        {
+    //            redoStack.Clear();
+    //            Figure figure = Figures[Figures.Count - 1];
+    //            figure.ModifyFigure(Figure.FigureAction.ROTATE, 30);
+    //            Figures[Figures.Count - 1] = figure;
+    //            undoStack.Push(new UserCommands( _ => { figure.ModifyFigure(Figure.FigureAction.ROTATE, 30); }, 
+    //                                             _ => { figure.ModifyFigure(Figure.FigureAction.ROTATE, -30); }));
+    //        });
+    //    }
+    //}
 
-    public RelayCommand DoScale
-    {
-        get
-        {
-            return new RelayCommand( _ =>
-            {
-                redoStack.Clear();
-                Figure figure = Figures[Figures.Count - 1];
-                figure.ModifyFigure(Figure.FigureAction.SCALE, new Point(2,2));
-                Figures[Figures.Count - 1] = figure;
-                undoStack.Push(new UserCommands( _ => { figure.ModifyFigure(Figure.FigureAction.SCALE, new Point(2, 2)); },
-                                                 _ => { figure.ModifyFigure(Figure.FigureAction.SCALE, new Point(0.5, 0.5)); }));
-            });
-        }
-    }
+    //public RelayCommand DoScale
+    //{
+    //    get
+    //    {
+    //        return new RelayCommand( _ =>
+    //        {
+    //            redoStack.Clear();
+    //            Figure figure = Figures[Figures.Count - 1];
+    //            figure.ModifyFigure(Figure.FigureAction.SCALE, new Point(2,2));
+    //            Figures[Figures.Count - 1] = figure;
+    //            undoStack.Push(new UserCommands( _ => { figure.ModifyFigure(Figure.FigureAction.SCALE, new Point(2, 2)); },
+    //                                             _ => { figure.ModifyFigure(Figure.FigureAction.SCALE, new Point(0.5, 0.5)); }));
+    //        });
+    //    }
+    //}
 
-    public RelayCommand DoMove
-    {
-        get
-        {
-            return new RelayCommand( _ =>
-            {
-                redoStack.Clear();
-                Figure figure = Figures[Figures.Count - 1];
-                Random r = new Random();
-                double x =  r.Next(-10, 11);
-                double y = r.Next(-10, 11);
-                Vector v = new Vector(x, y);
-                figure.ModifyFigure(Figure.FigureAction.MOVE, v);
-                Figures[Figures.Count - 1] = figure;
-                undoStack.Push(new UserCommands( _ => { figure.ModifyFigure(Figure.FigureAction.MOVE, v); },
-                                                 _ => { figure.ModifyFigure(Figure.FigureAction.MOVE, -v); }));
+    //public RelayCommand DoMove
+    //{
+    //    get
+    //    {
+    //        return new RelayCommand( _ =>
+    //        {
+    //            redoStack.Clear();
+    //            Figure figure = Figures[Figures.Count - 1];
+    //            Random r = new Random();
+    //            double x =  r.Next(-10, 11);
+    //            double y = r.Next(-10, 11);
+    //            Vector v = new Vector(x, y);
+    //            figure.ModifyFigure(Figure.FigureAction.MOVE, v);
+    //            Figures[Figures.Count - 1] = figure;
+    //            undoStack.Push(new UserCommands( _ => { figure.ModifyFigure(Figure.FigureAction.MOVE, v); },
+    //                                             _ => { figure.ModifyFigure(Figure.FigureAction.MOVE, -v); }));
 
-            });
-        }
-    }
+    //        });
+    //    }
+    //}
 
-     public RelayCommand DeleteFigure
-    {
-        get
-        {
-            return new RelayCommand( _ =>
-            {
-                redoStack.Clear();
-                Figure figure = Figures[Figures.Count - 1];
-                figure.DeleteFigure();
-                Figures[Figures.Count - 1] = figure;
-                undoStack.Push(new UserCommands( _ => { figure.DeleteFigure(); }, _ => { figure.CreateFigure(); }));
-            });
-        }
-    }
+    // public RelayCommand DeleteFigure
+    //{
+    //    get
+    //    {
+    //        return new RelayCommand( _ =>
+    //        {
+    //            redoStack.Clear();
+    //            Figure figure = Figures[Figures.Count - 1];
+    //            figure.DeleteFigure();
+    //            Figures[Figures.Count - 1] = figure;
+    //            undoStack.Push(new UserCommands( _ => { figure.DeleteFigure(); }, _ => { figure.CreateFigure(); }));
+    //        });
+    //    }
+    //}
 
     public MainWindowVM()
     {

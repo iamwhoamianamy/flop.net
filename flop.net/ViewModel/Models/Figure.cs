@@ -17,8 +17,6 @@ namespace flop.net.ViewModel.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         
-        private static IGeometric emptyGeometric = new Polygon(new PointCollection {new(-1, -1), new(-1, -1)}, true);
-        private IGeometric saveGeometric;
         private IGeometric geometric;
         public IGeometric Geometric 
         {
@@ -30,23 +28,21 @@ namespace flop.net.ViewModel.Models
             }
         }
 
-        public DrawingParameters DrawingParameters { get; set; }
+        private DrawingParameters drawingParameters;
+        public DrawingParameters DrawingParameters
+        {
+            get => drawingParameters;
+            set
+            {
+                drawingParameters = value;
+                OnPropertyChanged();
+            }
+        }
 
         public Figure(IGeometric geometric, DrawingParameters drawingParameters, PointCollection points)
         {
             Geometric = geometric;
             DrawingParameters = drawingParameters;
-        }
-
-        public void CreateFigure()
-        {
-            Geometric = saveGeometric;
-        }
-
-        public void DeleteFigure()
-        {
-            saveGeometric = Geometric;
-            Geometric = emptyGeometric;
         }
 
         public void ModifyFigure(FigureAction action, object parameter)
