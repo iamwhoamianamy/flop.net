@@ -23,32 +23,6 @@ namespace flop.net.ViewModel.Models
             } 
         }
         // TODO: Добавить св-ва необходимые бригаде GUI
-        public Stack<UserCommands> UndoStack { get; set; }
-        public Stack<UserCommands> RedoStack { get; set; }
-        public void UndoFunc()
-        {
-            if (UndoStack.Count > 0)
-            {
-                var undoCommand = UndoStack.Pop();
-                RedoStack.Push(undoCommand);
-                undoCommand.UnExecute.Execute(null);
-                if (Figures.Count != 0)
-                    Figures.Move(0, 0); // simulation of a collection change 
-            }
-        }
-
-        public void RedoFunc()
-        {
-            if (RedoStack.Count > 0)
-            {
-                var redoCommand = RedoStack.Pop();
-                UndoStack.Push(redoCommand);
-                redoCommand.Execute.Execute(null);
-                if (Figures.Count != 0)
-                    Figures.Move(0, 0); // simulation of a collection change 
-            }
-        }
-
         public void GetFigure()
         {
             // TODO: Обговорить с биргадой IO, в каком формате необходимо передавать фигуру

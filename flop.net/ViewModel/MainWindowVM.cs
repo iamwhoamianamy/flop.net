@@ -39,22 +39,61 @@ public class UserCommands
 public class MainWindowVM : INotifyPropertyChanged
 {
     // public ObservableCollection<Figure> Figures { get; set; }
-    // public Stack<UserCommands> UndoStack;
-    // public Stack<UserCommands> RedoStack;
+    public Stack<UserCommands> UndoStack { get; set; }
+    public Stack<UserCommands> RedoStack { get; set; }
     public Layer ActiveLayer { get; set; }
-    public int NumActiveLayer { get; set; }
     public ObservableCollection<Layer> Layers { get; set; }
     public RelayCommand Undo
     {
-        get => new RelayCommand(_ => ActiveLayer.UndoFunc());
+        get => new RelayCommand(_ => UndoFunc());
         set => OnPropertyChanged();
     }
 
     public RelayCommand Redo
     {
-        get => new RelayCommand(_ => ActiveLayer.RedoFunc());
+        get => new RelayCommand(_ => RedoFunc());
         set => OnPropertyChanged();
     }
+
+    public void SetActiveLayer(Layer layer)
+    {
+        ActiveLayer = layer;
+    }
+
+    public void AddLayer(Layer layer)
+    {
+        Layers.Add(layer);
+    }
+
+    public void RemoveLayer(Layer layer)
+    {
+        Layers.Remove(layer);
+    }
+
+    public void UndoFunc()
+    {
+        if (UndoStack.Count > 0)
+        {
+            var undoCommand = UndoStack.Pop();
+            RedoStack.Push(undoCommand);
+            undoCommand.UnExecute.Execute(null);
+            if (ActiveLayer.Figures.Count != 0)
+                ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
+        }
+    }
+
+    public void RedoFunc()
+    {
+        if (RedoStack.Count > 0)
+        {
+            var redoCommand = RedoStack.Pop();
+            UndoStack.Push(redoCommand);
+            redoCommand.Execute.Execute(null);
+            if (ActiveLayer.Figures.Count != 0)
+                ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
+        }
+    }
+
 
     public RelayCommand DrawRectangle
     {
@@ -62,7 +101,7 @@ public class MainWindowVM : INotifyPropertyChanged
         {
             return new RelayCommand( _ =>
             {
-                ActiveLayer.RedoStack.Clear();
+                RedoStack.Clear();
                 Random r = new Random();
                 int lwidth = r.Next(0, 500);
                 int lheight = r.Next(0, 500);
@@ -71,22 +110,9 @@ public class MainWindowVM : INotifyPropertyChanged
                 Polygon rectangle = PolygonBuilder.CreateRectangle(a, b);
                 Figure figure = new Figure(rectangle, null, null);
                 ActiveLayer.Figures.Add(figure);
-                ActiveLayer.UndoStack.Push(new UserCommands( _ => { figure.CreateFigure(); }, _ => { figure.DeleteFigure(); }));
+                UndoStack.Push(new UserCommands( _ => { figure.CreateFigure(); }, _ => { figure.DeleteFigure(); }));
             });
         }
-    }
-
-    public void UpActiveLayer()
-    {
-        NumActiveLayer++;
-        ActiveLayer = Layers[NumActiveLayer];
-    }
-
-    public void DownActiveLayer()
-    {
-        if (NumActiveLayer == 0) return;
-        NumActiveLayer--;
-        ActiveLayer = Layers[NumActiveLayer];
     }
 
     public RelayCommand DoRotate
@@ -95,11 +121,11 @@ public class MainWindowVM : INotifyPropertyChanged
         {
             return new RelayCommand( _ =>
             {
-                ActiveLayer.RedoStack.Clear();
+                RedoStack.Clear();
                 Figure figure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
                 figure.ModifyFigure(Figure.FigureAction.ROTATE, 30);
                 ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = figure;
-                ActiveLayer.UndoStack.Push(new UserCommands( _ => { figure.ModifyFigure(Figure.FigureAction.ROTATE, 30); }, 
+                UndoStack.Push(new UserCommands( _ => { figure.ModifyFigure(Figure.FigureAction.ROTATE, 30); }, 
                                                  _ => { figure.ModifyFigure(Figure.FigureAction.ROTATE, -30); }));
             });
         }
@@ -111,11 +137,11 @@ public class MainWindowVM : INotifyPropertyChanged
         {
             return new RelayCommand( _ =>
             {
-                ActiveLayer.RedoStack.Clear();
+                RedoStack.Clear();
                 Figure figure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
                 figure.ModifyFigure(Figure.FigureAction.SCALE, new Point(2,2));
                 ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = figure;
-                ActiveLayer.UndoStack.Push(new UserCommands( _ => { figure.ModifyFigure(Figure.FigureAction.SCALE, new Point(2, 2)); },
+                UndoStack.Push(new UserCommands( _ => { figure.ModifyFigure(Figure.FigureAction.SCALE, new Point(2, 2)); },
                                                  _ => { figure.ModifyFigure(Figure.FigureAction.SCALE, new Point(0.5, 0.5)); }));
             });
         }
@@ -127,7 +153,7 @@ public class MainWindowVM : INotifyPropertyChanged
         {
             return new RelayCommand( _ =>
             {
-                ActiveLayer.RedoStack.Clear();
+                RedoStack.Clear();
                 Figure figure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
                 Random r = new Random();
                 double x =  r.Next(-10, 11);
@@ -135,7 +161,7 @@ public class MainWindowVM : INotifyPropertyChanged
                 Vector v = new Vector(x, y);
                 figure.ModifyFigure(Figure.FigureAction.MOVE, v);
                 ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = figure;
-                ActiveLayer.UndoStack.Push(new UserCommands( _ => { figure.ModifyFigure(Figure.FigureAction.MOVE, v); },
+                UndoStack.Push(new UserCommands( _ => { figure.ModifyFigure(Figure.FigureAction.MOVE, v); },
                                                  _ => { figure.ModifyFigure(Figure.FigureAction.MOVE, -v); }));
 
             });
@@ -148,11 +174,11 @@ public class MainWindowVM : INotifyPropertyChanged
         {
             return new RelayCommand( _ =>
             {
-                ActiveLayer.RedoStack.Clear();
+                RedoStack.Clear();
                 Figure figure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
                 figure.DeleteFigure();
                 ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = figure;
-                ActiveLayer.UndoStack.Push(new UserCommands( _ => { figure.DeleteFigure(); }, _ => { figure.CreateFigure(); }));
+                UndoStack.Push(new UserCommands( _ => { figure.DeleteFigure(); }, _ => { figure.CreateFigure(); }));
             });
         }
     }
@@ -161,8 +187,8 @@ public class MainWindowVM : INotifyPropertyChanged
     {
         ActiveLayer = new Layer();
         ActiveLayer.Figures = new ObservableCollection<Figure>();
-        ActiveLayer.RedoStack = new Stack<UserCommands>();
-        ActiveLayer.UndoStack = new Stack<UserCommands>();
+        RedoStack = new Stack<UserCommands>();
+        UndoStack = new Stack<UserCommands>();
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
