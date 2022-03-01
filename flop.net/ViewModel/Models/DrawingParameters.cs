@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using flop.net.Annotations;
-using flop.net.ViewModel.Enums;
 
 namespace flop.net.ViewModel.Models
 {
