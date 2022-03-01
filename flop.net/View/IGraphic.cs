@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,8 +14,8 @@ namespace flop.net.View
 {
     public interface IGraphic
     {
-        void DrawPolyline(List<Point> points, DrawingParameters drawingParametrs);
-        void DrawPolygon(PointCollection points);
+        void DrawPolyline(PointCollection points, DrawingParameters drawingParametrs);
+        void DrawPolygon(PointCollection points, DrawingParameters drawingParametrs);
     }
     public class Graphic : IGraphic
     {
@@ -29,14 +30,15 @@ namespace flop.net.View
             canvas.Children.Clear();
         }
 
-        public void DrawPolygon(PointCollection points)
+        public void DrawPolygon(PointCollection points, DrawingParameters drawingParametrs)
         {
             Polygon polygon = new Polygon();
-
+          
             polygon.Fill = Brushes.Green;
-            //polygon.Stroke = drawingParametrs.Fill;
-            //polygon.StrokeThickness = drawingParametrs.Fill;
-            //polygon.StrokeDashCap = drawingParametrs.Fill;
+            //polygon.Fill = drawingParametrs.Fill;
+            //polygon.Stroke = drawingParametrs.Stroke;
+            //polygon.StrokeThickness = drawingParametrs.StrokeThickness;
+            //polygon.StrokeDashCap = drawingParametrs.StrokeDashCap;
             //polygon.Opacity = drawingParametrs.Opacity;
             //polygon.Name = "Polygon" + 1.ToString();
 
@@ -44,7 +46,6 @@ namespace flop.net.View
             //{
             //    polygon.StrokeDashArray.Add(x);
             //}
-
 
             foreach (Point point in points)
             {
@@ -54,14 +55,14 @@ namespace flop.net.View
             canvas.Children.Add(polygon);
         }
 
-        public void DrawPolyline(List<Point> points, DrawingParameters drawingParametrs)
+        public void DrawPolyline(PointCollection points, DrawingParameters drawingParametrs)
         {
             Polyline polyline = new Polyline();
 
             //polyline.Fill = drawingParametrs.Fill;
-            //polyline.Stroke = drawingParametrs.Fill;
-            //polyline.StrokeThickness = drawingParametrs.Fill;
-            //polyline.StrokeDashCap = drawingParametrs.Fill;
+            //polyline.Stroke = drawingParametrs.Stroke;
+            //polyline.StrokeThickness = drawingParametrs.StrokeThickness;
+            //polyline.StrokeDashCap = drawingParametrs.StrokeDashCap;
             //polyline.Opacity = drawingParametrs.Opacity;
 
             //foreach (var x in drawingParametrs.StrokeDashArray)

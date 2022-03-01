@@ -8,7 +8,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <!-- Fluent Package-->
                 <ResourceDictionary Source="/Fluent;Component/Themes/Generic.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Fluent;component/Themes/Themes/Dark.Teal.xaml" />
 
                 <!-- Local Dictionaries -->
                 <ResourceDictionary Source="/Styles/MenuButton.xaml" />
