@@ -9,8 +9,6 @@ namespace flop.net.ViewModel.Models
 {
     public class Figure : INotifyPropertyChanged
     {
-        public enum FigureAction { MOVE, ROTATE, SCALE };
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
@@ -39,35 +37,10 @@ namespace flop.net.ViewModel.Models
             }
         }
 
-        public Figure(IGeometric geometric, DrawingParameters drawingParameters, PointCollection points)
+        public Figure(IGeometric geometric, DrawingParameters drawingParameters)
         {
             Geometric = geometric;
             DrawingParameters = drawingParameters;
-        }
-
-        public void ModifyFigure(FigureAction action, object parameter)
-        {
-            switch (action)
-            {
-                case FigureAction.MOVE:
-                {
-                    var vector = (Vector)parameter;
-                    Geometric.Move(vector);
-                    break;
-                }
-                case FigureAction.ROTATE:
-                {
-                    var angle = Convert.ToSingle(parameter);
-                    Geometric.Rotate(angle);
-                    break;
-                }
-                case FigureAction.SCALE:
-                {
-                    var p = (Point)parameter;
-                    Geometric.Scale(p);
-                    break;
-                }
-            }
         }
     }
 }

@@ -45,7 +45,7 @@
                     <r:Button Header="Линия" Style="{StaticResource RibbonMenuButton}" />
                     <r:Button Header="Ломанная линия" Style="{StaticResource RibbonMenuButton}" />
                     <r:Button Header="Эллипс" Style="{StaticResource RibbonMenuButton}" />
-                    <r:Button Header="Прямоугольник" Command="{Binding DrawRectangle}" Style="{StaticResource RibbonMenuButton}" />
+                    <r:Button Header="Прямоугольник" Command="{Binding CreateRectangle}" Style="{StaticResource RibbonMenuButton}" />
                 </r:RibbonGroupBox>
 
                 <r:RibbonGroupBox Header="Масштабирование">
@@ -57,9 +57,9 @@
 
             <r:RibbonTabItem Header="Фигура">
                 <r:RibbonGroupBox Header="Объектный режим">
-                    <r:Button Header="Перемещение" Command="{Binding DoMove}" Style="{StaticResource RibbonMenuButton}" />
-                    <r:Button Header="Масштабирование" Command="{Binding DoScale}" Style="{StaticResource RibbonMenuButton}" />
-                    <r:Button Header="Поворот" Command="{Binding DoRotate}" Style="{StaticResource RibbonMenuButton}" />
+                    <r:Button Header="Перемещение" Command="{Binding MoveFigure}" Style="{StaticResource RibbonMenuButton}" />
+                    <r:Button Header="Масштабирование" Command="{Binding ScaleFigure}" Style="{StaticResource RibbonMenuButton}" />
+                    <r:Button Header="Поворот" Command="{Binding RotateFigure}" Style="{StaticResource RibbonMenuButton}" />
                     <r:Button Header="Удаление" Command="{Binding DeleteFigure}" Style="{StaticResource RibbonMenuButton}" />
                 </r:RibbonGroupBox>
 

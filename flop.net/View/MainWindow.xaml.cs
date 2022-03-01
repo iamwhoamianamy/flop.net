@@ -78,9 +78,9 @@ namespace flop.net
         public void DrawAll()
         {
             Graphic.CleanCanvas();
-            foreach (var x in MainWindowVM.Figures)
+            foreach (var figure in MainWindowVM.Figures)
             {
-                Graphic.DrawPolygon(x.Geometric.Points);
+                Graphic.DrawPolygon(figure.Geometric.Points);
             }
         }
         private void MainCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
