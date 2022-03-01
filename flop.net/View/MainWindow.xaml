@@ -56,13 +56,13 @@
                               Header="Отменить" 
                               Command="{Binding Undo}"
                               Icon="/Images/undo.png"
-                              r:KeyTip="Z"
-                              ToolTip="Alt + Z"/>
+                              r:KeyTip.Keys="Z"
+                              ToolTip="Alt + Z" />
                     <r:Button x:Name="redoButton"
                               Header="Redo" 
                               Command="{Binding Redo}" 
                               Icon="/Images/redo.png"
-                              r:KeyTip="Y"
+                              r:KeyTip.Keys="Y"
                               ToolTip="Alt + Y"/>
                 </r:RibbonGroupBox>
                 <r:RibbonGroupBox Header="Рисование">
