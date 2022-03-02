@@ -45,16 +45,5 @@ namespace flop.net.Model
          }
          return new Polygon(points, true);
       }
-
-      public static Polygon CreateTriangle(Point pointA, Point pointB, Point pointC)
-      {
-         var points = new PointCollection()
-         {
-            pointA,
-            pointB,
-            pointC
-         };
-         return new Polygon(points, true);
-      }
    }
 }
