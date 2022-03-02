@@ -45,5 +45,20 @@ namespace flop.net.Model
          }
          return new Polygon(points, true);
       }
+
+      public static Polygon CreateEllipse(Point pointA, Point pointB, double amount)
+      {
+         PointCollection points = new PointCollection() { };
+         Point center = new Point((pointA.X + pointB.X) / 2, (pointA.Y + pointB.Y) / 2);
+         double h = Math.Abs(pointA.Y) + Math.Abs(pointB.Y);
+         double w = Math.Abs(pointA.X) + Math.Abs(pointB.X);
+         for (var i = 0; i < amount; i ++)
+         {
+            double x = Math.Cos(2 * Math.PI * i / amount) * w / 2 + center.X;
+            double y = Math.Sin(2 * Math.PI * i / amount) * h / 2 + center.Y;
+            points.Add(new Point(x, y));
+         }
+         return new Polygon(points, true);
+      }
    }
 }
