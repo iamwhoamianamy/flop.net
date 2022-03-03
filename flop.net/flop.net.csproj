@@ -80,11 +80,12 @@
     <Compile Include="Model\Polygon.cs" />
     <Compile Include="Model\PolygonBuilder.cs" />
     <Compile Include="Save\JsonSaver.cs" />
+    <Compile Include="ViewModel\CommandsList.cs" />
     <Compile Include="ViewModel\Models\DrawingParameters.cs" />
     <Compile Include="ViewModel\Models\Figure.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModel\MainWindowVM.cs" />
-    <Compile Include="ViewModel\RelayCommand.cs" />
+    <Compile Include="ViewModel\CommandFlop.cs" />
     <Compile Include="View\IGraphic.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

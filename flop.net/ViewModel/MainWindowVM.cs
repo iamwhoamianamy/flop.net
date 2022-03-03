@@ -15,102 +15,59 @@ using System.Windows.Media;
 
 namespace flop.net.ViewModel;
 
-public class UserCommands
-{
-    private Action<object> execute;
-    private Action<object> unexecute;
-    public UserCommands(Action<object> execute, Action<object> unexecute)
-    {
-        this.execute = execute;
-        this.unexecute = unexecute;
-    }
-
-    public RelayCommand Execute
-    {
-       get => new RelayCommand(execute);
-    }
-
-    public RelayCommand UnExecute
-    {
-        get => new RelayCommand(unexecute);
-    }
-}
-
 public class MainWindowVM : INotifyPropertyChanged
 {
     public ObservableCollection<Figure> Figures { get; set; }
-    public Stack<UserCommands> undoStack;
-    public Stack<UserCommands> redoStack;
 
-    private void undoFunc()
-    {
-        if (undoStack.Count > 0)
-        {
-            var undoCommand = undoStack.Pop();
-            redoStack.Push(undoCommand);
-            undoCommand.UnExecute.Execute(null);
-            if (Figures.Count != 0)
-                Figures.Move(0, 0); // simulation of a collection change 
-        }
-    }
+    //public RelayCommand Undo
+    //{
+    //    get => new (obj => undoFunc());
+    //    set => OnPropertyChanged();
+    //}
 
-    private void redoFunc()
-    {
-        if (redoStack.Count > 0)
-        {
-            var redoCommand = redoStack.Pop();
-            undoStack.Push(redoCommand);
-            redoCommand.Execute.Execute(null);
-            if (Figures.Count != 0)
-                Figures.Move(0, 0); // simulation of a collection change 
-        }
-    }
+    //public RelayCommand Redo
+    //{
+    //    get => new (obj => redoFunc());
+    //    set => OnPropertyChanged();
+    //}
 
-    public RelayCommand Undo
-    {
-        get => new RelayCommand(_ => undoFunc());
-        set => OnPropertyChanged();
-    }
-
-    public RelayCommand Redo
-    {
-        get => new RelayCommand(_ => redoFunc());
-        set => OnPropertyChanged();
-    }
-
-
-    public RelayCommand CreateRectangle
+    private CommandFlop createRectangle;
+    public CommandFlop CreateRectangle
     {
         get
         {
-            return new RelayCommand(_ =>
-           {
-               redoStack.Clear();
-               Random r = new Random();
-               int lwidth = r.Next(0, 500);
-               int lheight = r.Next(0, 500);
-               Point a = new(lwidth, lheight);
-               Point b = new(lwidth + 20, lheight + 20);
-               Polygon rectangle = PolygonBuilder.CreateRectangle(a, b);
-               Figure figure = new(rectangle, null);
-               Figures.Add(figure);
-               //undoStack.Push(new UserCommands(_ => { figure.CreateFigure(); }, _ => { figure.DeleteFigure(); }));
-           });
+            createRectangle ??= new CommandFlop(obj =>
+            {
+                Random r = new Random();
+                int lwidth = r.Next(0, 500);
+                int lheight = r.Next(0, 500);
+                Point a = new(lwidth, lheight);
+                Point b = new(lwidth + 20, lheight + 20);
+                Polygon rectangle = PolygonBuilder.CreateRectangle(a, b);
+                Figure figure = new(rectangle, null);
+                Figures.Add(figure);
+             });
+            createRectangle.ExecuteCommand += CommandsList.Instance.CommandExecuted;
+            return createRectangle;
         }
+    }
+
+    private void CreateRectangleOnExecuteCommand(object sender, EventArgs e)
+    {
+        throw new NotImplementedException();
     }
 
     public RelayCommand RotateFigure
     {
         get
         {
-            return new RelayCommand(_ =>
+            return new RelayCommand(obj =>
             {
-               redoStack.Clear();
                Figure figure = Figures[Figures.Count - 1];
                figure.Geometric.Rotate(30);
                Figures[Figures.Count - 1] = figure;
-                undoStack.Push(new UserCommands(_ => { figure.Geometric.Rotate(30); },
-                   _ => { figure.Geometric.Rotate(-30); }));
+                //undoStack.Push(new CommandFlop(_ => { figure.Geometric.Rotate(30); },
+                //   _ => { figure.Geometric.Rotate(-30); }));
             });
         }
     }
@@ -119,15 +76,14 @@ public class MainWindowVM : INotifyPropertyChanged
     {
         get
         {
-            return new RelayCommand(_ =>
+            return new RelayCommand(obj =>
             {
-                redoStack.Clear();
                 Figure figure = Figures[Figures.Count - 1];
                 figure.Geometric.Scale(new Point(2, 2));
                 Figures[Figures.Count - 1] = figure;
-                undoStack.Push(new UserCommands(
-                    _ => { figure.Geometric.Scale(new Point(2, 2)); },
-                    _ => { figure.Geometric.Scale(new Point(0.5, 0.5)); }));
+                //undoStack.Push(new CommandFlop(
+                //    _ => { figure.Geometric.Scale(new Point(2, 2)); },
+                //    _ => { figure.Geometric.Scale(new Point(0.5, 0.5)); }));
             });
         }
     }
@@ -138,7 +94,6 @@ public class MainWindowVM : INotifyPropertyChanged
         {
             return new RelayCommand(_ =>
            {
-               redoStack.Clear();
                Figure figure = Figures[Figures.Count - 1];
                Random r = new Random();
                double x = r.Next(-10, 11);
@@ -146,8 +101,8 @@ public class MainWindowVM : INotifyPropertyChanged
                Vector v = new Vector(x, y);
                figure.Geometric.Move(v);
                Figures[Figures.Count - 1] = figure;
-               undoStack.Push(new UserCommands(_ => { figure.Geometric.Move(v); },
-                   _ => { figure.Geometric.Move(-v); }));
+               //undoStack.Push(new CommandFlop(_ => { figure.Geometric.Move(v); },
+               //    _ => { figure.Geometric.Move(-v); }));
            });
         }
     }
@@ -161,7 +116,7 @@ public class MainWindowVM : INotifyPropertyChanged
     //           redoStack.Clear();
     //           Figure figure = Figures.Last();
     //           Figures[Figures.Count - 1] = figure;
-    //           //undoStack.Push(new UserCommands(_ => { figure.DeleteFigure(); }, _ => { figure.CreateFigure(); }));
+    //           //undoStack.Push(new CommandFlop(_ => { figure.DeleteFigure(); }, _ => { figure.CreateFigure(); }));
     //       });
     //    }
     //}
@@ -169,14 +124,11 @@ public class MainWindowVM : INotifyPropertyChanged
     public MainWindowVM()
     {
         Figures = new ObservableCollection<Figure>();
-        redoStack = new Stack<UserCommands>();
-        undoStack = new Stack<UserCommands>();
-
     }
     public event PropertyChangedEventHandler PropertyChanged;
 
     [NotifyPropertyChangedInvocator]
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
