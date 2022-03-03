@@ -28,10 +28,23 @@ namespace flop.net.Model
       }
 
       public bool IsClosed { get; }
-      
+
+      // Пока сыро, не обрабатывает попадания в вершину
       public bool IsIn(Point position, double eps)
       {
-         throw new NotImplementedException();
+         var result = false;
+         for (int i = 0, j = Points.Count - 1; i < Points.Count; j = i++)
+         {
+            var segmentPointA = Point.Subtract(Points[i], (Vector)position);
+            var segmentPointB = Point.Subtract(Points[j], (Vector)position);
+
+            // Проверка принадлежности точки ребру
+
+
+            // Проверка пересечения луча, отпущеного в горизонтальном направлении, и ребра
+
+         }
+         return result;
       }
 
       public void Move(Vector delta)
