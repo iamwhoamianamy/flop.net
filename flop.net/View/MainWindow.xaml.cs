@@ -58,7 +58,7 @@ namespace flop.net
 
             DataContext = MainWindowVM;
             MainWindowVM.Figures.CollectionChanged += Figures_CollectionChanged;
-            Graphic = new Graphic(MainCanvas);
+            //Graphic = new Graphic(MainCanvas);
 
             DrawAll();
         }
@@ -77,10 +77,11 @@ namespace flop.net
         }
         public void DrawAll()
         {
-            Graphic.CleanCanvas();
+            //Graphic.CleanCanvas();
             foreach (var x in MainWindowVM.Figures)
             {
-                Graphic.DrawPolygon(x.Geometric.Points);
+                //Graphic.DrawPolygon(x.Geometric.Points);
+                
             }
         }
         private void MainCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

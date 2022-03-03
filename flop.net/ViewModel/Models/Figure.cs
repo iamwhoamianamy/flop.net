@@ -4,6 +4,9 @@ using System.Windows.Media;
 using flop.net.Model;
 using System.Windows;
 using System.Diagnostics;
+using System.Windows.Input;
+using System;
+
 namespace flop.net.ViewModel.Models
 {
     public class Figure : INotifyPropertyChanged
@@ -13,6 +16,19 @@ namespace flop.net.ViewModel.Models
         public enum FigureAction { MOVE, ROTATE, SCALE };
 
         public PointCollection Points { get; set; }
+        Point position;
+        public Point Position
+        {
+            get { return position; }
+            set 
+            {
+                if (position != value)
+                {
+                    position = value; 
+                    OnPropertyChanged();
+                }
+            }
+        }
         private IGeometric geometric;
         public IGeometric Geometric 
         {
@@ -28,8 +44,13 @@ namespace flop.net.ViewModel.Models
         }
         public DrawingParameters DrawingParameters { get; set; }
 
+        public ICommand RequestMove { get; }
         public Figure()
+        {            
+        }
+        void MoveTo(Point newPosition)
         {
+            Position = newPosition;
         }
         static Figure()
         {
@@ -40,7 +61,10 @@ namespace flop.net.ViewModel.Models
             Points = points;
             Geometric = geometric;
             DrawingParameters = drawingParameters;
-        }
+            Random r = new Random();
+            Position = new Point(r.Next(0, 500), r.Next(0, 500));
+            RequestMove = new SimpleCommand<Point>(MoveTo);
+        }        
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {

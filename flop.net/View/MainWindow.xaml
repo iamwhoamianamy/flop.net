@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:flop.net"
+        xmlns:local="clr-namespace:flop.net.View"
         xmlns:r="urn:fluent-ribbon"
         mc:Ignorable="d"
         FontSize="13" 
@@ -71,11 +71,35 @@
             </r:RibbonTabItem>
         </r:Ribbon>
 
-        <Canvas x:Name="MainCanvas" Grid.Row="1" Grid.Column="0" Background="White"
-                MouseLeftButtonDown="MainCanvas_MouseLeftButtonDown">
-            <!--Место для вашей рекламы-->           
-
+        <ItemsControl ItemsSource="{Binding Figures}" Grid.Row="1" Grid.Column="0"
+                      Background="White" Name="DraggableItemsHost">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas IsItemsHost="True"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <local:FigureUserControl
+                        DraggedImageContainer="{Binding ElementName=DraggedImageContainer}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Canvas.Left" Value="{Binding Position.X}"/>
+                    <Setter Property="Canvas.Top" Value="{Binding Position.Y}"/>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
+        <Canvas IsHitTestVisible="False" Grid.Row="1" Grid.Column="0">
+            <Rectangle Opacity="0.4" Name="DraggedImageContainer" Visibility="Collapsed"/>
         </Canvas>
+
+        <!--<Canvas x:Name="MainCanvas" Grid.Row="1" Grid.Column="0" Background="White"
+                MouseLeftButtonDown="MainCanvas_MouseLeftButtonDown">
+            --><!--Место для вашей рекламы--><!--           
+
+        </Canvas>-->
 
         <StackPanel Grid.Column="1" Grid.Row="1" Background="DarkGray">
             <Border>
