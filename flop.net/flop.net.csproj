@@ -147,5 +147,10 @@
   <ItemGroup>
     <Resource Include="Images\undo.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ellipse.png" />
+    <Resource Include="Images\line.png" />
+    <Resource Include="Images\rectangle.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

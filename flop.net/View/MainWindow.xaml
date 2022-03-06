@@ -66,30 +66,62 @@
                               ToolTip="Alt + Y"/>
                 </r:RibbonGroupBox>
                 <r:RibbonGroupBox Header="Рисование">
-                    <r:ToggleButton Header="Линия" Style="{StaticResource RibbonMenuButton}" />
-                    <r:ToggleButton Header="Ломанная линия" Style="{StaticResource RibbonMenuButton}" />
-                    <r:ToggleButton Header="Эллипс" Style="{StaticResource RibbonMenuButton}" />
-                    <r:ToggleButton Header="Прямоугольник" Command="{Binding DrawRectangle}" Style="{StaticResource RibbonMenuButton}" />
+                    <r:ToggleButton Header="Линия"
+                                    Icon="/Images/line.png"
+                                    ToolTip="Рисование линии произвольной толщины"
+                                    Style="{StaticResource RibbonMenuButton}" />
+                    <r:ToggleButton Header="Ломанная линия"
+                                    ToolTip="Рисование ломанной линии произвольной толщины"
+                                    Style="{StaticResource RibbonMenuButton}" />
+                    <r:ToggleButton Header="Эллипс"
+                                    Icon="/Images/ellipse.png"
+                                    ToolTip="Рисование эллипса"
+                                    Style="{StaticResource RibbonMenuButton}" />
+                    <r:ToggleButton Header="Прямоугольник" 
+                                    Icon="/Images/rectangle.png"
+                                    ToolTip="Рисование прямоугольника"
+                                    Command="{Binding DrawRectangle}" 
+                                    Style="{StaticResource RibbonMenuButton}" />
                 </r:RibbonGroupBox>
 
                 <r:RibbonGroupBox Header="Масштабирование">
-                    <r:ToggleButton Header="Приблизить"  Style="{StaticResource RibbonMenuButton}" />
-                    <r:ToggleButton Header="Отдалить" Style="{StaticResource RibbonMenuButton}" />
-                    <r:ToggleButton Header="Сбросить" Style="{StaticResource RibbonMenuButton}" />
+                    <r:ToggleButton Header="Приблизить"
+                                    ToolTip="Увеличение масштабирования"
+                                    Style="{StaticResource RibbonMenuButton}" />
+                    <r:ToggleButton Header="Отдалить" 
+                                    ToolTip="Уменьшение масштабирования"
+                                    Style="{StaticResource RibbonMenuButton}" />
+                    <r:ToggleButton Header="Сбросить"
+                                    ToolTip="Сбросить масштабирование"
+                                    Style="{StaticResource RibbonMenuButton}" />
                 </r:RibbonGroupBox>
             </r:RibbonTabItem>
 
             <r:RibbonTabItem Header="Фигура">
                 <r:RibbonGroupBox Header="Объектный режим">
-                    <r:ToggleButton Header="Перемещение" Command="{Binding DoMove}" Style="{StaticResource RibbonMenuButton}" />
-                    <r:ToggleButton Header="Масштабирование" Command="{Binding DoScale}" Style="{StaticResource RibbonMenuButton}" />
-                    <r:ToggleButton Header="Поворот" Command="{Binding DoRotate}" Style="{StaticResource RibbonMenuButton}" />
-                    <r:ToggleButton Header="Удаление" Command="{Binding DeleteFigure}" Style="{StaticResource RibbonMenuButton}" />
+                    <r:ToggleButton Header="Перемещение" 
+                                    ToolTip="Перемещение фигуры"
+                                    Command="{Binding DoMove}" 
+                                    Style="{StaticResource RibbonMenuButton}" />
+                    <r:ToggleButton Header="Масштабирование" 
+                                    ToolTip="Масштабирование фигуры"
+                                    Command="{Binding DoScale}" 
+                                    Style="{StaticResource RibbonMenuButton}" />
+                    <r:ToggleButton Header="Поворот" 
+                                    ToolTip="Поворот фигуры"
+                                    Command="{Binding DoRotate}" 
+                                    Style="{StaticResource RibbonMenuButton}" />
+                    <r:ToggleButton Header="Удаление" 
+                                    ToolTip="Удаление фигуры"
+                                    Command="{Binding DeleteFigure}" 
+                                    Style="{StaticResource RibbonMenuButton}" />
                 </r:RibbonGroupBox>
 
                 <r:RibbonGroupBox Header="Режим трансформации">
-                    <r:ToggleButton Header="Добавление вершины" />        
-                    <r:ToggleButton Header="Удаление вершины" />        
+                    <r:ToggleButton Header="Добавление вершины"
+                                    ToolTip="Добавить вершину"/>        
+                    <r:ToggleButton Header="Удаление вершины"
+                                    ToolTip="Удалить вершину"/>        
                 </r:RibbonGroupBox>
             </r:RibbonTabItem>
         </r:Ribbon>
