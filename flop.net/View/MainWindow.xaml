@@ -86,12 +86,15 @@
 
                 <r:RibbonGroupBox Header="Масштабирование">
                     <r:ToggleButton Header="Приблизить"
+                                    Icon="/Images/plus.png"
                                     ToolTip="Увеличение масштабирования"
                                     Style="{StaticResource RibbonMenuButton}" />
                     <r:ToggleButton Header="Отдалить" 
+                                    Icon="/Images/minus.png"
                                     ToolTip="Уменьшение масштабирования"
                                     Style="{StaticResource RibbonMenuButton}" />
                     <r:ToggleButton Header="Сбросить"
+                                    Icon="/Images/reset.png"
                                     ToolTip="Сбросить масштабирование"
                                     Style="{StaticResource RibbonMenuButton}" />
                 </r:RibbonGroupBox>
