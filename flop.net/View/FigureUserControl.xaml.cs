@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -73,6 +74,7 @@ namespace flop.net.View
             MouseMove += OnDragMove;             
             LostMouseCapture += OnLostCapture;
             Mouse.Capture(this);
+            ResizeGrid.Visibility = Visibility.Visible;
         }
 
         // клавиша отпущена - завершаем процесс
@@ -81,11 +83,11 @@ namespace flop.net.View
             FinishDrag(sender, e);
             Mouse.Capture(null);
         }
-
         // потеряли фокус (например, юзер переключился в другое окно) - завершаем тоже
         void OnLostCapture(object sender, MouseEventArgs e)
         {
             FinishDrag(sender, e);
+            ResizeGrid.Visibility = Visibility.Hidden;
         }
 
         void OnDragMove(object sender, MouseEventArgs e)
@@ -151,6 +153,18 @@ namespace flop.net.View
             }
             while (t == null && current != null);
             return t;
+        }
+
+        private void TopEdgeThumb_DragDelta(object sender, DragDeltaEventArgs e)
+        {
+            double y = double.IsNaN(figureUserControl.Height) ?
+                figureUserControl.ActualHeight + e.VerticalChange :
+                figureUserControl.Height + e.VerticalChange;
+
+            if (y >= 0)
+            {
+                figureUserControl.Height = y;
+            }
         }
     }
 }
