@@ -40,16 +40,43 @@ namespace flop.net
         private Graphic graphic;
         public Graphic Graphic
         {
-            get 
-            {
-                return graphic; 
-            }
+            get { return graphic; }
             set
             {
                 graphic = value;
                 OnPropertyChanged();
             }
-        } 
+        }
+        private Point mousePos1;
+        public Point MousePos1
+        {
+            get { return mousePos1; }
+            set
+            {
+                mousePos1 = value;
+                OnPropertyChanged();
+            }
+        }
+        private Point mousePos2;
+        public Point MousePos2
+        {
+            get { return mousePos2; }
+            set
+            {
+                mousePos2 = value;
+                OnPropertyChanged();
+            }
+        }
+        private bool isPressed;
+        public bool IsPressed
+        {
+            get { return isPressed; }
+            set
+            {
+                isPressed = value;
+                OnPropertyChanged();
+            }
+        }
         public MainWindow()
         {
             InitializeComponent();
@@ -57,15 +84,6 @@ namespace flop.net
             MainWindowVM = new MainWindowVM();
 
             DataContext = MainWindowVM;
-            MainWindowVM.Figures.CollectionChanged += Figures_CollectionChanged;
-            //Graphic = new Graphic(MainCanvas);
-
-            DrawAll();
-        }
-
-        private void Figures_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            DrawAll();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -75,18 +93,33 @@ namespace flop.net
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public void DrawAll()
+        private void DraggableItemsHost_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            //Graphic.CleanCanvas();
-            foreach (var x in MainWindowVM.Figures)
+            if (!isPressed && (bool)Test.IsChecked)
             {
-                //Graphic.DrawPolygon(x.Geometric.Points);
-                
+                isPressed = true;
+                MousePos1 = e.GetPosition(DraggableItemsHost);
             }
         }
-        private void MainCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+
+        private void DraggableItemsHost_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            DrawAll();
+            if (isPressed && (bool)Test.IsChecked)
+            {
+                isPressed = false;
+                MousePos2 = e.GetPosition(DraggableItemsHost);
+                MainWindowVM.Draw(MousePos1, MousePos2);
+                Test.IsChecked = false;
+            }
+        }
+
+        private void DraggableItemsHost_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isPressed && (bool)Test.IsChecked)
+            {
+                MousePos2 = e.GetPosition(DraggableItemsHost);
+                MainWindowVM.Draw(MousePos1, MousePos2);
+            }
         }
     }
 }

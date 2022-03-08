@@ -85,17 +85,23 @@ public class MainWindowVM : INotifyPropertyChanged
             return new RelayCommand( _ =>
             {
                 redoStack.Clear();
-                Random r = new Random();
-                int lwidth = r.Next(0, 500);
-                int lheight = r.Next(0, 500);
-                Point a = new Point(lwidth, lheight);
-                Point b = new Point(lwidth + 50, lheight + 50);
+                Point a = new Point(0, 0);
+                Point b = new Point(0, 0);
                 Polygon rectangle = PolygonBuilder.CreateRectangle(a, b);
-                Figure figure = new Figure(rectangle, null, rectangle.Points); 
+                Figure figure = new Figure(rectangle, null, rectangle.Points, a); 
                 Figures.Add(figure);
-                undoStack.Push(new UserCommands( _ => { figure.CreateFigure(); }, _ => { figure.DeleteFigure(); }));
+                //undoStack.Push(new UserCommands( _ => { figure.CreateFigure(); }, _ => { figure.DeleteFigure(); }));
             });
         }
+    }
+    public void Draw(Point a, Point b)
+    {
+        Point A = new Point(0, 0);
+        Point B = new Point(b.X - a.X, b.Y - a.Y);
+
+        Polygon rectangle = PolygonBuilder.CreateRectangle(A, B);
+        Figures[Figures.Count - 1] = new Figure(rectangle, null, rectangle.Points, a);
+        //Figures[Figures.Count - 1].Position = new Point((a.X + b.X) / 2, (a.Y + b.Y) / 2);
     }
 
     public RelayCommand DoRotate

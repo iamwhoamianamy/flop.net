@@ -24,7 +24,7 @@ namespace flop.net.View
         {
             InitializeComponent();
             SetBinding(RequestMoveCommandProperty, new Binding("RequestMove"));
-            //SetBinding(RequestMoveCommandProperty, new Binding(null));
+            SetBinding(RequestDrawCommandProperty, new Binding("RequestDraw"));
         }
         // стандартное DependencyProperty
         #region dp ICommand RequestMoveCommand
@@ -36,6 +36,18 @@ namespace flop.net.View
 
         public static readonly DependencyProperty RequestMoveCommandProperty =
             DependencyProperty.Register("RequestMoveCommand", typeof(ICommand),
+                                        typeof(FigureUserControl));
+        #endregion
+
+        #region dp ICommand RequestDrawCommand
+        public ICommand RequestDrawCommand
+        {
+            get { return (ICommand)GetValue(RequestDrawCommandProperty); }
+            set { SetValue(RequestDrawCommandProperty, value); }
+        }
+
+        public static readonly DependencyProperty RequestDrawCommandProperty =
+            DependencyProperty.Register("RequestDrawCommand", typeof(ICommand),
                                         typeof(FigureUserControl));
         #endregion
 
@@ -55,10 +67,10 @@ namespace flop.net.View
 
         // по нажатию на левую клавишу начинаем следить за мышью
         void OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
+        {            
             container = FindParent<Canvas>(this);
             relativeMousePos = e.GetPosition(this) - new Point();
-            MouseMove += OnDragMove;
+            MouseMove += OnDragMove;             
             LostMouseCapture += OnLostCapture;
             Mouse.Capture(this);
         }

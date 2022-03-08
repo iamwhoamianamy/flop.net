@@ -45,6 +45,7 @@ namespace flop.net.ViewModel.Models
         public DrawingParameters DrawingParameters { get; set; }
 
         public ICommand RequestMove { get; }
+        public ICommand RequestDraw { get; }
         public Figure()
         {            
         }
@@ -52,18 +53,27 @@ namespace flop.net.ViewModel.Models
         {
             Position = newPosition;
         }
+        void DrawTo(Point A, Point B)
+        {
+            Point newPosition = new Point((A.X + B.X) / 2, (A.Y + B.Y) / 2);
+
+            Position = newPosition;
+
+            Points.Add(A);
+            Points.Add(B);
+        }
         static Figure()
         {
             EmptyGeometric = new Polygon(new PointCollection(){ new Point(-1, -1), new Point(-1, -1) }, true);
         }
-        public Figure(IGeometric geometric, DrawingParameters drawingParameters, PointCollection points)
+        public Figure(IGeometric geometric, DrawingParameters drawingParameters, PointCollection points, Point position)
         {
             Points = points;
             Geometric = geometric;
             DrawingParameters = drawingParameters;
-            Random r = new Random();
-            Position = new Point(r.Next(0, 500), r.Next(0, 500));
+            Position = position;
             RequestMove = new SimpleCommand<Point>(MoveTo);
+            RequestDraw = new SimpleCommand2<Point, Point>(DrawTo);
         }        
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
