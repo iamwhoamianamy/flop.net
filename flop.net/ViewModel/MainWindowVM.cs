@@ -10,6 +10,7 @@ using flop.net.View;
 using System.Windows.Input;
 using flop.net.ViewModel.Models;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Media;
 using flop.net.ViewModel;
 
@@ -119,7 +120,7 @@ public class MainWindowVM : INotifyPropertyChanged
     {
         get
         {
-            return new RelayCommand( _ =>
+            return new RelayCommand(_ =>
             {
                 RedoStack.Clear();
                 Figure figure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
@@ -135,7 +136,7 @@ public class MainWindowVM : INotifyPropertyChanged
     {
         get
         {
-            return new RelayCommand( _ =>
+            return new RelayCommand(_ =>
             {
                 RedoStack.Clear();
                 Figure figure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
