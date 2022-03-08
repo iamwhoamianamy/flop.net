@@ -78,7 +78,7 @@ namespace flop.net
         public void DrawAll()
         {
             Graphic.CleanCanvas();
-            foreach (var x in MainWindowVM.ActiveLayer.Figures)
+            foreach (var figure in MainWindowVM.ActiveLayer.Figures)
             {
                 Graphic.DrawPolygon(figure.Geometric.Points, figure.DrawingParameters);
             }

@@ -81,9 +81,9 @@
 
             <r:RibbonTabItem Header="Фигура">
                 <r:RibbonGroupBox Header="Объектный режим">
-                    <r:ToggleButton Header="Перемещение" Command="{Binding Move}" Style="{StaticResource RibbonMenuButton}" />
-                    <r:ToggleButton Header="Масштабирование" Command="{Binding Scale}" Style="{StaticResource RibbonMenuButton}" />
-                    <r:ToggleButton Header="Поворот" Command="{Binding Rotate}" Style="{StaticResource RibbonMenuButton}" />
+                    <r:ToggleButton Header="Перемещение" Command="{Binding MoveFigure}" Style="{StaticResource RibbonMenuButton}" />
+                    <r:ToggleButton Header="Масштабирование" Command="{Binding ScaleFigure}" Style="{StaticResource RibbonMenuButton}" />
+                    <r:ToggleButton Header="Поворот" Command="{Binding RotateFigure}" Style="{StaticResource RibbonMenuButton}" />
                     <r:ToggleButton Header="Удаление" Command="{Binding DeleteFigure}" Style="{StaticResource RibbonMenuButton}" />
                 </r:RibbonGroupBox>
 
