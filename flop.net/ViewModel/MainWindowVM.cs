@@ -95,7 +95,7 @@ public class MainWindowVM : INotifyPropertyChanged
     }
 
 
-    public RelayCommand DrawRectangle
+    public RelayCommand AddRectangle
     {
         get
         {
@@ -115,7 +115,7 @@ public class MainWindowVM : INotifyPropertyChanged
         }
     }
 
-    public RelayCommand DoRotate
+    public RelayCommand Rotate
     {
         get
         {
@@ -131,7 +131,7 @@ public class MainWindowVM : INotifyPropertyChanged
         }
     }
 
-    public RelayCommand DoScale
+    public RelayCommand Scale
     {
         get
         {
@@ -147,7 +147,7 @@ public class MainWindowVM : INotifyPropertyChanged
         }
     }
 
-    public RelayCommand DoMove
+    public RelayCommand Move
     {
         get
         {
