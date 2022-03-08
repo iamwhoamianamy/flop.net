@@ -69,7 +69,7 @@
                     <r:ToggleButton Header="Линия" Style="{StaticResource RibbonMenuButton}" />
                     <r:ToggleButton Header="Ломанная линия" Style="{StaticResource RibbonMenuButton}" />
                     <r:ToggleButton Header="Эллипс" Style="{StaticResource RibbonMenuButton}" />
-                    <r:ToggleButton Header="Прямоугольник" Command="{Binding CreateRectangle}" Style="{StaticResource RibbonMenuButton}" />
+                    <r:ToggleButton Header="Прямоугольник" Command="{Binding AddRectangle}" Style="{StaticResource RibbonMenuButton}" />
                 </r:RibbonGroupBox>
 
                 <r:RibbonGroupBox Header="Масштабирование">

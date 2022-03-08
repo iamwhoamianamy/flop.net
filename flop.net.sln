@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.32126.317
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "flop.net", "flop.net\flop.net.csproj", "{82A310BB-66CC-4A40-BF59-AA2133782CB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "flop.net.Tests", "flop.net.Tests\flop.net.Tests.csproj", "{D51952AA-4C25-4475-98A0-A3DE254609CB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "flop.net.Tests", "flop.net.Tests\flop.net.Tests.csproj", "{E4FDD06F-0ACF-4A2F-A878-4DC4B28709EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{82A310BB-66CC-4A40-BF59-AA2133782CB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82A310BB-66CC-4A40-BF59-AA2133782CB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82A310BB-66CC-4A40-BF59-AA2133782CB2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D51952AA-4C25-4475-98A0-A3DE254609CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D51952AA-4C25-4475-98A0-A3DE254609CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D51952AA-4C25-4475-98A0-A3DE254609CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D51952AA-4C25-4475-98A0-A3DE254609CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4FDD06F-0ACF-4A2F-A878-4DC4B28709EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4FDD06F-0ACF-4A2F-A878-4DC4B28709EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4FDD06F-0ACF-4A2F-A878-4DC4B28709EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4FDD06F-0ACF-4A2F-A878-4DC4B28709EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
