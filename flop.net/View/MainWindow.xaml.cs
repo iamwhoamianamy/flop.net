@@ -57,7 +57,7 @@ namespace flop.net
             MainWindowVM = new MainWindowVM();
 
             DataContext = MainWindowVM;
-            MainWindowVM.ActiveLayer.Figures.CollectionChanged += Figures_CollectionChanged;
+            MainWindowVM.Figures.CollectionChanged += Figures_CollectionChanged;
             Graphic = new Graphic(MainCanvas);
 
             DrawAll();
@@ -78,7 +78,7 @@ namespace flop.net
         public void DrawAll()
         {
             Graphic.CleanCanvas();
-            foreach (var figure in MainWindowVM.ActiveLayer.Figures)
+            foreach (var figure in MainWindowVM.Figures)
             {
                 Graphic.DrawPolygon(figure.Geometric.Points, figure.DrawingParameters);
             }
