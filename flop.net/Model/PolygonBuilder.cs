@@ -31,7 +31,7 @@ namespace flop.net.Model
             {
                pointB,
                new Point(pointA.X, pointB.Y),
-               new Point(pointA.Y, (pointB.X + pointA.X) / 2)
+               new Point((pointB.X + pointA.X) / 2, pointA.Y)
             };
          }  
          else
@@ -40,7 +40,7 @@ namespace flop.net.Model
             {
                pointA,
                new Point(pointB.X, pointA.Y),
-               new Point(pointB.Y, (pointB.X + pointA.X) / 2)
+               new Point((pointB.X + pointA.X) / 2, pointB.Y)
             };
          }
          return new Polygon(points, true);
