@@ -44,7 +44,7 @@
 
             <r:RibbonTabItem Header="Главная">
                 <r:RibbonGroupBox Header="Рисование">
-                    <r:ToggleButton Header="Линия" Style="{StaticResource RibbonMenuButton}" />
+                    <r:ToggleButton IsEnabled="False" Header="Линия" Style="{StaticResource RibbonMenuButton}" />
                     <r:ToggleButton Header="Ломанная линия" Style="{StaticResource RibbonMenuButton}" />
                     <r:ToggleButton Header="Эллипс" Style="{StaticResource RibbonMenuButton}" />
                     <r:ToggleButton x:Name="Test" Header="Прямоугольник" Command="{Binding DrawRectangle}" Style="{StaticResource RibbonMenuButton}" />
@@ -127,10 +127,10 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Text="MousePos1" Grid.Row="0" Grid.Column="0" Style="{StaticResource FigureEditorTextBlock}" />
-                    <TextBox Text="{Binding ElementName=MousePos1, Path=X}" Grid.Row="0" Grid.Column="1" Style="{StaticResource FigureEditorTextBox}" />
+                    <TextBox Text="" Grid.Row="0" Grid.Column="1" Style="{StaticResource FigureEditorTextBox}" />
 
                     <TextBlock Text="MousePos2" Grid.Row="1" Grid.Column="0" Style="{StaticResource FigureEditorTextBlock}" />
-                    <TextBox Text="{Binding ElementName=MousePos2, Path=X}" Grid.Row="1" Grid.Column="1" Style="{StaticResource FigureEditorTextBox}" />
+                    <TextBox Text="" Grid.Row="1" Grid.Column="1" Style="{StaticResource FigureEditorTextBox}" />
 
                     <TextBlock Text="Заливка" Grid.Row="2" Grid.Column="0" Style="{StaticResource FigureEditorTextBlock}" />
                     <TextBox Text=" " Grid.Row="2" Grid.Column="1" Style="{StaticResource FigureEditorTextBox}" />

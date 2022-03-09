@@ -16,16 +16,4 @@ namespace flop.net.ViewModel
         public bool CanExecute(object parameter) => true;
         public void Execute(object parameter) => onExecute((T)parameter);
     }
-    internal class SimpleCommand2<T, T2> : ICommand
-    {
-        readonly Action<T, T2> onExecute;
-        public SimpleCommand2(Action<T, T2> onExecute) { this.onExecute = onExecute; }
-
-        public event EventHandler CanExecuteChanged;
-        public bool CanExecute(object parameter) => true;
-        public void Execute(object parameter)
-        {
-            onExecute((T)parameter, (T2)parameter);
-        }
-    }
 }

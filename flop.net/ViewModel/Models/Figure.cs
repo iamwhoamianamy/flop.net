@@ -14,9 +14,17 @@ namespace flop.net.ViewModel.Models
         public event PropertyChangedEventHandler PropertyChanged;
         
         public enum FigureAction { MOVE, ROTATE, SCALE };
-
-        public PointCollection Points { get; set; }
-        Point position;
+        private PointCollection points;
+        public PointCollection Points
+        {
+            get { return points; }
+            set
+            {
+                points = value;
+                OnPropertyChanged();
+            }
+        }
+        private Point position;
         public Point Position
         {
             get { return position; }
@@ -27,6 +35,16 @@ namespace flop.net.ViewModel.Models
                     position = value; 
                     OnPropertyChanged();
                 }
+            }
+        }
+        private Visibility isSelected;
+        public Visibility IsSelected
+        {
+            get { return isSelected; }
+            set
+            {
+                isSelected = value;
+                OnPropertyChanged();
             }
         }
         private IGeometric geometric;
@@ -45,22 +63,22 @@ namespace flop.net.ViewModel.Models
         public DrawingParameters DrawingParameters { get; set; }
 
         public ICommand RequestMove { get; }
-        public ICommand RequestDraw { get; }
+        public ICommand RequestChangeSize { get; }
+        public ICommand RequestSelect { get; }
         public Figure()
         {            
         }
         void MoveTo(Point newPosition)
         {
             Position = newPosition;
-        }
-        void DrawTo(Point A, Point B)
+        } 
+        void ChangeSize(PointCollection points)
         {
-            Point newPosition = new Point((A.X + B.X) / 2, (A.Y + B.Y) / 2);
-
-            Position = newPosition;
-
-            Points.Add(A);
-            Points.Add(B);
+            Points = points;
+        }
+        void Select(Visibility visibility)
+        {
+            IsSelected = visibility;
         }
         static Figure()
         {
@@ -72,8 +90,10 @@ namespace flop.net.ViewModel.Models
             Geometric = geometric;
             DrawingParameters = drawingParameters;
             Position = position;
+            isSelected = Visibility.Hidden;
             RequestMove = new SimpleCommand<Point>(MoveTo);
-            RequestDraw = new SimpleCommand2<Point, Point>(DrawTo);
+            RequestChangeSize = new SimpleCommand<PointCollection>(ChangeSize);
+            RequestSelect = new SimpleCommand<Visibility>(Select);
         }        
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")

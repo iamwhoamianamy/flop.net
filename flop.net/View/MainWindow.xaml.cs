@@ -100,6 +100,10 @@ namespace flop.net
                 isPressed = true;
                 MousePos1 = e.GetPosition(DraggableItemsHost);
             }
+            foreach(var figure in MainWindowVM.Figures)
+            {
+                figure.IsSelected = Visibility.Hidden;
+            }
         }
 
         private void DraggableItemsHost_MouseUp(object sender, MouseButtonEventArgs e)
@@ -121,5 +125,6 @@ namespace flop.net
                 MainWindowVM.Draw(MousePos1, MousePos2);
             }
         }
+        
     }
 }

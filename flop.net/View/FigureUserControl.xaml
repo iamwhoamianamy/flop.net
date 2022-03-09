@@ -38,7 +38,7 @@
             <Thumb Width="7" Height="7" Cursor="SizeNWSE" Margin="0 0 -6 -6"
                    VerticalAlignment="Bottom" HorizontalAlignment="Right"/>-->
         </Grid>
-        <Polygon Points="{Binding Points}">
+        <Polygon x:Name="polygon" Points="{Binding Points, Mode=TwoWay}">
             <Polygon.Fill>
                 <SolidColorBrush Color="Green"/>
             </Polygon.Fill>

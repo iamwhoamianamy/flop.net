@@ -37,7 +37,7 @@ public class UserCommands
 
 public class MainWindowVM : INotifyPropertyChanged
 {
-    public ObservableCollection<Figure> Figures { get; set; }
+    public ObservableCollection<Figure> Figures { get; set; }    
     public Stack<UserCommands> undoStack;
     public Stack<UserCommands> redoStack;
 
@@ -76,7 +76,6 @@ public class MainWindowVM : INotifyPropertyChanged
         get => new RelayCommand( _ => redoFunc());
         set => OnPropertyChanged();
     }
-
 
     public RelayCommand DrawRectangle
     {
