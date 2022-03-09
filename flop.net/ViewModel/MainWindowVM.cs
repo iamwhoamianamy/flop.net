@@ -37,6 +37,12 @@ public class UserCommands
    }
 }
 
+public enum ViewModelMode
+{
+   Default,
+   Creation
+}
+
 public class MainWindowVM : INotifyPropertyChanged
 {
    // public ObservableCollection<Figure> Figures { get; set; }
@@ -44,6 +50,8 @@ public class MainWindowVM : INotifyPropertyChanged
    public Stack<UserCommands> RedoStack { get; set; }
    public Layer ActiveLayer { get; set; }
    public ObservableCollection<Layer> Layers { get; set; }
+   //public Figure FigureOnCreation { get; set; }
+   public ViewModelMode Mode { get; set; } = ViewModelMode.Default;
    public RelayCommand Undo
    {
       get => new RelayCommand(_ => UndoFunc());
@@ -95,6 +103,45 @@ public class MainWindowVM : INotifyPropertyChanged
       }
    }
 
+   public RelayCommand ToggleRectangleCreation
+   {
+      get
+      {
+         return new RelayCommand(_ =>
+         {
+            if(Mode == ViewModelMode.Default)
+            {
+               Mode = ViewModelMode.Creation;
+            }
+            else
+            {
+               Mode = ViewModelMode.Default;
+            }
+         });
+      }
+   }
+   public RelayCommand BeginRectangleCreation
+   {
+      get
+      {
+         return new RelayCommand(_ =>
+         {
+            ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateRectangle(new Point(0, 0), new Point(0, 0)), null));
+         });
+      }
+   }
+
+   public RelayCommand OnRectangleCreation
+   {
+      get
+      {
+         return new RelayCommand(obj =>
+         {
+            var points = obj as (Point, Point)?;
+            ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = new Figure(PolygonBuilder.CreateRectangle(points.Value.Item1, points.Value.Item2), null);
+         });
+      }
+   }
 
    public RelayCommand AddRectangle
    {
@@ -111,8 +158,8 @@ public class MainWindowVM : INotifyPropertyChanged
            Polygon rectangle = PolygonBuilder.CreateRectangle(a, b);
            Figure figure = new Figure(rectangle, null);
            ActiveLayer.Figures.Add(figure);
-               //UndoStack.Push(new UserCommands( _ => { figure.CreateFigure(); }, _ => { figure.DeleteFigure(); }));
-            });
+           //UndoStack.Push(new UserCommands( _ => { figure.CreateFigure(); }, _ => { figure.DeleteFigure(); }));
+        });
       }
    }
 
@@ -154,18 +201,18 @@ public class MainWindowVM : INotifyPropertyChanged
       get
       {
          return new RelayCommand(_ =>
-        {
-           RedoStack.Clear();
-           Figure figure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
-           Random r = new Random();
-           double x = r.Next(-10, 11);
-           double y = r.Next(-10, 11);
-           Vector v = new Vector(x, y);
-           figure.Geometric.Move(v);
-           ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = figure;
-           UndoStack.Push(new UserCommands(_ => { figure.Geometric.Move(v); },
+         {
+            RedoStack.Clear();
+            Figure figure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
+            Random r = new Random();
+            double x = r.Next(-10, 11);
+            double y = r.Next(-10, 11);
+            Vector v = new Vector(x, y);
+            figure.Geometric.Move(v);
+            ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = figure;
+            UndoStack.Push(new UserCommands(_ => { figure.Geometric.Move(v); },
                _ => { figure.Geometric.Move(-v); }));
-        });
+         });
       }
    }
 

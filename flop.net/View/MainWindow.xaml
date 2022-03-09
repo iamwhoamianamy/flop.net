@@ -159,7 +159,7 @@
           <r:ToggleButton Header="Прямоугольник"
                           Icon="/Images/rectangle.png"
                           ToolTip="Рисование прямоугольника"
-                          Command="{Binding DrawRectangle}"
+                          Command="{Binding ToggleRectangleCreation}"
                           Style="{StaticResource RibbonMenuButton}" />
           <r:ToggleButton Header="Треугольник"
                           Icon="/Images/rectangle.png"
@@ -293,7 +293,10 @@
             Grid.Row="1"
             Grid.Column="0"
             Background="White"
-            ClipToBounds="True">
+            ClipToBounds="True"
+            PreviewMouseLeftButtonDown="MainCanvas_PreviewMouseLeftButtonDown"
+            PreviewMouseLeftButtonUp="MainCanvas_PreviewMouseLeftButtonUp"
+            PreviewMouseMove="MainCanvas_PreviewMouseMove">
       <!--Место для вашей рекламы-->
 
     </Canvas>
