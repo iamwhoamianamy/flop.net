@@ -32,7 +32,8 @@ namespace flop.net.Tests
             Assert.Equal(triangle.Points[0], new Point(0, 0));
             Assert.Equal(triangle.Points[1], new Point(2, 0));
             Assert.Equal(triangle.Points[2], new Point(2, 1));
-          
+        }
+        
         private const double Eps = 1E-10;
 
         [Fact]
