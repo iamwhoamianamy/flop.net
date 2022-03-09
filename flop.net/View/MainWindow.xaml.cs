@@ -53,32 +53,7 @@ namespace flop.net
         } 
         public MainWindow()
         {
-         double eps = 0.001;
-         var rectangle = Model.PolygonBuilder.CreateRectangle(new Point(0.0, 0.0), new Point(11.0, 5.0));
-         //var t1 =  rectangle.IsIn(new Point(0.0, 1.0));
-         //var t2 = rectangle.IsIn(new Point(1.0, 1.0));
-         //var t3 = rectangle.IsIn(new Point(1.5, 1.5));
-         //var t4 = rectangle.IsIn(new Point(0.0, 0.0));
-         //var t5 = rectangle.IsIn(new Point(6.7, 7.8));
-         //var t6 = rectangle.IsIn(new Point(-6.7, 7.8));
-         //var t7 = rectangle.IsIn(new Point(-1.5, -1.5));
-         //var t8 = rectangle.IsIn(new Point(-0.0, 0.0));
-         //var t9 = rectangle.IsIn(new Point(11.0, 0.0));
-
-         var triangle = Model.PolygonBuilder.CreateTriangle(new Point(0.0, 0.0), new Point(11.0, 5.0));
-         var s1 = rectangle.IsIn(new Point(0.0, 0.0), eps);
-         var s2 = rectangle.IsIn(new Point(11.0, 0.0), eps);
-         var s3 = rectangle.IsIn(new Point(5.5, 5.0), eps);
-         var s4 = rectangle.IsIn(new Point(5.0, 0.0), eps);
-         var s5 = rectangle.IsIn(new Point(4.3, 43.0 / 11), eps);
-         var s6 = rectangle.IsIn(new Point(7.7, 3.0), eps);
-         var s7 = rectangle.IsIn(new Point(2.0, 4.5), eps);
-         var s8 = rectangle.IsIn(new Point(11.0, 5.0), eps);
-         var s9 = rectangle.IsIn(new Point(5.0, -3.0), eps);
-         var s10 = rectangle.IsIn(new Point(-3.3, -2.0), eps);
-
-
-         InitializeComponent();
+            InitializeComponent();
 
             MainWindowVM = new MainWindowVM();
 

@@ -66,7 +66,6 @@ namespace flop.net.Model
                i1++;
                if (i1 >= pointsSize)
                   i1 = 0;
-               break;
             }
             if (result == true)
                break;
