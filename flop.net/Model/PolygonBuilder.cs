@@ -46,7 +46,7 @@ namespace flop.net.Model
          return new Polygon(points, true);
       }
 
-     
+
       public static Polygon CreateTriangle(Point pointA, Point pointB, Point pointC)
       {
          var points = new PointCollection()
@@ -55,6 +55,9 @@ namespace flop.net.Model
             pointB,
             pointC
          };
+
+         return new Polygon(points, true);
+      }
   
       public static Polygon CreateEllipse(Point pointA, Point pointB, double pointCount)
       {
