@@ -31,7 +31,7 @@ namespace flop.net.Model
             {
                pointB,
                new Point(pointA.X, pointB.Y),
-               new Point(pointA.Y, (pointB.X + pointA.X) / 2)
+               new Point((pointB.X + pointA.X) / 2, pointA.Y)
             };
          }  
          else
@@ -40,8 +40,36 @@ namespace flop.net.Model
             {
                pointA,
                new Point(pointB.X, pointA.Y),
-               new Point(pointB.Y, (pointB.X + pointA.X) / 2)
+               new Point((pointB.X + pointA.X) / 2, pointB.Y)
             };
+         }
+         return new Polygon(points, true);
+      }
+
+
+      public static Polygon CreateTriangle(Point pointA, Point pointB, Point pointC)
+      {
+         var points = new PointCollection()
+         {
+            pointA,
+            pointB,
+            pointC
+         };
+
+         return new Polygon(points, true);
+      }
+  
+      public static Polygon CreateEllipse(Point pointA, Point pointB, double pointCount)
+      {
+         PointCollection points = new PointCollection() { };
+         Point center = new Point((pointA.X + pointB.X) / 2, (pointA.Y + pointB.Y) / 2);
+         double h = Math.Abs(pointA.Y) + Math.Abs(pointB.Y);
+         double w = Math.Abs(pointA.X) + Math.Abs(pointB.X);
+         for (var i = 0; i < pointCount; i ++)
+         {
+            double x = Math.Cos(2 * Math.PI * i / pointCount) * w / 2 + center.X;
+            double y = Math.Sin(2 * Math.PI * i / pointCount) * h / 2 + center.Y;
+            points.Add(new Point(x, y));
          }
          return new Polygon(points, true);
       }
