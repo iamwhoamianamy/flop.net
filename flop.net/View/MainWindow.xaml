@@ -79,11 +79,13 @@
                            Height="32"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           Fill="Green"/>
+                           Fill="{Binding CurrentFillColor}"
+                           Stroke="AliceBlue"
+                           StrokeThickness="2"/>
               </Grid>
             </r:DropDownButton.Icon>
             <r:ColorGallery Columns="10"
-                            SelectedColor="Green"
+                            SelectedColor="{Binding CurrentFillColor}"
                             IsNoColorButtonVisible="False"
                             StandardColorGridRows="3"
                             ThemeColorGridRows="5" />
@@ -96,11 +98,13 @@
                            Height="32"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           Fill="Green"/>
+                           Fill="{Binding CurrentStrokeColor}"
+                           Stroke="AliceBlue"
+                           StrokeThickness="2"/>
               </Grid>
             </r:DropDownButton.Icon>
             <r:ColorGallery Columns="10"
-                            SelectedColor="Green"
+                            SelectedColor="{Binding CurrentStrokeColor}"
                             IsNoColorButtonVisible="False"
                             StandardColorGridRows="3"
                             ThemeColorGridRows="5" />
@@ -118,7 +122,8 @@
                        Grid.Column="0"
                        Grid.Row="0"
                        Margin="0 10 0 0"/>
-            <r:Spinner Grid.Column="1"
+            <r:Spinner Value="{Binding CurrentSrokeThickness}"
+                       Grid.Column="1"
                        Grid.Row="0"
                        Margin="0 10 0 0"
                        Width="90"/>
@@ -130,8 +135,8 @@
                       Grid.Row="1"
                       Margin="0 10 0 0"
                       Width="90"
-                      SelectedItem="Flat">
-              <ComboBoxItem Content="Flat" IsSelected="True"/>
+                      SelectedItem="{Binding CurrentStrokeDashCap}">
+              <ComboBoxItem Content="Flat"/>
               <ComboBoxItem Content="Square"/>
               <ComboBoxItem Content="Round"/>
               <ComboBoxItem Content="Triangle"/>
@@ -192,7 +197,9 @@
         </r:RibbonGroupBox>
       </r:RibbonTabItem>
 
-      <r:RibbonTabItem Header="Фигура">
+      <r:RibbonTabItem Header="Фигура" >
+                <!--DataContext="{Binding ElementName=MainWin, Path=MainWindowVM.SelectedFigure}"-->
+                       
         <r:RibbonGroupBox Header="Параметры фигуры">
           <r:DropDownButton x:Name="SelectedFillColorButton"
                             Header="Цвет заливки">
@@ -202,11 +209,13 @@
                            Height="32"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           Fill="Green"/>
+                           Fill="{Binding DrawParametrs.Fill}"
+                           Stroke="AliceBlue"
+                           StrokeThickness="2"/>
               </Grid>
             </r:DropDownButton.Icon>
             <r:ColorGallery Columns="10"
-                            SelectedColor="Green"
+                            SelectedColor="{Binding DrawingParameters.Fill}"
                             IsNoColorButtonVisible="False"
                             StandardColorGridRows="3"
                             ThemeColorGridRows="5" />
@@ -219,11 +228,13 @@
                            Height="32"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           Fill="Green"/>
+                           Fill="{Binding DrawParametrs.Stroke}"
+                           Stroke="AliceBlue"
+                           StrokeThickness="2"/>
               </Grid>
             </r:DropDownButton.Icon>
             <r:ColorGallery Columns="10"
-                            SelectedColor="Green"
+                            SelectedColor="{Binding DrawingParameters.Stroke}"
                             IsNoColorButtonVisible="False"
                             StandardColorGridRows="3"
                             ThemeColorGridRows="5" />
@@ -243,7 +254,8 @@
                        Grid.Column="0"
                        Grid.Row="0"
                        Margin="0 10 0 0"/>
-            <r:Spinner Grid.Column="1"
+            <r:Spinner Value="{Binding DrawingParameters.StrokeThickness}"
+                       Grid.Column="1"
                        Grid.Row="0"
                        Margin="0 5 0 0"
                        Width="90"/>
@@ -255,8 +267,8 @@
                       Grid.Row="1"
                       Margin="0 5 0 0"
                       Width="90"
-                      SelectedItem="Flat">
-              <ComboBoxItem Content="Flat" IsSelected="True"/>
+                      SelectedItem="{Binding DrawingParameters.StrokeDashCap}">
+              <ComboBoxItem Content="Flat"/>
               <ComboBoxItem Content="Square"/>
               <ComboBoxItem Content="Round"/>
               <ComboBoxItem Content="Triangle"/>
