@@ -36,7 +36,6 @@ namespace flop.net
                 OnPropertyChanged();
             }
         }
-
         private Graphic graphic;
         public Graphic Graphic
         {
@@ -49,7 +48,17 @@ namespace flop.net
                 graphic = value;
                 OnPropertyChanged();
             }
-        } 
+        }
+        private Brush currentFillColor;
+        public Brush CurrentFillColor
+        {
+            get => currentFillColor;
+            set
+            {
+                currentFillColor = value;
+                OnPropertyChanged();
+            }
+        }
         public MainWindow()
         {
             InitializeComponent();
