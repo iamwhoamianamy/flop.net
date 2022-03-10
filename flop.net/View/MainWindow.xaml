@@ -173,7 +173,7 @@
         <r:RibbonGroupBox Header="Объектный режим">
           <r:ToggleButton Header="Перемещение"
                           ToolTip="Перемещение фигуры"
-                          Command="{Binding DoMove}"
+                          Command="{Binding ToggleMoving}"
                           Style="{StaticResource RibbonMenuButton}" />
           <r:ToggleButton Header="Масштабирование"
                           ToolTip="Масштабирование фигуры"
@@ -295,13 +295,12 @@
             Background="White"
             ClipToBounds="True"
             PreviewMouseLeftButtonDown="MainCanvas_PreviewMouseLeftButtonDown"
+            PreviewMouseRightButtonDown="MainCanvas_PreviewMouseRightButtonDown"
             PreviewMouseLeftButtonUp="MainCanvas_PreviewMouseLeftButtonUp"
             PreviewMouseMove="MainCanvas_PreviewMouseMove">
       <!--Место для вашей рекламы-->
 
     </Canvas>
-
-
     <StackPanel Grid.Column="1"
                 Grid.Row="1"
                 Background="DarkGray">

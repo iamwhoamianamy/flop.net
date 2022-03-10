@@ -40,17 +40,19 @@ public class UserCommands
 public enum ViewModelMode
 {
    Default,
-   Creation
+   Creation,
+   Moving,
+   Rotating,
+   Scaling
 }
 
 public class MainWindowVM : INotifyPropertyChanged
 {
-   // public ObservableCollection<Figure> Figures { get; set; }
    public Stack<UserCommands> UndoStack { get; set; }
    public Stack<UserCommands> RedoStack { get; set; }
-   public Layer ActiveLayer { get; set; }
+   public Layer ActiveLayer { get; private set; }
+   public Figure ActiveFigure { get; private set; }
    public ObservableCollection<Layer> Layers { get; set; }
-   //public Figure FigureOnCreation { get; set; }
    public ViewModelMode Mode { get; set; } = ViewModelMode.Default;
    public RelayCommand Undo
    {
@@ -103,15 +105,28 @@ public class MainWindowVM : INotifyPropertyChanged
       }
    }
 
-   public RelayCommand ToggleRectangleCreation
+   public RelayCommand toggleRectangleCreation;
+   public RelayCommand ToggleRectangleCreation => toggleRectangleCreation = new RelayCommand(_ =>
+   {
+      if (Mode == ViewModelMode.Default)
+      {
+         Mode = ViewModelMode.Creation;
+      }
+      else
+      {
+         Mode = ViewModelMode.Default;
+      }
+   });
+
+   public RelayCommand ToggleMoving
    {
       get
       {
          return new RelayCommand(_ =>
          {
-            if(Mode == ViewModelMode.Default)
+            if (Mode == ViewModelMode.Default)
             {
-               Mode = ViewModelMode.Creation;
+               Mode = ViewModelMode.Moving;
             }
             else
             {
@@ -120,6 +135,7 @@ public class MainWindowVM : INotifyPropertyChanged
          });
       }
    }
+
    public RelayCommand BeginRectangleCreation
    {
       get
@@ -127,6 +143,49 @@ public class MainWindowVM : INotifyPropertyChanged
          return new RelayCommand(_ =>
          {
             ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateRectangle(new Point(0, 0), new Point(0, 0)), null));
+         });
+      }
+   }
+
+   public RelayCommand BeginActiveFigureMoving
+   {
+      get
+      {
+         return new RelayCommand(_ =>
+         {
+
+         });
+      }
+   }
+
+   public RelayCommand OnActiveFigureMoving
+   {
+      get
+      {
+         return new RelayCommand(obj =>
+         {
+            var coords = obj as (Point, Point)?;
+
+            var mousePreviousCoords = coords.Value.Item1;
+            var mouseCurrentCoords = coords.Value.Item2;
+
+            var delta = mouseCurrentCoords - mousePreviousCoords;
+
+            ActiveFigure.Geometric.Move(delta);
+
+            ActiveLayer.Figures.Add(null);
+            ActiveLayer.Figures.RemoveAt(ActiveLayer.Figures.Count - 1);
+         });
+      }
+   }
+
+   public RelayCommand EndActiveFigureMoving
+   {
+      get
+      {
+         return new RelayCommand(_ =>
+         {
+
          });
       }
    }
@@ -160,6 +219,26 @@ public class MainWindowVM : INotifyPropertyChanged
            ActiveLayer.Figures.Add(figure);
            //UndoStack.Push(new UserCommands( _ => { figure.CreateFigure(); }, _ => { figure.DeleteFigure(); }));
         });
+      }
+   }
+
+   public RelayCommand SetActiveFigure
+   {
+      get
+      {
+         return new RelayCommand(obj =>
+         {
+            var mouseCoords = obj as Point?;
+
+            foreach (var figure in ActiveLayer.Figures)
+            {
+               if (figure.Geometric.IsIn(mouseCoords.Value, 1e-1))
+               {
+                  ActiveFigure = figure;
+                  break;
+               }
+            }
+         });
       }
    }
 

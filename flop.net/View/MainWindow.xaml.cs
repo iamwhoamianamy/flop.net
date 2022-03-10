@@ -24,7 +24,10 @@ namespace flop.net
    public enum ViewMode
    {
       Default,
-      Creation
+      Creation,
+      Moving,
+      Rotating,
+      Scaling
    }
    /// <summary>
    /// Логика взаимодействия для MainWindow.xaml
@@ -67,6 +70,7 @@ namespace flop.net
          }
       }
       public Point MousePressedCoords { get; set; }
+      public Point PreviousMouseCoords { get; set; }
       public MainWindow()
       {
          InitializeComponent();
@@ -112,14 +116,15 @@ namespace flop.net
             mainWindowVM.BeginRectangleCreation.Execute();
             Mode = ViewMode.Creation;
          }
-         //else
-         //{
-         //   if (mainWindowVM.Mode == ViewModelMode.Creation &&
-         //      Mode == ViewMode.Creation)
-         //   {
-         //      Mode = ViewMode.Default;
-         //   }
-         //}
+
+         if(mainWindowVM.Mode == ViewModelMode.Moving &&
+            Mode == ViewMode.Default)
+         {
+            mainWindowVM.BeginActiveFigureMoving.Execute();
+            Mode = ViewMode.Moving;
+
+            PreviousMouseCoords = e.GetPosition(MainCanvas);
+         }
       }
 
       private void MainCanvas_PreviewMouseMove(object sender, MouseEventArgs e)
@@ -130,7 +135,14 @@ namespace flop.net
             mainWindowVM.OnRectangleCreation.Execute((MousePressedCoords, e.GetPosition(MainCanvas)));
          }
 
-         if(e.LeftButton == MouseButtonState.Released)
+         if (mainWindowVM.Mode == ViewModelMode.Moving &&
+            Mode == ViewMode.Moving)
+         {
+            mainWindowVM.OnActiveFigureMoving.Execute((PreviousMouseCoords, e.GetPosition(MainCanvas)));
+            PreviousMouseCoords = e.GetPosition(MainCanvas);
+         }
+
+         if (e.LeftButton == MouseButtonState.Released)
          {
             Mode = ViewMode.Default;
          }
@@ -143,6 +155,11 @@ namespace flop.net
          //{
          //   Mode = ViewMode.Default;
          //}
+      }
+
+      private void MainCanvas_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+      {
+         mainWindowVM.SetActiveFigure.Execute(e.GetPosition(MainCanvas));
       }
    }
 }
