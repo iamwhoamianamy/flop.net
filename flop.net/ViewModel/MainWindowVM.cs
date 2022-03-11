@@ -6,36 +6,9 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using flop.net.Annotations;
 using flop.net.Model;
-using flop.net.View;
-using System.Windows.Input;
 using flop.net.ViewModel.Models;
-using System.Diagnostics;
-using System.Linq;
-using System.Windows.Media;
-using flop.net.ViewModel;
 
 namespace flop.net.ViewModel;
-
-public class UserCommands
-{
-   private Action<object> execute;
-   private Action<object> unexecute;
-   public UserCommands(Action<object> execute, Action<object> unexecute)
-   {
-      this.execute = execute;
-      this.unexecute = unexecute;
-   }
-
-   public RelayCommand Execute
-   {
-      get => new RelayCommand(execute);
-   }
-
-   public RelayCommand UnExecute
-   {
-      get => new RelayCommand(unexecute);
-   }
-}
 
 public class MainWindowVM : INotifyPropertyChanged
 {
