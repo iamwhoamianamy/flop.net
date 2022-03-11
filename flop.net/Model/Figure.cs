@@ -1,11 +1,7 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Media;
-using flop.net.Model;
-using System.Windows;
 
-namespace flop.net.ViewModel.Models
+namespace flop.net.Model
 {
     public class Figure : INotifyPropertyChanged
     {

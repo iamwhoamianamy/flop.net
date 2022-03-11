@@ -76,15 +76,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\DrawingParameters.cs" />
+    <Compile Include="Model\Figure.cs" />
     <Compile Include="Model\IGeometric.cs" />
+    <Compile Include="Model\Layer.cs" />
     <Compile Include="Model\Polygon.cs" />
     <Compile Include="Model\PolygonBuilder.cs" />
     <Compile Include="Save\JsonSaver.cs" />
-    <Compile Include="ViewModel\Models\DrawingParameters.cs" />
-    <Compile Include="ViewModel\Models\Figure.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModel\MainWindowVM.cs" />
-    <Compile Include="ViewModel\Models\Layer.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="ViewModel\UserCommands.cs" />
     <Compile Include="View\IGraphic.cs" />
