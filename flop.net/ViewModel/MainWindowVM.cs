@@ -39,6 +39,7 @@ public class UserCommands
 
 public class MainWindowVM : INotifyPropertyChanged
 {
+   private const double EpsIsIn = double.MinValue;
    // public ObservableCollection<Figure> Figures { get; set; }
    public Stack<UserCommands> UndoStack { get; set; }
    public Stack<UserCommands> RedoStack { get; set; }
@@ -95,6 +96,15 @@ public class MainWindowVM : INotifyPropertyChanged
       }
    }
 
+   public Figure ActiveFigure { get; set; }
+   public RelayCommand SetActiveFigure => new (o =>
+   {
+      if (o is Point point)
+      {
+         var figure = ActiveLayer.Figures.FirstOrDefault(figure => figure.Geometric.IsIn(point, EpsIsIn));
+         ActiveFigure = figure;
+      }
+   });
 
    public RelayCommand AddRectangle
    {
