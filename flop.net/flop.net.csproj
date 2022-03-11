@@ -86,6 +86,7 @@
     <Compile Include="ViewModel\MainWindowVM.cs" />
     <Compile Include="ViewModel\Models\Layer.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
+    <Compile Include="ViewModel\UserCommands.cs" />
     <Compile Include="View\IGraphic.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
