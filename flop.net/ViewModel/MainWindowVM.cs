@@ -15,8 +15,11 @@ public class MainWindowVM : INotifyPropertyChanged
    // public ObservableCollection<Figure> Figures { get; set; }
    public Stack<UserCommands> UndoStack { get; set; }
    public Stack<UserCommands> RedoStack { get; set; }
+   
    public Layer ActiveLayer { get; set; }
    public ObservableCollection<Layer> Layers { get; set; }
+   public Figure FigureOnCreating { get; set; }
+
    public RelayCommand Undo
    {
       get => new RelayCommand(_ => UndoFunc());
