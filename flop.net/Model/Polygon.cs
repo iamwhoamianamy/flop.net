@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Media;
+using System.Linq;
 
 namespace flop.net.Model
 {
@@ -23,11 +24,30 @@ namespace flop.net.Model
 
       public Polygon(PointCollection points, bool isClosed)
       {
-         Points = points;
+         Points = points.Clone();
          IsClosed = isClosed;
       }
 
-      public bool IsClosed { get; }
+      public Polygon CircumscribingRectangle
+      {
+         get
+         {
+            var maxX = Points.Max(x => x.X);
+            var maxY = Points.Max(y => y.Y);
+            var minX = Points.Min(x => x.X);
+            var minY = Points.Min(y => y.Y);
+            var points = new PointCollection()
+            {
+               new Point(minX, minY),
+               new Point(minX, maxY),
+               new Point(maxX, maxY),
+               new Point(maxX, minY)
+            };
+            return new Polygon(points, true);
+         }
+      }
+
+      public bool IsClosed { get; private set; }
       
       public bool IsIn(Point position, double eps)
       {
@@ -42,18 +62,21 @@ namespace flop.net.Model
          }
       }
 
-      public void Rotate(double angle)
+      public void Rotate(double angle, Point? rotationCenter)
       {
-         var shift = Center;
+         if (!rotationCenter.HasValue)
+         {
+            rotationCenter = Center;
+         }
          var degToRad = angle * Math.PI / 180;
          for (var i = 0; i < Points.Count; i++)
          {
-            var point = Point.Subtract(Points[i], (Vector)shift);
+            var point = Point.Subtract(Points[i], (Vector)rotationCenter);
             var oldX = point.X;
             var oldY = point.Y;
             point.X = oldX * Math.Cos(degToRad) - oldY * Math.Sin(degToRad);
             point.Y = oldX * Math.Sin(degToRad) + oldY * Math.Cos(degToRad);
-            Points[i] = Point.Add(point, (Vector)shift);
+            Points[i] = Point.Add(point, (Vector)rotationCenter);
          }
       }
 
