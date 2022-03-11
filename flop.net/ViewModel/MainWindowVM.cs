@@ -6,7 +6,6 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using flop.net.Annotations;
 using flop.net.Model;
-using flop.net.ViewModel.Models;
 
 namespace flop.net.ViewModel;
 
