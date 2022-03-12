@@ -29,7 +29,7 @@ namespace flop.net.Model
 
       public bool IsClosed { get; }
 
-      public bool IsIn(Point position, double eps)
+      public bool IsIn(Point position, double eps = 0.001)
       {
          var result = false;
          int i1, i2, n;
