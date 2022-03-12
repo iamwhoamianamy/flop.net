@@ -21,76 +21,76 @@ using System.Windows.Shapes;
 
 namespace flop.net
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : RibbonWindow, INotifyPropertyChanged
-    {
-        private MainWindowVM mainWindowVM;
-        public MainWindowVM MainWindowVM
-        {
-            get { return mainWindowVM; }
-            set
-            {
-                mainWindowVM = value;
-                OnPropertyChanged();
-            }
-        }
-        private Graphic graphic;
-        public Graphic Graphic
-        {
-            get 
-            {
-                return graphic; 
-            }
-            set
-            {
-                graphic = value;
-                OnPropertyChanged();
-            }
-        }
-        private Brush currentFillColor;
-        public Brush CurrentFillColor
-        {
-            get => currentFillColor;
-            set
-            {
-                currentFillColor = value;
-                OnPropertyChanged();
-            }
-        }
-        public MainWindow()
-        {
-            InitializeComponent();
+   /// <summary>
+   /// Логика взаимодействия для MainWindow.xaml
+   /// </summary>
+   public partial class MainWindow : RibbonWindow, INotifyPropertyChanged
+   {
+      private MainWindowVM mainWindowVM;
+      public MainWindowVM MainWindowVM
+      {
+         get { return mainWindowVM; }
+         set
+         {
+            mainWindowVM = value;
+            OnPropertyChanged();
+         }
+      }
+      private Graphic graphic;
+      public Graphic Graphic
+      {
+         get
+         {
+            return graphic;
+         }
+         set
+         {
+            graphic = value;
+            OnPropertyChanged();
+         }
+      }
+      private Brush currentFillColor;
+      public Brush CurrentFillColor
+      {
+         get => currentFillColor;
+         set
+         {
+            currentFillColor = value;
+            OnPropertyChanged();
+         }
+      }
+      public MainWindow()
+      {
+         InitializeComponent();
 
-            MainWindowVM = new MainWindowVM();
+         MainWindowVM = new MainWindowVM();
 
-            DataContext = MainWindowVM;
-            MainWindowVM.ActiveLayer.Figures.CollectionChanged += Figures_CollectionChanged;
-            Graphic = new Graphic(MainCanvas);
+         DataContext = MainWindowVM;
+         MainWindowVM.ActiveLayer.Figures.CollectionChanged += Figures_CollectionChanged;
+         Graphic = new Graphic(MainCanvas);
 
-            DrawAll();
-        }
+         DrawAll();
+      }
 
-        private void Figures_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            DrawAll();
-        }
+      private void Figures_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+      {
+         DrawAll();
+      }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+      public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        public void DrawAll()
-        {
-            Graphic.CleanCanvas();
-            foreach (var figure in MainWindowVM.ActiveLayer.Figures)
-            {
-                Graphic.DrawPolygon(figure.Geometric.Points, figure.DrawingParameters);
-            }
-        }
-    }
+      [NotifyPropertyChangedInvocator]
+      protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+      {
+         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+      }
+      public void DrawAll()
+      {
+         Graphic.CleanCanvas();
+         foreach (var figure in MainWindowVM.ActiveLayer.Figures)
+         {
+            Graphic.DrawPolygon(figure.Geometric.Points, figure.DrawingParameters);
+         }
+      }
+   }
 }
