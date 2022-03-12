@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using flop.net.Annotations;
 
-namespace flop.net.ViewModel.Models
+namespace flop.net.Model
 {
     public class DrawingParameters : INotifyPropertyChanged
     {
