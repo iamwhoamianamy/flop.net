@@ -12,7 +12,7 @@ namespace flop.net.Model
    public interface IGeometric
    {
       void Move(Vector delta);
-      void Rotate(double angle, Point? rotationCenter);
+      void Rotate(double angle, Point? rotationCenter=null);
       void Scale(Point scale);
       PointCollection Points { get; }
       bool IsClosed { get; }
