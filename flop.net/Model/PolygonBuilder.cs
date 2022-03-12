@@ -46,8 +46,9 @@ namespace flop.net.Model
          return new Polygon(points, true);
       }
 
-      public static Polygon CreateCircle(Point center, double radius, int pointCount)
+      public static Polygon CreateCircle(Point center, double radius)
       {
+         int pointCount = (int)Math.Round(2 * Math.PI * radius);   
          PointCollection points = new PointCollection() { };
          for (var i = 0; i < pointCount; i++)
          {
