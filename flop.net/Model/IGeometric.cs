@@ -18,6 +18,6 @@ namespace flop.net.Model
       bool IsClosed { get; }
       Point Center { get; }
       bool IsIn(Point position, double eps);
-      Polygon CircumscribingRectangle { get; }
+      Polygon BoundingBox { get; }
    }
 }

@@ -59,7 +59,7 @@ namespace flop.net.Model
          return new Polygon(points, true);
       }
   
-      public static Polygon CreateEllipse(Point pointA, Point pointB, double pointCount)
+      public static Polygon CreateEllipse(Point pointA, Point pointB, int pointCount)
       {
          PointCollection points = new PointCollection() { };
          Point center = new Point((pointA.X + pointB.X) / 2, (pointA.Y + pointB.Y) / 2);

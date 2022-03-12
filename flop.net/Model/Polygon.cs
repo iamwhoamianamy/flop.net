@@ -28,7 +28,7 @@ namespace flop.net.Model
          IsClosed = isClosed;
       }
 
-      public Polygon CircumscribingRectangle
+      public Polygon BoundingBox
       {
          get
          {
@@ -62,7 +62,7 @@ namespace flop.net.Model
          }
       }
 
-      public void Rotate(double angle, Point? rotationCenter)
+      public void Rotate(double angle, Point? rotationCenter=null)
       {
          if (!rotationCenter.HasValue)
          {
