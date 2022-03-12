@@ -21,6 +21,22 @@ using System.Windows.Shapes;
 
 namespace flop.net
 {
+    public enum ViewMode
+    {
+        Default,
+        Creation,
+        Moving,
+        Rotating,
+        Scaling
+    }
+    public enum FigureCreation
+    {
+        Rectangle,
+        Triangle,
+        Ellipse,
+        Polyline,
+        Polygon
+    }
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
