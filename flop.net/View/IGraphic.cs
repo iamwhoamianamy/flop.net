@@ -8,7 +8,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using flop.net.ViewModel.Models;
+using flop.net.Model;
+using Polygon = System.Windows.Shapes.Polygon;
 
 namespace flop.net.View
 {
