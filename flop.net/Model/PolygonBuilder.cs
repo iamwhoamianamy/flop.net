@@ -59,8 +59,8 @@ namespace flop.net.Model
       {
          PointCollection points = new PointCollection() { };
          Point center = new Point((pointA.X + pointB.X) / 2, (pointA.Y + pointB.Y) / 2);
-         double h = Math.Abs(pointA.Y + pointB.Y);
-         double w = Math.Abs(pointA.X + pointB.X);
+         double h = Math.Abs(pointA.Y - pointB.Y);
+         double w = Math.Abs(pointA.X - pointB.X);
          if(pointCount == null)
          {
             pointCount = (int)Math.Round(4 * (Math.PI * h * w + (w - h) * (w - h)) / (w + h));
