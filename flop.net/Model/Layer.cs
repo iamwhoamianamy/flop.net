@@ -7,7 +7,7 @@ namespace flop.net.Model
     public class Layer : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        private ObservableCollection<Figure> figures { get; set; }
+        private ObservableCollection<Figure> figures;
         public ObservableCollection<Figure> Figures 
         {
             get => this.figures; 
