@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using flop.net.Annotations;
 using flop.net.Model;
+using System.Windows.Media;
 
 namespace flop.net.ViewModel;
 
@@ -13,7 +14,7 @@ public class MainWindowVM : INotifyPropertyChanged
 {
    // public ObservableCollection<Figure> Figures { get; set; }
    public Stack<UserCommands> UndoStack { get; set; }
-   public Stack<UserCommands> RedoStack { get; set; 
+   public Stack<UserCommands> RedoStack { get; set; } 
    public Stack<Figure> DeletedFigures;
    private Figure activeFigure;
    public Layer ActiveLayer { get; set; }
