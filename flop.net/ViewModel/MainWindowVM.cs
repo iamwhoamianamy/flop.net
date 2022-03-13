@@ -48,50 +48,6 @@ public class MainWindowVM : INotifyPropertyChanged
       Layers.Remove(layer);
    }
 
-   private Brush сurrentFillColor;
-   public Brush СurrentFillColor
-   {
-      get => сurrentFillColor;
-      set
-      {
-         сurrentFillColor = value;
-         OnPropertyChanged();
-      }
-   }
-
-   private Brush сurrentStrokeColor;
-   public Brush CurrentStrokeColor
-   {
-      get => сurrentStrokeColor;
-      set
-      {
-         сurrentStrokeColor = value;
-         OnPropertyChanged();
-      }
-   }
-
-   private int сurrentSrokeThickness;
-   public int CurrentSrokeThickness
-   {
-      get => сurrentSrokeThickness;
-      set
-      {
-         сurrentSrokeThickness = value;
-         OnPropertyChanged();
-      }
-   }
-
-   private PenLineCap сurrentStrokeDashCap;
-   public PenLineCap CurrentStrokeDashCap
-   {
-      get => сurrentStrokeDashCap;
-      set
-      {
-         сurrentStrokeDashCap = value;
-         OnPropertyChanged();
-      }
-   }
-
    public void UndoFunc()
    {
       if (UndoStack.Count > 0)
