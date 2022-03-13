@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using flop.net.Annotations;
 using flop.net.Model;
+using System.Windows.Media;
 
 namespace flop.net.ViewModel;
 
@@ -15,8 +16,9 @@ public class MainWindowVM : INotifyPropertyChanged
    private const double EpsIsIn = double.MinValue;
 
    public Stack<UserCommands> UndoStack { get; set; }
-   public Stack<UserCommands> RedoStack { get; set; }
-   
+   public Stack<UserCommands> RedoStack { get; set; } 
+   public Stack<Figure> DeletedFigures;
+   private Figure activeFigure;
    public Layer ActiveLayer { get; set; }
    public ObservableCollection<Layer> Layers { get; set; }
    public Figure FigureOnCreating { get; set; }
@@ -82,93 +84,164 @@ public class MainWindowVM : INotifyPropertyChanged
       }
    });
 
+   private RelayCommand addRectangle;
    public RelayCommand AddRectangle
    {
       get
       {
-         return new RelayCommand(_ =>
-        {
-           RedoStack.Clear();
-           Random r = new Random();
-           int lwidth = r.Next(0, 500);
-           int lheight = r.Next(0, 500);
-           Point a = new Point(lwidth, lheight);
-           Point b = new Point(lwidth + 20, lheight + 20);
-           Polygon rectangle = PolygonBuilder.CreateRectangle(a, b);
-           Figure figure = new Figure(rectangle, null);
-           ActiveLayer.Figures.Add(figure);
-               //UndoStack.Push(new UserCommands( _ => { figure.CreateFigure(); }, _ => { figure.DeleteFigure(); }));
-            });
+         Action<object> redo = (_) =>
+         {
+            if (DeletedFigures.Count > 0)
+            {
+               activeFigure = DeletedFigures.Pop();
+               ActiveLayer.Figures.Add(activeFigure);
+            }
+            else
+               throw new InvalidOperationException();
+         };
+
+         Action<object> undo = (_) =>
+         {
+            if (!ActiveLayer.Figures.Contains(activeFigure))
+               throw new InvalidOperationException();
+            DeletedFigures.Push(activeFigure);
+            ActiveLayer.Figures.Remove(activeFigure);
+            if (ActiveLayer.Figures.Count > 0)
+               activeFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
+            else
+               activeFigure = null;
+         };
+
+         return addRectangle ??= new RelayCommand(_ =>
+         {
+            RedoStack.Clear();
+            Random r = new Random();
+            int lwidth = r.Next(0, 500);
+            int lheight = r.Next(0, 500);
+            Point a = new Point(lwidth, lheight);
+            Point b = new Point(lwidth + 20, lheight + 20);
+            Polygon rectangle = PolygonBuilder.CreateRectangle(a, b);
+            activeFigure = new Figure(rectangle, null);
+            ActiveLayer.Figures.Add(activeFigure);
+            UndoStack.Push(new UserCommands(redo, undo));
+         });
       }
    }
-
+   private RelayCommand rotateFigure;
    public RelayCommand RotateFigure
    {
       get
       {
-         return new RelayCommand(_ =>
+         return rotateFigure ??= new RelayCommand(_ =>
          {
             RedoStack.Clear();
-            Figure figure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
-            figure.Geometric.Rotate(30);
-            ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = figure;
-            UndoStack.Push(new UserCommands(_ => { figure.Geometric.Rotate(30); },
-               _ => { figure.Geometric.Rotate(-30); }));
+            if (activeFigure != null)
+            {
+               activeFigure.Geometric.Rotate(30);
+               ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = activeFigure;
+               UndoStack.Push(new UserCommands(_ => { activeFigure.Geometric.Rotate(30); },
+                      _ => { activeFigure.Geometric.Rotate(-30); }));
+               if (ActiveLayer.Figures.Count != 0)
+                  ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
+               }
          });
       }
    }
 
+   private RelayCommand scaleFigure;
    public RelayCommand ScaleFigure
    {
       get
       {
-         return new RelayCommand(_ =>
+         return scaleFigure ??= new RelayCommand(_ =>
          {
             RedoStack.Clear();
-            Figure figure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
-            figure.Geometric.Scale(new Point(2, 2));
-            ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = figure;
-            UndoStack.Push(new UserCommands(
-                _ => { figure.Geometric.Scale(new Point(2, 2)); },
-                _ => { figure.Geometric.Scale(new Point(0.5, 0.5)); }));
+            if (activeFigure != null)
+            {
+               activeFigure.Geometric.Scale(new Point(2, 2));
+               UndoStack.Push(new UserCommands(
+                      _ => { activeFigure.Geometric.Scale(new Point(2, 2)); },
+                      _ => { activeFigure.Geometric.Scale(new Point(0.5, 0.5)); }));
+               if (ActiveLayer.Figures.Count != 0)
+                  ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
+               }
          });
       }
    }
 
+   private RelayCommand moveFigure;
    public RelayCommand MoveFigure
    {
       get
       {
-         return new RelayCommand(_ =>
-        {
-           RedoStack.Clear();
-           Figure figure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
-           Random r = new Random();
-           double x = r.Next(-10, 11);
-           double y = r.Next(-10, 11);
-           Vector v = new Vector(x, y);
-           figure.Geometric.Move(v);
-           ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = figure;
-           UndoStack.Push(new UserCommands(_ => { figure.Geometric.Move(v); },
-               _ => { figure.Geometric.Move(-v); }));
-        });
+         return moveFigure ??= new RelayCommand(_ =>
+         {
+            RedoStack.Clear();
+            if (activeFigure != null)
+            {
+               Random r = new Random();
+               double x = r.Next(-10, 11);
+               double y = r.Next(-10, 11);
+               Vector v = new Vector(x, y);
+               activeFigure.Geometric.Move(v);
+               UndoStack.Push(new UserCommands(_ => { activeFigure.Geometric.Move(v); },
+                      _ => { activeFigure.Geometric.Move(-v); }));
+               if (ActiveLayer.Figures.Count != 0)
+                  ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
+               }
+         });
       }
    }
+   private RelayCommand deleteFigure;
+   public RelayCommand DeleteFigure
+   {
+      get
+      {
+         Action<object> redo = (_) =>
+         {
+            if (!ActiveLayer.Figures.Contains(activeFigure))
+               throw new InvalidOperationException();
+            DeletedFigures.Push(activeFigure);
+            ActiveLayer.Figures.Remove(activeFigure);
+            if (ActiveLayer.Figures.Count > 0)
+               activeFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
+            else
+               activeFigure = null;
+         };
 
-   // public RelayCommand DeleteFigure
-   //{
-   //    get
-   //    {
-   //        return new RelayCommand( _ =>
-   //        {
-   //            RedoStack.Clear();
-   //            Figure figure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
-   //            figure.DeleteFigure();
-   //            ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = figure;
-   //            UndoStack.Push(new UserCommands( _ => { figure.DeleteFigure(); }, _ => { figure.CreateFigure(); }));
-   //        });
-   //    }
-   //}
+         Action<object> undo = (_) =>
+         {
+            if (DeletedFigures.Count > 0)
+            {
+               activeFigure = DeletedFigures.Pop();
+               ActiveLayer.Figures.Add(activeFigure);
+            }
+            else
+               throw new InvalidOperationException();
+         };
+
+         return deleteFigure ??= new RelayCommand(_ =>
+         {
+            RedoStack.Clear();
+            if (activeFigure != null)
+            {
+               DeletedFigures.Push(activeFigure);
+               if (ActiveLayer.Figures.Contains(activeFigure))
+                  ActiveLayer.Figures.Remove(activeFigure);
+               else
+                  throw new InvalidOperationException();
+               UndoStack.Push(new UserCommands(redo, undo));
+               if (ActiveLayer.Figures.Count > 0)
+                  activeFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
+               else
+                  activeFigure = null;
+               if (ActiveLayer.Figures.Count != 0)
+                  ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
+               }
+
+         });
+      }
+   }
 
    public MainWindowVM()
    {
@@ -176,6 +249,8 @@ public class MainWindowVM : INotifyPropertyChanged
       ActiveLayer.Figures = new ObservableCollection<Figure>();
       RedoStack = new Stack<UserCommands>();
       UndoStack = new Stack<UserCommands>();
+      DeletedFigures = new Stack<Figure>();
+      activeFigure = null;
    }
 
    public event PropertyChangedEventHandler PropertyChanged;
