@@ -11,7 +11,6 @@ namespace flop.net.ViewModel;
 
 public class MainWindowVM : INotifyPropertyChanged
 {
-   // public ObservableCollection<Figure> Figures { get; set; }
    public Stack<UserCommands> UndoStack { get; set; }
    public Stack<UserCommands> RedoStack { get; set; }
    
