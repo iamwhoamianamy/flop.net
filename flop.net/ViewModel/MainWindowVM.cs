@@ -48,7 +48,7 @@ public class MainWindowVM : INotifyPropertyChanged
       Layers.Remove(layer);
    }
 
-   private Brush сurrentFillColor;
+   private Brush сurrentFillColor; 
    public Brush СurrentFillColor
    {
       get => сurrentFillColor;
