@@ -19,6 +19,8 @@ public class MainWindowVM : INotifyPropertyChanged
    public Layer ActiveLayer { get; set; }
    public ObservableCollection<Layer> Layers { get; set; }
    public Figure FigureOnCreating { get; set; }
+   public ViewMode WorkingMode { get; set; }
+   public FigureCreation СurrentFigureType { get; set; }
 
    public RelayCommand Undo
    {
@@ -131,6 +133,71 @@ public class MainWindowVM : INotifyPropertyChanged
                if (ActiveLayer.Figures.Count != 0)
                   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
                }
+         });
+      }
+   }
+
+   private RelayCommand toggleRectangleCreation;
+   public RelayCommand ToggleRectangleCreation
+   {
+      get
+      {
+         return rotateFigure ??= new RelayCommand(_ =>
+         {
+            WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
+            СurrentFigureType = FigureCreation.Rectangle;
+         });
+      }
+   }
+
+   private RelayCommand toggleTriangleCreation;
+   public RelayCommand ToggleTriangleCreation
+   {
+      get
+      {
+         return rotateFigure ??= new RelayCommand(_ =>
+         {
+            WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
+            СurrentFigureType = FigureCreation.Triangle;
+         });
+      }
+   }
+
+   private RelayCommand toggleEllipseCreation;
+   public RelayCommand ToggleEllipseCreation
+   {
+      get
+      {
+         return rotateFigure ??= new RelayCommand(_ =>
+         {
+            WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
+            СurrentFigureType = FigureCreation.Ellipse;
+         });
+      }
+   }
+
+   private RelayCommand togglePolylineCreation;
+   public RelayCommand TogglePolylineCreation
+   {
+      get
+      {
+         return rotateFigure ??= new RelayCommand(_ =>
+         {
+            WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
+            СurrentFigureType = FigureCreation.Polyline;
+         });
+      }
+   }
+
+   private RelayCommand togglePolygonCreation;
+   public RelayCommand TogglePolygonCreation
+   {
+      get
+      {
+         return rotateFigure ??= new RelayCommand(_ =>
+         {
+            WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
+            СurrentFigureType = FigureCreation.Polygon;
          });
       }
    }
