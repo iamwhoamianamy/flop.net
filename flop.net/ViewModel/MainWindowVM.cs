@@ -179,6 +179,7 @@ public class MainWindowVM : INotifyPropertyChanged
          });
       }
    }
+
    private RelayCommand deleteFigure;
    public RelayCommand DeleteFigure
    {
@@ -226,6 +227,17 @@ public class MainWindowVM : INotifyPropertyChanged
                   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
                }
 
+         });
+      }
+   }
+
+   private RelayCommand onFigureCreation;
+   public RelayCommand OnFigureCreation
+   {
+      get
+      {
+         return onFigureCreation ??= new RelayCommand(parameters =>
+         {
          });
       }
    }
