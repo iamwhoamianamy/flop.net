@@ -26,5 +26,20 @@ namespace flop.net.Properties
             return defaultInstance;
          }
       }
-   }
+        // Выбранная тема
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Dark.Cyan")]
+        public string Theme
+        {
+            get
+            {
+                return ((string)(this["Theme"]));
+            }
+            set
+            {
+                this["Theme"] = value;
+            }
+        }
+    }
 }

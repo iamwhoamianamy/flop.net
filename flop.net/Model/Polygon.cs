@@ -4,32 +4,33 @@ using System.Windows.Media;
 
 namespace flop.net.Model
 {
-   public class Rectangle : IGeometric
+   public class Polygon : IGeometric
    {
       public PointCollection Points { get; }
-      public Point Center => new ((Points[0].X + Points[2].X) / 2, (Points[0].Y + Points[2].Y) / 2);
-
-      public Rectangle() { Points = new PointCollection(); }
-      public Rectangle(Point pointA, Point pointB)
-      {  
-         // Точки хранятся начиная с точки А по порядку следования
-         Points = new PointCollection
+      public Point Center { get 
          {
-            pointA,
-            new Point(pointB.X, pointA.Y),
-            pointB,
-            new Point(pointA.X, pointB.Y)
-         };
+            var sumPoints = new Point(0, 0);
+            var pointsSize = Points.Count;
+            foreach (var point in Points)
+            {
+               sumPoints = Point.Add(sumPoints, (Vector)point);
+            }
+            return new Point(sumPoints.X / pointsSize, sumPoints.Y / pointsSize);
+         }
       }
 
-      public bool IsClosed => true;
+      public Polygon() { Points = new PointCollection(); }
+
+      public Polygon(PointCollection points, bool isClosed)
+      {
+         Points = points;
+         IsClosed = isClosed;
+      }
+
+      public bool IsClosed { get; }
       
       public bool IsIn(Point position, double eps)
       {
-         //return (position.X - Math.Min(Points[0].X, Points[2].X) < -eps &&
-         //   position.X < Math.Max(Points[0].X, Points[2].X) &&
-         //   position.Y > Math.Min(Points[0].Y, Points[2].Y) &&
-         //   position.Y < Math.Max(Points[0].Y, Points[2].Y));
          throw new NotImplementedException();
       }
 
