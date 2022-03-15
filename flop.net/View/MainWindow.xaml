@@ -159,36 +159,37 @@
           <r:ToggleButton Header="Прямоугольник"
                           Icon="/Images/rectangle.png"
                           ToolTip="Рисование прямоугольника"
-                          Command="{Binding AddRectangle}"
+                          Command="{Binding DrawRectangle}"
                           Style="{StaticResource RibbonMenuButton}" />
           <r:ToggleButton Header="Треугольник"
                           Icon="/Images/rectangle.png"
                           ToolTip="Рисование треугольника"
+                          Command="{Binding DrawTriangle}"
                           Style="{StaticResource RibbonMenuButton}" />
         </r:RibbonGroupBox>
       </r:RibbonTabItem>
 
       <r:RibbonTabItem Header="Режимы редактирования">
-                <r:RibbonGroupBox Header="Объектный режим">
-                    <r:ToggleButton Header="Перемещение"
+        <r:RibbonGroupBox Header="Объектный режим">
+          <r:ToggleButton Header="Перемещение"
                           ToolTip="Перемещение фигуры"
-                          Command="{Binding MoveFigure}"
+                          Command="{Binding DoMove}"
                           Style="{StaticResource RibbonMenuButton}" />
-                    <r:ToggleButton Header="Масштабирование"
+          <r:ToggleButton Header="Масштабирование"
                           ToolTip="Масштабирование фигуры"
-                          Command="{Binding ScaleFigure}"
+                          Command="{Binding DoScale}"
                           Style="{StaticResource RibbonMenuButton}" />
-                    <r:ToggleButton Header="Поворот"
+          <r:ToggleButton Header="Поворот"
                           ToolTip="Поворот фигуры"
-                          Command="{Binding RotateFigure}"
+                          Command="{Binding DoRotate}"
                           Style="{StaticResource RibbonMenuButton}" />
-                    <r:ToggleButton Header="Удаление"
+          <r:ToggleButton Header="Удаление"
                           ToolTip="Удаление фигуры"
                           Command="{Binding DeleteFigure}"
                           Style="{StaticResource RibbonMenuButton}" />
-                </r:RibbonGroupBox>
+        </r:RibbonGroupBox>
 
-                <r:RibbonGroupBox Header="Режим трансформации">
+        <r:RibbonGroupBox Header="Режим трансформации">
           <r:ToggleButton Header="Добавление вершины"
                           ToolTip="Добавить вершину"/>
           <r:ToggleButton Header="Удаление вершины"
