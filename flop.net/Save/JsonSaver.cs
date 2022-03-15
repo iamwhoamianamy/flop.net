@@ -14,13 +14,15 @@ namespace flop.net.Save
 {
    public class JsonSaver
    {
+      public string FilePath { get; private set; }
+      public string FileName { get; private set; }
+      
       public JsonSaver(string filePath, string fileName)
       {
          FilePath = filePath;
          FileName = fileName;
       }
-      public string FilePath { get; private set; }
-      public string FileName { get; private set; }
+
 
       public void SaveLayersToJson(Collection<Layer> layers)
       {
