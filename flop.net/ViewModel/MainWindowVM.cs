@@ -7,6 +7,7 @@ using System.Windows;
 using flop.net.Annotations;
 using flop.net.Model;
 using System.Windows.Media;
+using flop.net.Enums;
 
 namespace flop.net.ViewModel;
 
@@ -20,7 +21,7 @@ public class MainWindowVM : INotifyPropertyChanged
    public ObservableCollection<Layer> Layers { get; set; }
    public Figure FigureOnCreating { get; set; }
    public ViewMode WorkingMode { get; set; }
-   public FigureCreation СurrentFigureType { get; set; }
+   public FigureCreationMode СurrentFigureType { get; set; }
 
    public RelayCommand Undo
    {
@@ -142,10 +143,10 @@ public class MainWindowVM : INotifyPropertyChanged
    {
       get
       {
-         return rotateFigure ??= new RelayCommand(_ =>
+         return toggleRectangleCreation ??= new RelayCommand(_ =>
          {
             WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
-            СurrentFigureType = FigureCreation.Rectangle;
+            СurrentFigureType = FigureCreationMode.Rectangle;
          });
       }
    }
@@ -155,10 +156,10 @@ public class MainWindowVM : INotifyPropertyChanged
    {
       get
       {
-         return rotateFigure ??= new RelayCommand(_ =>
+         return toggleTriangleCreation ??= new RelayCommand(_ =>
          {
             WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
-            СurrentFigureType = FigureCreation.Triangle;
+            СurrentFigureType = FigureCreationMode.Triangle;
          });
       }
    }
@@ -168,10 +169,10 @@ public class MainWindowVM : INotifyPropertyChanged
    {
       get
       {
-         return rotateFigure ??= new RelayCommand(_ =>
+         return toggleEllipseCreation ??= new RelayCommand(_ =>
          {
             WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
-            СurrentFigureType = FigureCreation.Ellipse;
+            СurrentFigureType = FigureCreationMode.Ellipse;
          });
       }
    }
@@ -181,10 +182,10 @@ public class MainWindowVM : INotifyPropertyChanged
    {
       get
       {
-         return rotateFigure ??= new RelayCommand(_ =>
+         return togglePolylineCreation ??= new RelayCommand(_ =>
          {
             WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
-            СurrentFigureType = FigureCreation.Polyline;
+            СurrentFigureType = FigureCreationMode.Polyline;
          });
       }
    }
@@ -194,10 +195,10 @@ public class MainWindowVM : INotifyPropertyChanged
    {
       get
       {
-         return rotateFigure ??= new RelayCommand(_ =>
+         return togglePolygonCreation ??= new RelayCommand(_ =>
          {
             WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
-            СurrentFigureType = FigureCreation.Polygon;
+            СurrentFigureType = FigureCreationMode.Polygon;
          });
       }
    }
