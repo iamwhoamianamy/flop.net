@@ -49,9 +49,48 @@ namespace flop.net.Model
 
       public bool IsClosed { get; private set; }
       
-      public bool IsIn(Point position, double eps)
+      public bool IsIn(Point position, double eps = 0.001)
       {
-         throw new NotImplementedException();
+         var result = false;
+         int i1, i2, n;
+         double S, S1, S2, S3;
+         var pointsSize = Points.Count;
+         for (n = 0; n < pointsSize; n++)
+         {
+            result = false;
+            i1 = n < pointsSize - 1 ? n + 1 : 0;
+            while (result == false)
+            {
+               i2 = i1 + 1;
+               if (i2 >= pointsSize)
+                  i2 = 0;
+               if (i2 == (n < pointsSize - 1 ? n + 1 : 0))
+                  break;
+               S = Math.Abs(Points[i1].X * (Points[i2].Y - Points[n].Y) +
+                        Points[i2].X * (Points[n].Y - Points[i1].Y) +
+                        Points[n].X * (Points[i1].Y - Points[i2].Y));
+               S1 = Math.Abs(Points[i1].X * (Points[i2].Y - position.Y) +
+                         Points[i2].X * (position.Y - Points[i1].Y) +
+                         position.X * (Points[i1].Y - Points[i2].Y));
+               S2 = Math.Abs(Points[n].X * (Points[i2].Y - position.Y) +
+                         Points[i2].X * (position.Y - Points[n].Y) +
+                          position.X * (Points[n].Y - Points[i2].Y));
+               S3 = Math.Abs(Points[i1].X * (Points[n].Y - position.Y) +
+                         Points[n].X * (position.Y - Points[i1].Y) +
+                          position.X * (Points[i1].Y - Points[n].Y));
+               if (Math.Abs(S - (S1 + S2 + S3)) <= eps)
+               {
+                  result = true;
+                  break;
+               }
+               i1++;
+               if (i1 >= pointsSize)
+                  i1 = 0;
+            }
+            if (result == true)
+               break;
+         }
+         return result;
       }
 
       public void Move(Vector delta)
