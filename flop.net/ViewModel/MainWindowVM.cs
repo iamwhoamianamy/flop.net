@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using flop.net.Annotations;
@@ -13,6 +14,8 @@ namespace flop.net.ViewModel;
 
 public class MainWindowVM : INotifyPropertyChanged
 {
+   private const double EpsIsIn = double.MinValue;
+
    public Stack<UserCommands> UndoStack { get; set; }
    public Stack<UserCommands> RedoStack { get; set; } 
    public Stack<Figure> DeletedFigures;
@@ -73,6 +76,16 @@ public class MainWindowVM : INotifyPropertyChanged
             ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
       }
    }
+
+   public Figure ActiveFigure { get; set; }
+   public RelayCommand SetActiveFigure => new (o =>
+   {
+      if (o is Point point)
+      {
+         var figure = ActiveLayer.Figures.FirstOrDefault(figure => figure.Geometric.IsIn(point, EpsIsIn));
+         ActiveFigure = figure;
+      }
+   });
 
    private RelayCommand addRectangle;
    public RelayCommand AddRectangle
