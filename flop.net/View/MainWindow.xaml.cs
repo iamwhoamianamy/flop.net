@@ -49,16 +49,6 @@ namespace flop.net
             OnPropertyChanged();
          }
       }
-      private Brush currentFillColor;
-      public Brush CurrentFillColor
-      {
-         get => currentFillColor;
-         set
-         {
-            currentFillColor = value;
-            OnPropertyChanged();
-         }
-      }
       public MainWindow()
       {
          InitializeComponent();
@@ -89,7 +79,15 @@ namespace flop.net
          Graphic.CleanCanvas();
          foreach (var figure in MainWindowVM.ActiveLayer.Figures)
          {
-            Graphic.DrawPolygon(figure.Geometric.Points, figure.DrawingParameters);
+            switch (figure.Geometric.IsClosed)
+            {
+               case true:
+                  Graphic.DrawPolygon(figure.Geometric.Points, figure.DrawingParameters);
+                  break;
+               case false:
+                  Graphic.DrawPolyline(figure.Geometric.Points, figure.DrawingParameters);
+                  break;
+            }
          }
       }
    }

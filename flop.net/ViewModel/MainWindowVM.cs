@@ -7,6 +7,7 @@ using System.Windows;
 using flop.net.Annotations;
 using flop.net.Model;
 using System.Windows.Media;
+using flop.net.Enums;
 
 namespace flop.net.ViewModel;
 
@@ -19,6 +20,8 @@ public class MainWindowVM : INotifyPropertyChanged
    public Layer ActiveLayer { get; set; }
    public ObservableCollection<Layer> Layers { get; set; }
    public Figure FigureOnCreating { get; set; }
+   public ViewMode WorkingMode { get; set; }
+   public FigureCreationMode СurrentFigureType { get; set; }
 
    public RelayCommand Undo
    {
@@ -131,6 +134,71 @@ public class MainWindowVM : INotifyPropertyChanged
                if (ActiveLayer.Figures.Count != 0)
                   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
                }
+         });
+      }
+   }
+
+   private RelayCommand toggleRectangleCreation;
+   public RelayCommand ToggleRectangleCreation
+   {
+      get
+      {
+         return toggleRectangleCreation ??= new RelayCommand(_ =>
+         {
+            WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
+            СurrentFigureType = FigureCreationMode.Rectangle;
+         });
+      }
+   }
+
+   private RelayCommand toggleTriangleCreation;
+   public RelayCommand ToggleTriangleCreation
+   {
+      get
+      {
+         return toggleTriangleCreation ??= new RelayCommand(_ =>
+         {
+            WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
+            СurrentFigureType = FigureCreationMode.Triangle;
+         });
+      }
+   }
+
+   private RelayCommand toggleEllipseCreation;
+   public RelayCommand ToggleEllipseCreation
+   {
+      get
+      {
+         return toggleEllipseCreation ??= new RelayCommand(_ =>
+         {
+            WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
+            СurrentFigureType = FigureCreationMode.Ellipse;
+         });
+      }
+   }
+
+   private RelayCommand togglePolylineCreation;
+   public RelayCommand TogglePolylineCreation
+   {
+      get
+      {
+         return togglePolylineCreation ??= new RelayCommand(_ =>
+         {
+            WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
+            СurrentFigureType = FigureCreationMode.Polyline;
+         });
+      }
+   }
+
+   private RelayCommand togglePolygonCreation;
+   public RelayCommand TogglePolygonCreation
+   {
+      get
+      {
+         return togglePolygonCreation ??= new RelayCommand(_ =>
+         {
+            WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
+            СurrentFigureType = FigureCreationMode.Polygon;
          });
       }
    }

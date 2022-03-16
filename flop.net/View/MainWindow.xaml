@@ -169,26 +169,26 @@
       </r:RibbonTabItem>
 
       <r:RibbonTabItem Header="Режимы редактирования">
-                <r:RibbonGroupBox Header="Объектный режим">
-                    <r:ToggleButton Header="Перемещение"
+        <r:RibbonGroupBox Header="Объектный режим">
+          <r:ToggleButton Header="Перемещение"
                           ToolTip="Перемещение фигуры"
                           Command="{Binding MoveFigure}"
                           Style="{StaticResource RibbonMenuButton}" />
-                    <r:ToggleButton Header="Масштабирование"
+          <r:ToggleButton Header="Масштабирование"
                           ToolTip="Масштабирование фигуры"
                           Command="{Binding ScaleFigure}"
                           Style="{StaticResource RibbonMenuButton}" />
-                    <r:ToggleButton Header="Поворот"
+          <r:ToggleButton Header="Поворот"
                           ToolTip="Поворот фигуры"
                           Command="{Binding RotateFigure}"
                           Style="{StaticResource RibbonMenuButton}" />
-                    <r:ToggleButton Header="Удаление"
+          <r:ToggleButton Header="Удаление"
                           ToolTip="Удаление фигуры"
                           Command="{Binding DeleteFigure}"
                           Style="{StaticResource RibbonMenuButton}" />
-                </r:RibbonGroupBox>
+        </r:RibbonGroupBox>
 
-                <r:RibbonGroupBox Header="Режим трансформации">
+        <r:RibbonGroupBox Header="Режим трансформации">
           <r:ToggleButton Header="Добавление вершины"
                           ToolTip="Добавить вершину"/>
           <r:ToggleButton Header="Удаление вершины"
@@ -197,8 +197,8 @@
       </r:RibbonTabItem>
 
       <r:RibbonTabItem Header="Фигура" >
-                <!--DataContext="{Binding ElementName=MainWin, Path=MainWindowVM.SelectedFigure}"-->
-                       
+        <!--DataContext="{Binding ElementName=MainWin, Path=MainWindowVM.SelectedFigure}"-->
+
         <r:RibbonGroupBox Header="Параметры фигуры">
           <r:DropDownButton x:Name="SelectedFillColorButton"
                             Header="Цвет заливки">
