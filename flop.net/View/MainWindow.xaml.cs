@@ -49,6 +49,7 @@ namespace flop.net
             OnPropertyChanged();
          }
       }
+
       public MainWindow()
       {
          InitializeComponent();

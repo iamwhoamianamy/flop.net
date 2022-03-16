@@ -53,6 +53,17 @@ public class MainWindowVM : INotifyPropertyChanged
       Layers.Remove(layer);
    }
 
+   private DrawingParameters creationDrawingParameters;
+   public DrawingParameters CreationDrawingParameters
+   {
+      get => creationDrawingParameters ??= new DrawingParameters();
+      set
+      {
+         creationDrawingParameters = value;
+         OnPropertyChanged();
+      }
+   }
+
    public void UndoFunc()
    {
       if (UndoStack.Count > 0)
@@ -76,6 +87,7 @@ public class MainWindowVM : INotifyPropertyChanged
             ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
       }
    }
+
 
    public Figure ActiveFigure { get; set; }
    public RelayCommand SetActiveFigure => new (o =>
@@ -306,7 +318,6 @@ public class MainWindowVM : INotifyPropertyChanged
                if (ActiveLayer.Figures.Count != 0)
                   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
                }
-
          });
       }
    }
