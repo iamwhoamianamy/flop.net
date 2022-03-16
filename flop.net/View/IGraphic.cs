@@ -8,7 +8,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using flop.net.ViewModel.Models;
+using flop.net.Model;
+using Polygon = System.Windows.Shapes.Polygon;
 
 namespace flop.net.View
 {
@@ -38,7 +39,7 @@ namespace flop.net.View
             //polygon.Fill = drawingParametrs.Fill;
             //polygon.Stroke = drawingParametrs.Stroke;
             //polygon.StrokeThickness = drawingParametrs.StrokeThickness;
-            //polygon.StrokeDashCap = drawingParametrs.StrokeDashCap;
+            //polygon.StrokeDashCap = drawingParametrs.PenLineCap;
             //polygon.Opacity = drawingParametrs.Opacity;
             //polygon.Name = "Polygon" + 1.ToString();
 
@@ -62,7 +63,7 @@ namespace flop.net.View
             //polyline.Fill = drawingParametrs.Fill;
             //polyline.Stroke = drawingParametrs.Stroke;
             //polyline.StrokeThickness = drawingParametrs.StrokeThickness;
-            //polyline.StrokeDashCap = drawingParametrs.StrokeDashCap;
+            //polyline.StrokeDashCap = drawingParametrs.PenLineCap;
             //polyline.Opacity = drawingParametrs.Opacity;
 
             //foreach (var x in drawingParametrs.StrokeDashArray)
