@@ -159,12 +159,11 @@
           <r:ToggleButton Header="Прямоугольник"
                           Icon="/Images/rectangle.png"
                           ToolTip="Рисование прямоугольника"
-                          Command="{Binding DrawRectangle}"
+                          Command="{Binding AddRectangle}"
                           Style="{StaticResource RibbonMenuButton}" />
           <r:ToggleButton Header="Треугольник"
                           Icon="/Images/rectangle.png"
                           ToolTip="Рисование треугольника"
-                          Command="{Binding DrawTriangle}"
                           Style="{StaticResource RibbonMenuButton}" />
         </r:RibbonGroupBox>
       </r:RibbonTabItem>
@@ -173,15 +172,15 @@
         <r:RibbonGroupBox Header="Объектный режим">
           <r:ToggleButton Header="Перемещение"
                           ToolTip="Перемещение фигуры"
-                          Command="{Binding DoMove}"
+                          Command="{Binding MoveFigure}"
                           Style="{StaticResource RibbonMenuButton}" />
           <r:ToggleButton Header="Масштабирование"
                           ToolTip="Масштабирование фигуры"
-                          Command="{Binding DoScale}"
+                          Command="{Binding ScaleFigure}"
                           Style="{StaticResource RibbonMenuButton}" />
           <r:ToggleButton Header="Поворот"
                           ToolTip="Поворот фигуры"
-                          Command="{Binding DoRotate}"
+                          Command="{Binding RotateFigure}"
                           Style="{StaticResource RibbonMenuButton}" />
           <r:ToggleButton Header="Удаление"
                           ToolTip="Удаление фигуры"
@@ -198,8 +197,8 @@
       </r:RibbonTabItem>
 
       <r:RibbonTabItem Header="Фигура" >
-                <!--DataContext="{Binding ElementName=MainWin, Path=MainWindowVM.SelectedFigure}"-->
-                       
+        <!--DataContext="{Binding ElementName=MainWin, Path=MainWindowVM.SelectedFigure}"-->
+
         <r:RibbonGroupBox Header="Параметры фигуры">
           <r:DropDownButton x:Name="SelectedFillColorButton"
                             Header="Цвет заливки">

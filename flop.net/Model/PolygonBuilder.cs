@@ -60,8 +60,8 @@ namespace flop.net.Model
       {
          PointCollection points = new PointCollection() { };
          Point center = new Point((pointA.X + pointB.X) / 2, (pointA.Y + pointB.Y) / 2);
-         double h = Math.Abs(pointA.Y + pointB.Y);
-         double w = Math.Abs(pointA.X + pointB.X);
+         double h = Math.Abs(pointA.Y - pointB.Y);
+         double w = Math.Abs(pointA.X - pointB.X);
          if(pointCount == null)
          {
             pointCount = (int)Math.Round(4 * (Math.PI * h * w + (w - h) * (w - h)) / (w + h));
@@ -71,6 +71,19 @@ namespace flop.net.Model
          {
             double x = Math.Cos(2 * Math.PI * i / Convert.ToDouble(pointCount)) * w / 2 + center.X;
             double y = Math.Sin(2 * Math.PI * i / Convert.ToDouble(pointCount)) * h / 2 + center.Y;
+            points.Add(new Point(x, y));
+         }
+         return new Polygon(points, true);
+      }
+
+      public static Polygon CreateCircle(Point center, double radius)
+      {
+         int pointCount = (int)Math.Round(2 * Math.PI * radius);   
+         PointCollection points = new PointCollection() { };
+         for (var i = 0; i < pointCount; i++)
+         {
+            double x = Math.Cos(2 * Math.PI * i / pointCount) * radius + center.X;
+            double y = Math.Sin(2 * Math.PI * i / pointCount) * radius + center.Y;
             points.Add(new Point(x, y));
          }
          return new Polygon(points, true);
