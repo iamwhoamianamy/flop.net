@@ -12,7 +12,7 @@ namespace flop.net.Tests.Geometry
    public class PolygonIsInTest
    {
       [Fact]
-      public void IncludePointTriang()
+      public void IncludePointTriangle()
       {
          var pointA = new Point(0, 0);
          var pointB = new Point(0, 2);
