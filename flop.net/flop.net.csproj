@@ -81,6 +81,7 @@
     <Compile Include="Enums\FigureCreationMode.cs" />
     <Compile Include="Enums\ViewMode.cs" />
     <Compile Include="Model\DrawingParameters.cs" />
+    <Compile Include="Model\Ellipse.cs" />
     <Compile Include="Model\Figure.cs" />
     <Compile Include="Model\IGeometric.cs" />
     <Compile Include="Model\Layer.cs" />
