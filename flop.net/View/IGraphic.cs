@@ -35,9 +35,9 @@ namespace flop.net.View
         {
             Polygon polygon = new Polygon();
           
-            polygon.Fill = Brushes.Green;
-            //polygon.Fill = drawingParametrs.Fill;
-            //polygon.Stroke = drawingParametrs.Stroke;
+            polygon.Fill = new SolidColorBrush(Colors.Green);
+            //polygon.Fill = new SolidColorBrush(drawingParametrs.Fill);
+            //polygon.Stroke = new SolidColorBrush(drawingParametrs.Stroke);
             //polygon.StrokeThickness = drawingParametrs.StrokeThickness;
             //polygon.StrokeDashCap = drawingParametrs.PenLineCap;
             //polygon.Opacity = drawingParametrs.Opacity;
@@ -60,8 +60,8 @@ namespace flop.net.View
         {
             Polyline polyline = new Polyline();
 
-            //polyline.Fill = drawingParametrs.Fill;
-            //polyline.Stroke = drawingParametrs.Stroke;
+            //polyline.Fill = new SolidColorBrush(drawingParametrs.Fill);
+            //polyline.Stroke = new SolidColorBrush(drawingParametrs.Stroke);
             //polyline.StrokeThickness = drawingParametrs.StrokeThickness;
             //polyline.StrokeDashCap = drawingParametrs.PenLineCap;
             //polyline.Opacity = drawingParametrs.Opacity;
