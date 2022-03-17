@@ -308,9 +308,10 @@
             Grid.Column="0"
             Background="White"
             ClipToBounds="True"
-            PreviewMouseDown="OnPreviewMouseDown"
+            PreviewMouseLeftButtonDown="OnPreviewMouseDown"
             PreviewMouseMove="OnPreviewMouseMove"
-            PreviewMouseUp="OnPreviewMouseUp">
+            PreviewMouseLeftButtonUp="OnPreviewMouseUp"
+            PreviewMouseRightButtonDown="MainCanvas_PreviewMouseRightButtonDown">
       <!--Место для вашей рекламы-->
 
     </Canvas>

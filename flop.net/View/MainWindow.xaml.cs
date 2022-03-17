@@ -104,7 +104,7 @@ namespace flop.net
          if (mainWindowVM.WorkingMode == ViewMode.Creation &&
             WorkingMode == ViewMode.Default)
          {
-            //mainWindowVM.BeginRectangleCreation.Execute();
+            mainWindowVM.BeginFigureCreation.Execute(null);
             WorkingMode = ViewMode.Creation;
          }
 
@@ -123,7 +123,7 @@ namespace flop.net
          if (mainWindowVM.WorkingMode == ViewMode.Creation &&
             WorkingMode == ViewMode.Creation)
          {
-            //mainWindowVM.OnRectangleCreation.Execute((MousePressedCoords, e.GetPosition(MainCanvas)));
+            mainWindowVM.OnFigureCreation.Execute((MousePosition1, e.GetPosition(MainCanvas)));
          }
 
          if (mainWindowVM.WorkingMode == ViewMode.Moving &&
@@ -143,6 +143,11 @@ namespace flop.net
       private void OnPreviewMouseUp(object sender, MouseButtonEventArgs e)
       {
 
+      }
+
+      private void MainCanvas_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+      {
+         mainWindowVM.SetActiveFigure.Execute(e.GetPosition(MainCanvas));
       }
    }
 }

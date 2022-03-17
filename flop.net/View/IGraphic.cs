@@ -35,8 +35,8 @@ namespace flop.net.View
         {
             Polygon polygon = new Polygon();
           
-            polygon.Fill = new SolidColorBrush(Colors.Green);
-            //polygon.Fill = new SolidColorBrush(drawingParametrs.Fill);
+            //polygon.Fill = new SolidColorBrush(Colors.Green);
+            polygon.Fill = new SolidColorBrush(drawingParametrs.Fill);
             //polygon.Stroke = new SolidColorBrush(drawingParametrs.Stroke);
             //polygon.StrokeThickness = drawingParametrs.StrokeThickness;
             //polygon.StrokeDashCap = drawingParametrs.PenLineCap;

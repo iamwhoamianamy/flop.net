@@ -107,14 +107,25 @@ public class MainWindowVM : INotifyPropertyChanged
    }
 
    public Figure ActiveFigure { get; set; }
-   public RelayCommand SetActiveFigure => new (o =>
+   public RelayCommand SetActiveFigure
    {
-      if (o is Point point)
+      get
       {
-         var figure = ActiveLayer.Figures.FirstOrDefault(figure => figure.Geometric.IsIn(point, EpsIsIn));
-         ActiveFigure = figure;
+         return new RelayCommand(obj =>
+         {
+            var mouseCoords = obj as Point?;
+
+            foreach (var figure in ActiveLayer.Figures)
+            {
+               if (figure.Geometric.IsIn(mouseCoords.Value, 1e-1))
+               {
+                  ActiveFigure = figure;
+                  break;
+               }
+            }
+         });
       }
-   });
+   }
 
    private RelayCommand addRectangle;
    public RelayCommand AddRectangle
@@ -161,7 +172,7 @@ public class MainWindowVM : INotifyPropertyChanged
       }
    }
 
-   public RelayCommand BeginFigureleCreation
+   public RelayCommand BeginFigureCreation
    {
       get
       {
@@ -170,17 +181,17 @@ public class MainWindowVM : INotifyPropertyChanged
             switch (СurrentFigureType)
             {
                case FigureCreationMode.Triangle:
-                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateTriangle(new Point(0, 0), new Point(0, 0)), null));
+                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateTriangle(new Point(0, 0), new Point(0, 0)), CreationDrawingParameters));
                   break;
                case FigureCreationMode.Ellipse:
-                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateEllipse(new Point(0, 0), new Point(0, 0)), null));
+                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateEllipse(new Point(0, 0), new Point(0, 0)), CreationDrawingParameters));
                   break;
                case FigureCreationMode.Polygon:
                   break;
                case FigureCreationMode.Polyline:
                   break;
                case FigureCreationMode.Rectangle:
-                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateRectangle(new Point(0, 0), new Point(0, 0)), null));
+                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateRectangle(new Point(0, 0), new Point(0, 0)), CreationDrawingParameters));
                   break;
                case FigureCreationMode.None:
                   break;
@@ -218,17 +229,17 @@ public class MainWindowVM : INotifyPropertyChanged
             switch (СurrentFigureType)
             {
                case FigureCreationMode.Triangle:
-                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = new Figure(PolygonBuilder.CreateTriangle(points.Value.Item1, points.Value.Item2), null);
+                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = new Figure(PolygonBuilder.CreateTriangle(points.Value.Item1, points.Value.Item2), CreationDrawingParameters);
                   break;
                case FigureCreationMode.Ellipse:
-                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = new Figure(PolygonBuilder.CreateEllipse(points.Value.Item1, points.Value.Item2), null);
+                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = new Figure(PolygonBuilder.CreateEllipse(points.Value.Item1, points.Value.Item2), CreationDrawingParameters);
                   break;
                case FigureCreationMode.Polygon:
                   break;
                case FigureCreationMode.Polyline:
                   break;
                case FigureCreationMode.Rectangle:
-                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = new Figure(PolygonBuilder.CreateRectangle(points.Value.Item1, points.Value.Item2), null);
+                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = new Figure(PolygonBuilder.CreateRectangle(points.Value.Item1, points.Value.Item2), CreationDrawingParameters);
                   break;
                case FigureCreationMode.None:
                   break;
