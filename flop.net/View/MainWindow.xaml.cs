@@ -19,6 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using flop.net.Model;
+using flop.net.Save;
 
 namespace flop.net
 {
@@ -61,6 +62,7 @@ namespace flop.net
          MainWindowVM.ActiveLayer.Figures.CollectionChanged += Figures_CollectionChanged;
          Graphic = new Graphic(MainCanvas);
 
+         Save.MouseLeftButtonDown += (sender, args) => { new SvgSaver(mainWindowVM.ActiveLayer,1280,720); };
          DrawAll();
       }
 
