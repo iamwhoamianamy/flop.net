@@ -302,20 +302,23 @@
       </r:RibbonTabItem>
 
     </r:Ribbon>
-
-    <Canvas x:Name="MainCanvas"
-            Grid.Row="1"
-            Grid.Column="0"
+    
+    <UserControl Background="Transparent"
+                Grid.Row="1"
+                Grid.Column="0"
+                PreviewMouseLeftButtonDown="OnPreviewMouseDown"
+                PreviewMouseMove="OnPreviewMouseMove"
+                PreviewMouseRightButtonDown="OnPreviewMouseRightButtonDown">   
+      <Canvas x:Name="MainCanvas"            
             Background="White"
             ClipToBounds="True"
-            PreviewMouseLeftButtonDown="OnPreviewMouseDown"
-            PreviewMouseMove="OnPreviewMouseMove"
-            PreviewMouseLeftButtonUp="OnPreviewMouseUp"
-            PreviewMouseRightButtonDown="MainCanvas_PreviewMouseRightButtonDown">
-      <!--Место для вашей рекламы-->
+            >
+        <!--Место для вашей рекламы-->
 
-    </Canvas>
+      </Canvas>
 
+    </UserControl>
+    
 
     <StackPanel Grid.Column="1"
                 Grid.Row="1"

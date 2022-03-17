@@ -139,19 +139,16 @@ namespace flop.net
          if (e.LeftButton == MouseButtonState.Released)
          {
             WorkingMode = ViewMode.Default;
+            OnPreviewMouseUp(sender, null);
          }
       }
 
       private void OnPreviewMouseUp(object sender, MouseButtonEventArgs e)
       {
-         if (WorkingMode == ViewMode.Creation) 
-         {
-            mainWindowVM.EndFigureCreation.Execute(null);
-            WorkingMode = ViewMode.Default;
-         }
+         // Место для рекламы ваших заканчивающих команд
       }
 
-      private void MainCanvas_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+      private void OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
       {
          mainWindowVM.SetActiveFigure.Execute(e.GetPosition(MainCanvas));
       }
