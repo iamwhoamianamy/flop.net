@@ -53,7 +53,8 @@ namespace flop.net
       }
       public ViewMode WorkingMode { get; set; }
       public FigureCreationMode СurrentFigureType { get; set; }
-
+      public Point MousePosition1;
+      public Point MousePosition2;
       public MainWindow()
       {
          InitializeComponent();
@@ -94,6 +95,53 @@ namespace flop.net
                   break;
             }
          }
+      }
+
+      private void OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+      {
+         MousePosition1 = e.GetPosition(MainCanvas);
+
+         if (mainWindowVM.WorkingMode == ViewMode.Creation &&
+            WorkingMode == ViewMode.Default)
+         {
+            //mainWindowVM.BeginRectangleCreation.Execute();
+            WorkingMode = ViewMode.Creation;
+         }
+
+         if (mainWindowVM.WorkingMode == ViewMode.Moving &&
+            WorkingMode == ViewMode.Default)
+         {
+            //mainWindowVM.BeginActiveFigureMoving.Execute();
+            WorkingMode = ViewMode.Moving;
+
+            MousePosition2 = e.GetPosition(MainCanvas);
+         }
+      }
+
+      private void OnPreviewMouseMove(object sender, MouseEventArgs e)
+      {
+         if (mainWindowVM.WorkingMode == ViewMode.Creation &&
+            WorkingMode == ViewMode.Creation)
+         {
+            //mainWindowVM.OnRectangleCreation.Execute((MousePressedCoords, e.GetPosition(MainCanvas)));
+         }
+
+         if (mainWindowVM.WorkingMode == ViewMode.Moving &&
+            WorkingMode == ViewMode.Moving)
+         {
+            //mainWindowVM.OnActiveFigureMoving.Execute((PreviousMouseCoords, e.GetPosition(MainCanvas)));
+            MousePosition2 = e.GetPosition(MainCanvas);
+         }
+
+         if (e.LeftButton == MouseButtonState.Released)
+         {
+            WorkingMode = ViewMode.Default;
+         }
+      }
+
+      private void OnPreviewMouseUp(object sender, MouseButtonEventArgs e)
+      {
+
       }
    }
 }

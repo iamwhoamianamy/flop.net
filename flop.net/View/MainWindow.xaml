@@ -148,22 +148,31 @@
           <r:ToggleButton Header="Линия"
                           Icon="/Images/line.png"
                           ToolTip="Рисование линии произвольной толщины"
+                          Command="{Binding ToggleLineCreation}"
+                          IsChecked="{Binding ToggleLineCreation.IsPressed}"
                           Style="{StaticResource RibbonMenuButton}" />
           <r:ToggleButton Header="Ломанная линия"
-                          ToolTip="Рисование ломанной линии произвольной толщины"
+                          ToolTip="Рисование ломанной линии произвольной толщины"                          
+                          Command="{Binding TogglePolylineCreation}"
+                          IsChecked="{Binding TogglePolylineCreation.IsPressed}" 
                           Style="{StaticResource RibbonMenuButton}" />
           <r:ToggleButton Header="Эллипс"
                           Icon="/Images/ellipse.png"
-                          ToolTip="Рисование эллипса"
+                          ToolTip="Рисование эллипса"                          
+                          Command="{Binding ToggleEllipseCreation}"
+                          IsChecked="{Binding ToggleEllipseCreation.IsPressed}" 
                           Style="{StaticResource RibbonMenuButton}" />
           <r:ToggleButton Header="Прямоугольник"
                           Icon="/Images/rectangle.png"
                           ToolTip="Рисование прямоугольника"
-                          Command="{Binding AddRectangle}"
+                          Command="{Binding ToggleRectangleCreation}"
+                          IsChecked="{Binding ToggleRectangleCreation.IsPressed}"                          
                           Style="{StaticResource RibbonMenuButton}" />
           <r:ToggleButton Header="Треугольник"
                           Icon="/Images/rectangle.png"
-                          ToolTip="Рисование треугольника"
+                          ToolTip="Рисование треугольника"                                                    
+                          Command="{Binding ToggleTriangleCreation}"
+                          IsChecked="{Binding ToggleTriangleCreation.IsPressed}" 
                           Style="{StaticResource RibbonMenuButton}" />
         </r:RibbonGroupBox>
       </r:RibbonTabItem>
@@ -292,7 +301,10 @@
             Grid.Row="1"
             Grid.Column="0"
             Background="White"
-            ClipToBounds="True">
+            ClipToBounds="True"
+            PreviewMouseDown="OnPreviewMouseDown"
+            PreviewMouseMove="OnPreviewMouseMove"
+            PreviewMouseUp="OnPreviewMouseUp">
       <!--Место для вашей рекламы-->
 
     </Canvas>
