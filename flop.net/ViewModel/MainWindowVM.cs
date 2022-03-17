@@ -161,6 +161,82 @@ public class MainWindowVM : INotifyPropertyChanged
       }
    }
 
+   public RelayCommand BeginFigureleCreation
+   {
+      get
+      {
+         return new RelayCommand(_ =>
+         {
+            switch (СurrentFigureType)
+            {
+               case FigureCreationMode.Triangle:
+                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateTriangle(new Point(0, 0), new Point(0, 0)), null));
+                  break;
+               case FigureCreationMode.Ellipse:
+                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateEllipse(new Point(0, 0), new Point(0, 0)), null));
+                  break;
+               case FigureCreationMode.Polygon:
+                  break;
+               case FigureCreationMode.Polyline:
+                  break;
+               case FigureCreationMode.Rectangle:
+                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateRectangle(new Point(0, 0), new Point(0, 0)), null));
+                  break;
+               case FigureCreationMode.None:
+                  break;
+            }
+         });
+      }
+   }
+   public RelayCommand OnActiveFigureMoving
+   {
+      get
+      {
+         return new RelayCommand(obj =>
+         {
+            var coords = obj as (Point, Point)?;
+
+            var mousePreviousCoords = coords.Value.Item1;
+            var mouseCurrentCoords = coords.Value.Item2;
+
+            var delta = mouseCurrentCoords - mousePreviousCoords;
+
+            ActiveFigure.Geometric.Move(delta);
+
+            ActiveLayer.Figures.Add(null);
+            ActiveLayer.Figures.RemoveAt(ActiveLayer.Figures.Count - 1);
+         });
+      }
+   }
+   public RelayCommand OnFigureCreation
+   {
+      get
+      {
+         return new RelayCommand(obj =>
+         {
+            var points = obj as (Point, Point)?;
+            switch (СurrentFigureType)
+            {
+               case FigureCreationMode.Triangle:
+                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = new Figure(PolygonBuilder.CreateTriangle(points.Value.Item1, points.Value.Item2), null);
+                  break;
+               case FigureCreationMode.Ellipse:
+                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = new Figure(PolygonBuilder.CreateEllipse(points.Value.Item1, points.Value.Item2), null);
+                  break;
+               case FigureCreationMode.Polygon:
+                  break;
+               case FigureCreationMode.Polyline:
+                  break;
+               case FigureCreationMode.Rectangle:
+                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = new Figure(PolygonBuilder.CreateRectangle(points.Value.Item1, points.Value.Item2), null);
+                  break;
+               case FigureCreationMode.None:
+                  break;
+            }
+         });
+      }
+   }
+
    private RelayCommand toggleRectangleCreation;
    public RelayCommand ToggleRectangleCreation
    {
