@@ -12,6 +12,7 @@ namespace flop.net.Enums
       Creation,
       Moving,
       Rotating,
-      Scaling
+      Scaling,
+      Deleting
    }
 }

@@ -8,6 +8,7 @@ namespace flop.net.Enums
 {
    public enum FigureCreationMode
    {
+      None,
       Rectangle,
       Triangle,
       Ellipse,
