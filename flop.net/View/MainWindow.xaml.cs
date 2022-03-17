@@ -132,7 +132,7 @@ namespace flop.net
          if (mainWindowVM.WorkingMode == ViewMode.Moving &&
             WorkingMode == ViewMode.Moving)
          {
-            mainWindowVM.OnActiveFigureMoving.Execute((MousePosition2, e.GetPosition(MainCanvas)));
+            mainWindowVM.OnActiveFigureMoving.Execute(e.GetPosition(MainCanvas) - MousePosition2);
             MousePosition2 = e.GetPosition(MainCanvas);
          }
 
@@ -144,7 +144,7 @@ namespace flop.net
 
       private void OnPreviewMouseUp(object sender, MouseButtonEventArgs e)
       {
-         if(WorkingMode == ViewMode.Creation)
+         if (WorkingMode == ViewMode.Creation) 
          {
             mainWindowVM.EndFigureCreation.Execute(null);
             WorkingMode = ViewMode.Default;
