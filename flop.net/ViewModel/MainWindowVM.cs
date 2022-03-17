@@ -381,6 +381,8 @@ public class MainWindowVM : INotifyPropertyChanged
       СurrentFigureType = FigureCreationMode.None;
       drawingCommands = new List<RelayCommand> { };
       modifyingCommands = new List<RelayCommand> { };
+      CreationDrawingParameters.Fill = Colors.Green;
+      CreationDrawingParameters.Stroke = Colors.Green;
    }
 
    public event PropertyChangedEventHandler PropertyChanged;

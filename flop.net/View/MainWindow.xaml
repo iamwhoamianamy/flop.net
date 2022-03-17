@@ -79,13 +79,16 @@
                            Height="32"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           Fill="{Binding CurrentFillColor}"
                            Stroke="AliceBlue"
-                           StrokeThickness="2"/>
+                           StrokeThickness="2">
+                  <Rectangle.Fill>
+                    <SolidColorBrush Color="{Binding CreationDrawingParameters.Fill, Mode=TwoWay}" />
+                  </Rectangle.Fill>
+                </Rectangle>
               </Grid>
             </r:DropDownButton.Icon>
             <r:ColorGallery Columns="10"
-                            SelectedColor="{Binding CurrentFillColor}"
+                            SelectedColor="{Binding CreationDrawingParameters.Fill, Mode=TwoWay}"
                             IsNoColorButtonVisible="False"
                             StandardColorGridRows="3"
                             ThemeColorGridRows="5" />
@@ -98,13 +101,16 @@
                            Height="32"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           Fill="{Binding CurrentStrokeColor}"
                            Stroke="AliceBlue"
-                           StrokeThickness="2"/>
+                           StrokeThickness="2">
+                  <Rectangle.Fill>
+                    <SolidColorBrush Color="{Binding CreationDrawingParameters.Stroke, Mode=TwoWay}" />
+                  </Rectangle.Fill>
+                </Rectangle>
               </Grid>
             </r:DropDownButton.Icon>
             <r:ColorGallery Columns="10"
-                            SelectedColor="{Binding CurrentStrokeColor}"
+                            SelectedColor="{Binding CreationDrawingParameters.Stroke, Mode=TwoWay}"
                             IsNoColorButtonVisible="False"
                             StandardColorGridRows="3"
                             ThemeColorGridRows="5" />

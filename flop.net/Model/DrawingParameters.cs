@@ -8,9 +8,8 @@ namespace flop.net.Model
 {
     public class DrawingParameters : INotifyPropertyChanged
     {
-        private Brush fill;
-
-        public Brush Fill
+        private Color fill;
+        public Color Fill
         {
             get => fill;
             set
@@ -20,8 +19,8 @@ namespace flop.net.Model
             }
         }
 
-        private Brush stroke;
-        public Brush Stroke
+        private Color stroke;
+        public Color Stroke
         {
             get => stroke;
             set
