@@ -136,6 +136,24 @@ namespace flop.net
             MousePosition2 = e.GetPosition(MainCanvas);
          }
 
+         if (e.LeftButton == MouseButtonState.Released &&
+            mainWindowVM.WorkingMode == ViewMode.Creation &&
+            WorkingMode == ViewMode.Creation)
+         {
+            WorkingMode = ViewMode.Default;
+            mainWindowVM.OnFigureCreationFinished.Execute(null);
+            OnPreviewMouseUp(sender, null);
+         }
+
+         if (e.LeftButton == MouseButtonState.Released &&
+            mainWindowVM.WorkingMode == ViewMode.Moving &&
+            WorkingMode == ViewMode.Moving)
+         {
+            WorkingMode = ViewMode.Default;
+            mainWindowVM.OnFigureMovingFinished.Execute(null);
+            OnPreviewMouseUp(sender, null);
+         }
+
          if (e.LeftButton == MouseButtonState.Released)
          {
             WorkingMode = ViewMode.Default;

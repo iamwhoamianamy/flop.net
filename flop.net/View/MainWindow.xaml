@@ -188,10 +188,14 @@
                     <r:ToggleButton Header="Перемещение"
                           ToolTip="Перемещение фигуры"
                           Command="{Binding ToggleMoving}"
+                          IsChecked="{Binding ToggleMoving.IsPressed}" 
+                                    
                           Style="{StaticResource RibbonMenuButton}" />
                     <r:ToggleButton Header="Масштабирование"
                           ToolTip="Масштабирование фигуры"
-                          Command="{Binding ScaleFigure}"
+                          Command="{Binding ToggleScaling}"
+                          IsChecked="{Binding ToggleScaling.IsPressed}" 
+                                    
                           Style="{StaticResource RibbonMenuButton}" />
                     <r:ToggleButton Header="Поворот"
                           ToolTip="Поворот фигуры"
