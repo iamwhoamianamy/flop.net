@@ -130,6 +130,7 @@ namespace flop.net
             WorkingMode == ViewMode.Moving)
          {
             //mainWindowVM.OnActiveFigureMoving.Execute((PreviousMouseCoords, e.GetPosition(MainCanvas)));
+            //mainWindowVM.OnActiveFigureMoving.Execute((e.GetPosition(MainCanvas) - MousePosition2));
             MousePosition2 = e.GetPosition(MainCanvas);
          }
 
