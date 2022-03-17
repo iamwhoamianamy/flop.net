@@ -85,15 +85,18 @@ namespace flop.net
          Graphic.CleanCanvas();
          foreach (var figure in MainWindowVM.ActiveLayer.Figures)
          {
-            switch (figure.Geometric.IsClosed)
+            if(figure != null)
             {
-               case true:
-                  Graphic.DrawPolygon(figure.Geometric.Points, figure.DrawingParameters);
-                  break;
-               case false:
-                  Graphic.DrawPolyline(figure.Geometric.Points, figure.DrawingParameters);
-                  break;
-            }
+               switch (figure.Geometric.IsClosed)
+               {
+                  case true:
+                     Graphic.DrawPolygon(figure.Geometric.Points, figure.DrawingParameters);
+                     break;
+                  case false:
+                     Graphic.DrawPolyline(figure.Geometric.Points, figure.DrawingParameters);
+                     break;
+               }
+            }            
          }
       }
 
@@ -111,7 +114,7 @@ namespace flop.net
          if (mainWindowVM.WorkingMode == ViewMode.Moving &&
             WorkingMode == ViewMode.Default)
          {
-            //mainWindowVM.BeginActiveFigureMoving.Execute();
+            mainWindowVM.BeginActiveFigureMoving.Execute(null);
             WorkingMode = ViewMode.Moving;
 
             MousePosition2 = e.GetPosition(MainCanvas);
@@ -129,8 +132,7 @@ namespace flop.net
          if (mainWindowVM.WorkingMode == ViewMode.Moving &&
             WorkingMode == ViewMode.Moving)
          {
-            //mainWindowVM.OnActiveFigureMoving.Execute((PreviousMouseCoords, e.GetPosition(MainCanvas)));
-            //mainWindowVM.OnActiveFigureMoving.Execute((e.GetPosition(MainCanvas) - MousePosition2));
+            mainWindowVM.OnActiveFigureMoving.Execute((MousePosition2, e.GetPosition(MainCanvas)));
             MousePosition2 = e.GetPosition(MainCanvas);
          }
 
@@ -142,7 +144,11 @@ namespace flop.net
 
       private void OnPreviewMouseUp(object sender, MouseButtonEventArgs e)
       {
-
+         if(WorkingMode == ViewMode.Creation)
+         {
+            mainWindowVM.EndFigureCreation.Execute(null);
+            WorkingMode = ViewMode.Default;
+         }
       }
 
       private void MainCanvas_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)

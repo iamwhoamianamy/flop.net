@@ -187,7 +187,7 @@
                 <r:RibbonGroupBox Header="Объектный режим">
                     <r:ToggleButton Header="Перемещение"
                           ToolTip="Перемещение фигуры"
-                          Command="{Binding MoveFigure}"
+                          Command="{Binding ToggleMoving}"
                           Style="{StaticResource RibbonMenuButton}" />
                     <r:ToggleButton Header="Масштабирование"
                           ToolTip="Масштабирование фигуры"

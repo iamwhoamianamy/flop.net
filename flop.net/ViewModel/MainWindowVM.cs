@@ -179,15 +179,24 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          return new RelayCommand(_ =>
          {
-            if (Mode == ViewMode.Default)
-               Mode = ViewMode.Moving;
+            if (WorkingMode == ViewMode.Default)
+               WorkingMode = ViewMode.Moving;
             else
-               Mode = ViewMode.Default;
+               WorkingMode = ViewMode.Default;
          });
       }
    }
+   public RelayCommand BeginActiveFigureMoving
+   {
+      get
+      {
+         return new RelayCommand(_ =>
+         {
 
-   public RelayCommand BeginFigureleCreation
+         });
+      }
+   }
+   public RelayCommand BeginFigureCreation
    {
       get
       {
@@ -270,7 +279,8 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          toggleRectangleCreation ??= new RelayCommand(_ =>
          {
-            switchButtonSelection(moveFigure, drawingCommands);
+            switchButtonSelection(toggleRectangleCreation, drawingCommands);
+
             WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
             СurrentFigureType = FigureCreationMode.Rectangle;
          });
@@ -340,7 +350,19 @@ public class MainWindowVM : INotifyPropertyChanged
          return togglePolygonCreation;
       }
    }
-
+   private RelayCommand endFigureCreation;
+   public RelayCommand EndFigureCreation
+   {
+      get
+      {
+         endFigureCreation ??= new RelayCommand(_ =>
+         {
+            switchButtonSelection(null, drawingCommands);
+            WorkingMode = ViewMode.Default;
+         });
+         return endFigureCreation;         
+      }
+   }
    private RelayCommand rotateFigure;
    public RelayCommand RotateFigure
    {
