@@ -84,6 +84,27 @@ namespace flop.net.Model
                 OnPropertyChanged();
             }
         }
+      public DrawingParameters()
+      {
+         this.Fill = Colors.Black;
+         this.Stroke = Colors.White;
+         this.StrokeThickness = 0;
+         this.StrokeDashArray = new List<double>();
+         this.Opacity = 1;
+         this.PenLineCap = PenLineCap.Flat;
+      }
+      public DrawingParameters(DrawingParameters parameters)
+      {
+         this.Fill = parameters.Fill;
+         this.Stroke = parameters.Stroke;
+         this.StrokeThickness = parameters.StrokeThickness;
+         this.StrokeDashArray = parameters.StrokeDashArray;
+         this.Opacity = parameters.Opacity;
+         this.ZIndex = parameters.ZIndex;
+         this.PenLineCap = parameters.PenLineCap;
+      }
+
+        
 
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -59,7 +59,7 @@ public class MainWindowVM : INotifyPropertyChanged
    private DrawingParameters creationDrawingParameters;
    public DrawingParameters CreationDrawingParameters
    {
-      get => creationDrawingParameters ??= new DrawingParameters();
+      get => creationDrawingParameters;
       set
       {
          creationDrawingParameters = value;
@@ -205,17 +205,17 @@ public class MainWindowVM : INotifyPropertyChanged
             switch (СurrentFigureType)
             {
                case FigureCreationMode.Triangle:
-                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateTriangle(new Point(0, 0), new Point(0, 0)), CreationDrawingParameters));
+                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateTriangle(new Point(0, 0), new Point(0, 0)), new DrawingParameters(CreationDrawingParameters)));
                   break;
                case FigureCreationMode.Ellipse:
-                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateEllipse(new Point(0, 0), new Point(0, 0)), CreationDrawingParameters));
+                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateEllipse(new Point(0, 0), new Point(0, 0)), new DrawingParameters(CreationDrawingParameters)));
                   break;
                case FigureCreationMode.Polygon:
                   break;
                case FigureCreationMode.Polyline:
                   break;
                case FigureCreationMode.Rectangle:
-                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateRectangle(new Point(0, 0), new Point(0, 0)), CreationDrawingParameters));
+                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateRectangle(new Point(0, 0), new Point(0, 0)), new DrawingParameters(CreationDrawingParameters)));
                   break;
                case FigureCreationMode.None:
                   break;
@@ -250,20 +250,25 @@ public class MainWindowVM : INotifyPropertyChanged
          return new RelayCommand(obj =>
          {
             var points = obj as (Point, Point)?;
+            var selfDrawingParametrs = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1].DrawingParameters;
+
             switch (СurrentFigureType)
             {
                case FigureCreationMode.Triangle:
-                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = new Figure(PolygonBuilder.CreateTriangle(points.Value.Item1, points.Value.Item2), CreationDrawingParameters);
+                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] 
+                  = new Figure(PolygonBuilder.CreateTriangle(points.Value.Item1, points.Value.Item2), selfDrawingParametrs);
                   break;
                case FigureCreationMode.Ellipse:
-                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = new Figure(PolygonBuilder.CreateEllipse(points.Value.Item1, points.Value.Item2), CreationDrawingParameters);
+                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] 
+                  = new Figure(PolygonBuilder.CreateEllipse(points.Value.Item1, points.Value.Item2), selfDrawingParametrs);
                   break;
                case FigureCreationMode.Polygon:
                   break;
                case FigureCreationMode.Polyline:
                   break;
                case FigureCreationMode.Rectangle:
-                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = new Figure(PolygonBuilder.CreateRectangle(points.Value.Item1, points.Value.Item2), CreationDrawingParameters);
+                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] 
+                  = new Figure(PolygonBuilder.CreateRectangle(points.Value.Item1, points.Value.Item2), selfDrawingParametrs);
                   break;
                case FigureCreationMode.None:
                   break;
@@ -505,8 +510,7 @@ public class MainWindowVM : INotifyPropertyChanged
       СurrentFigureType = FigureCreationMode.None;
       drawingCommands = new List<RelayCommand> { };
       modifyingCommands = new List<RelayCommand> { };
-      CreationDrawingParameters.Fill = Colors.Green;
-      CreationDrawingParameters.Stroke = Colors.Green;
+      CreationDrawingParameters = new DrawingParameters();
    }
 
    public event PropertyChangedEventHandler PropertyChanged;
