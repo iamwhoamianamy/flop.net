@@ -227,14 +227,9 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          return new RelayCommand(obj =>
          {
-            var coords = obj as (Point, Point)?;
+            var delta = obj as Vector?;
 
-            var mousePreviousCoords = coords.Value.Item1;
-            var mouseCurrentCoords = coords.Value.Item2;
-
-            var delta = mouseCurrentCoords - mousePreviousCoords;
-
-            ActiveFigure.Geometric.Move(delta);
+            ActiveFigure.Geometric.Move((Vector)delta);
 
             ActiveLayer.Figures.Add(null);
             ActiveLayer.Figures.RemoveAt(ActiveLayer.Figures.Count - 1);
