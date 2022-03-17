@@ -278,8 +278,8 @@ public class MainWindowVM : INotifyPropertyChanged
          toggleRectangleCreation ??= new RelayCommand(_ =>
          {
             switchButtonSelection(toggleRectangleCreation, drawingCommands);
-            WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
-            СurrentFigureType = FigureCreationMode.Rectangle;
+            СurrentFigureType = СurrentFigureType == FigureCreationMode.Rectangle ? FigureCreationMode.None : FigureCreationMode.Rectangle;
+            WorkingMode = СurrentFigureType == FigureCreationMode.Rectangle ? ViewMode.Creation : ViewMode.Default;
          });
          if (!drawingCommands.Contains(toggleRectangleCreation))
             drawingCommands.Add(toggleRectangleCreation);
@@ -295,8 +295,8 @@ public class MainWindowVM : INotifyPropertyChanged
          toggleTriangleCreation ??= new RelayCommand(_ =>
          {
             switchButtonSelection(toggleTriangleCreation, drawingCommands);
-            WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
-            СurrentFigureType = FigureCreationMode.Triangle;
+            СurrentFigureType = СurrentFigureType == FigureCreationMode.Triangle ? FigureCreationMode.None : FigureCreationMode.Triangle;
+            WorkingMode = СurrentFigureType == FigureCreationMode.Triangle ? ViewMode.Creation : ViewMode.Default;
          });
          if (!drawingCommands.Contains(toggleTriangleCreation))
             drawingCommands.Add(toggleTriangleCreation);
@@ -312,8 +312,8 @@ public class MainWindowVM : INotifyPropertyChanged
          toggleEllipseCreation ??= new RelayCommand(_ =>
          {
             switchButtonSelection(toggleEllipseCreation, drawingCommands);
-            WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
-            СurrentFigureType = FigureCreationMode.Ellipse;
+            СurrentFigureType = СurrentFigureType == FigureCreationMode.Ellipse ? FigureCreationMode.None : FigureCreationMode.Ellipse;
+            WorkingMode = СurrentFigureType == FigureCreationMode.Ellipse ? ViewMode.Creation : ViewMode.Default;
          });
          if (!drawingCommands.Contains(toggleEllipseCreation))
             drawingCommands.Add(toggleEllipseCreation);
@@ -329,8 +329,8 @@ public class MainWindowVM : INotifyPropertyChanged
          togglePolylineCreation ??= new RelayCommand(_ =>
          {
             switchButtonSelection(togglePolylineCreation, drawingCommands);
-            WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
-            СurrentFigureType = FigureCreationMode.Polyline;
+            СurrentFigureType = СurrentFigureType == FigureCreationMode.Polyline ? FigureCreationMode.None : FigureCreationMode.Polyline;
+            WorkingMode = СurrentFigureType == FigureCreationMode.Polyline ? ViewMode.Creation : ViewMode.Default;
          });
          if (!drawingCommands.Contains(togglePolylineCreation))
             drawingCommands.Add(togglePolylineCreation);
@@ -346,8 +346,8 @@ public class MainWindowVM : INotifyPropertyChanged
          togglePolygonCreation ??= new RelayCommand(_ =>
          {
             switchButtonSelection(togglePolygonCreation, drawingCommands);
-            WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
-            СurrentFigureType = FigureCreationMode.Polygon;
+            СurrentFigureType = СurrentFigureType == FigureCreationMode.Polygon ? FigureCreationMode.None : FigureCreationMode.Polygon;
+            WorkingMode = СurrentFigureType == FigureCreationMode.Polygon ? ViewMode.Creation : ViewMode.Default;
          });
          if (!drawingCommands.Contains(togglePolygonCreation))
             drawingCommands.Add(togglePolygonCreation);
