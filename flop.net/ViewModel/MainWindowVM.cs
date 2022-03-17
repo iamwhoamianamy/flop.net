@@ -100,9 +100,7 @@ public class MainWindowVM : INotifyPropertyChanged
    {
       foreach (var command in commandsInRibbon)
       {
-         if (selectedCommand == command)
-            command.IsPressed = true;
-         else
+         if (selectedCommand != command)
             command.IsPressed = false;
       }
    }
@@ -285,11 +283,11 @@ public class MainWindowVM : INotifyPropertyChanged
          toggleRectangleCreation ??= new RelayCommand(_ =>
          {
             switchButtonSelection(toggleRectangleCreation, drawingCommands);
-
             WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
             СurrentFigureType = FigureCreationMode.Rectangle;
          });
-         drawingCommands.Add(toggleRectangleCreation);
+         if (!drawingCommands.Contains(toggleRectangleCreation))
+            drawingCommands.Add(toggleRectangleCreation);
          return toggleRectangleCreation;
       }
    }
@@ -302,11 +300,11 @@ public class MainWindowVM : INotifyPropertyChanged
          toggleTriangleCreation ??= new RelayCommand(_ =>
          {
             switchButtonSelection(toggleTriangleCreation, drawingCommands);
-
             WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
             СurrentFigureType = FigureCreationMode.Triangle;
          });
-         drawingCommands.Add(toggleTriangleCreation);
+         if (!drawingCommands.Contains(toggleTriangleCreation))
+            drawingCommands.Add(toggleTriangleCreation);
          return toggleTriangleCreation;
       }
    }
@@ -318,10 +316,12 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          toggleEllipseCreation ??= new RelayCommand(_ =>
          {
+            switchButtonSelection(toggleEllipseCreation, drawingCommands);
             WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
             СurrentFigureType = FigureCreationMode.Ellipse;
          });
-         drawingCommands.Add(toggleEllipseCreation);
+         if (!drawingCommands.Contains(toggleEllipseCreation))
+            drawingCommands.Add(toggleEllipseCreation);
          return toggleEllipseCreation;
       }
    }
@@ -333,10 +333,12 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          togglePolylineCreation ??= new RelayCommand(_ =>
          {
+            switchButtonSelection(togglePolylineCreation, drawingCommands);
             WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
             СurrentFigureType = FigureCreationMode.Polyline;
          });
-         drawingCommands.Add(togglePolylineCreation);
+         if (!drawingCommands.Contains(togglePolylineCreation))
+            drawingCommands.Add(togglePolylineCreation);
          return togglePolylineCreation;
       }
    }
@@ -348,10 +350,12 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          togglePolygonCreation ??= new RelayCommand(_ =>
          {
+            switchButtonSelection(togglePolygonCreation, drawingCommands);
             WorkingMode = WorkingMode == ViewMode.Creation ? ViewMode.Default : ViewMode.Creation;
             СurrentFigureType = FigureCreationMode.Polygon;
          });
-         drawingCommands.Add(togglePolygonCreation);
+         if (!drawingCommands.Contains(togglePolygonCreation))
+            drawingCommands.Add(togglePolygonCreation);
          return togglePolygonCreation;
       }
    }
