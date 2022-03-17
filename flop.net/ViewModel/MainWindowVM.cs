@@ -27,6 +27,7 @@ public class MainWindowVM : INotifyPropertyChanged
    public Figure FigureOnCreating { get; set; }
    public ViewMode WorkingMode { get; set; }
    public FigureCreationMode СurrentFigureType { get; set; }
+   public ViewMode Mode { get; set; } = ViewMode.Default;
 
    public RelayCommand Undo
    {
@@ -157,6 +158,20 @@ public class MainWindowVM : INotifyPropertyChanged
             activeFigure = new Figure(rectangle, null);
             ActiveLayer.Figures.Add(activeFigure);
             UndoStack.Push(new UserCommands(redo, undo));
+         });
+      }
+   }
+
+   public RelayCommand ToggleMoving
+   {
+      get
+      {
+         return new RelayCommand(_ =>
+         {
+            if (Mode == ViewMode.Default)
+               Mode = ViewMode.Moving;
+            else
+               Mode = ViewMode.Default;
          });
       }
    }
