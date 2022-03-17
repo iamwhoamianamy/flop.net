@@ -19,6 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using flop.net.Model;
+using flop.net.Enums;
 
 namespace flop.net
 {
@@ -50,6 +51,8 @@ namespace flop.net
             OnPropertyChanged();
          }
       }
+      public ViewMode WorkingMode { get; set; }
+      public FigureCreationMode СurrentFigureType { get; set; }
 
       public MainWindow()
       {
