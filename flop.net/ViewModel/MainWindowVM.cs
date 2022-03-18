@@ -16,8 +16,7 @@ public class MainWindowVM : INotifyPropertyChanged
 {
    private const double EpsIsIn = double.MinValue;
 
-   private List<RelayCommand> drawingCommands;
-   private List<RelayCommand> modifyingCommands;
+   private List<RelayCommand> palletCommands;
    public Stack<UserCommands> UndoStack { get; set; }
    public Stack<UserCommands> RedoStack { get; set; } 
    public Stack<Figure> DeletedFigures;
@@ -178,15 +177,15 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          toggleMoving ??= new RelayCommand(_ =>
          {
-            switchButtonSelection(toggleMoving, modifyingCommands);
+            switchButtonSelection(toggleMoving, palletCommands);
             if (WorkingMode != ViewMode.Moving)
                WorkingMode = ViewMode.Moving;
             else if (WorkingMode == ViewMode.Moving)
                WorkingMode = ViewMode.Default;
             СurrentFigureType = FigureCreationMode.None;
          }, isModifyingAvailable);
-         if (!modifyingCommands.Contains(toggleMoving))
-            modifyingCommands.Add(toggleMoving);
+         if (!palletCommands.Contains(toggleMoving))
+            palletCommands.Add(toggleMoving);
          return toggleMoving;
       }
    }
@@ -198,15 +197,15 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          toggleScaling ??= new RelayCommand(_ =>
          {
-            switchButtonSelection(toggleScaling, modifyingCommands);
+            switchButtonSelection(toggleScaling, palletCommands);
             if (WorkingMode != ViewMode.Scaling)
                WorkingMode = ViewMode.Scaling;
             else if (WorkingMode == ViewMode.Scaling)
                WorkingMode = ViewMode.Default;
             СurrentFigureType = FigureCreationMode.None;
          }, isModifyingAvailable);
-         if (!modifyingCommands.Contains(toggleScaling))
-            modifyingCommands.Add(toggleScaling);
+         if (!palletCommands.Contains(toggleScaling))
+            palletCommands.Add(toggleScaling);
          return toggleScaling;
       }
    }
@@ -405,12 +404,12 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          toggleRectangleCreation ??= new RelayCommand(_ =>
          {
-            switchButtonSelection(toggleRectangleCreation, drawingCommands);
+            switchButtonSelection(toggleRectangleCreation, palletCommands);
             СurrentFigureType = СurrentFigureType == FigureCreationMode.Rectangle ? FigureCreationMode.None : FigureCreationMode.Rectangle;
             WorkingMode = СurrentFigureType == FigureCreationMode.Rectangle ? ViewMode.Creation : ViewMode.Default;
          });
-         if (!drawingCommands.Contains(toggleRectangleCreation))
-            drawingCommands.Add(toggleRectangleCreation);
+         if (!palletCommands.Contains(toggleRectangleCreation))
+            palletCommands.Add(toggleRectangleCreation);
          return toggleRectangleCreation;
       }
    }
@@ -422,12 +421,12 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          toggleTriangleCreation ??= new RelayCommand(_ =>
          {
-            switchButtonSelection(toggleTriangleCreation, drawingCommands);
+            switchButtonSelection(toggleTriangleCreation, palletCommands);
             СurrentFigureType = СurrentFigureType == FigureCreationMode.Triangle ? FigureCreationMode.None : FigureCreationMode.Triangle;
             WorkingMode = СurrentFigureType == FigureCreationMode.Triangle ? ViewMode.Creation : ViewMode.Default;
          });
-         if (!drawingCommands.Contains(toggleTriangleCreation))
-            drawingCommands.Add(toggleTriangleCreation);
+         if (!palletCommands.Contains(toggleTriangleCreation))
+            palletCommands.Add(toggleTriangleCreation);
          return toggleTriangleCreation;
       }
    }
@@ -439,12 +438,12 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          toggleEllipseCreation ??= new RelayCommand(_ =>
          {
-            switchButtonSelection(toggleEllipseCreation, drawingCommands);
+            switchButtonSelection(toggleEllipseCreation, palletCommands);
             СurrentFigureType = СurrentFigureType == FigureCreationMode.Ellipse ? FigureCreationMode.None : FigureCreationMode.Ellipse;
             WorkingMode = СurrentFigureType == FigureCreationMode.Ellipse ? ViewMode.Creation : ViewMode.Default;
          });
-         if (!drawingCommands.Contains(toggleEllipseCreation))
-            drawingCommands.Add(toggleEllipseCreation);
+         if (!palletCommands.Contains(toggleEllipseCreation))
+            palletCommands.Add(toggleEllipseCreation);
          return toggleEllipseCreation;
       }
    }
@@ -456,12 +455,12 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          togglePolylineCreation ??= new RelayCommand(_ =>
          {
-            switchButtonSelection(togglePolylineCreation, drawingCommands);
+            switchButtonSelection(togglePolylineCreation, palletCommands);
             СurrentFigureType = СurrentFigureType == FigureCreationMode.Polyline ? FigureCreationMode.None : FigureCreationMode.Polyline;
             WorkingMode = СurrentFigureType == FigureCreationMode.Polyline ? ViewMode.Creation : ViewMode.Default;
          });
-         if (!drawingCommands.Contains(togglePolylineCreation))
-            drawingCommands.Add(togglePolylineCreation);
+         if (!palletCommands.Contains(togglePolylineCreation))
+            palletCommands.Add(togglePolylineCreation);
          return togglePolylineCreation;
       }
    }
@@ -473,12 +472,12 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          togglePolygonCreation ??= new RelayCommand(_ =>
          {
-            switchButtonSelection(togglePolygonCreation, drawingCommands);
+            switchButtonSelection(togglePolygonCreation, palletCommands);
             СurrentFigureType = СurrentFigureType == FigureCreationMode.Polygon ? FigureCreationMode.None : FigureCreationMode.Polygon;
             WorkingMode = СurrentFigureType == FigureCreationMode.Polygon ? ViewMode.Creation : ViewMode.Default;
          });
-         if (!drawingCommands.Contains(togglePolygonCreation))
-            drawingCommands.Add(togglePolygonCreation);
+         if (!palletCommands.Contains(togglePolygonCreation))
+            palletCommands.Add(togglePolygonCreation);
          return togglePolygonCreation;
       }
    }
@@ -493,7 +492,7 @@ public class MainWindowVM : INotifyPropertyChanged
             if (activeFigure != null)
             {
                RedoStack.Clear();
-               switchButtonSelection(scaleFigure, modifyingCommands);
+               switchButtonSelection(scaleFigure, palletCommands);
 
                activeFigure.Geometric.Scale(new Point(2, 2));
                UndoStack.Push(new UserCommands(
@@ -503,7 +502,7 @@ public class MainWindowVM : INotifyPropertyChanged
                   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
             }
          }, isModifyingAvailable);
-         modifyingCommands.Add(scaleFigure);
+         palletCommands.Add(scaleFigure);
          return scaleFigure;
       }
    }
@@ -519,7 +518,7 @@ public class MainWindowVM : INotifyPropertyChanged
             {
                RedoStack.Clear();
 
-               switchButtonSelection(rotateFigure, modifyingCommands);
+               switchButtonSelection(rotateFigure, palletCommands);
 
                activeFigure.Geometric.Rotate(30);
                ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = activeFigure;
@@ -529,7 +528,7 @@ public class MainWindowVM : INotifyPropertyChanged
                   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
             }
          }, isModifyingAvailable);
-         modifyingCommands.Add(rotateFigure);
+         palletCommands.Add(rotateFigure);
          return rotateFigure;
       }
    }
@@ -567,7 +566,7 @@ public class MainWindowVM : INotifyPropertyChanged
             if (activeFigure != null)
             {
                RedoStack.Clear();
-               switchButtonSelection(deleteFigure, modifyingCommands);
+               switchButtonSelection(deleteFigure, palletCommands);
                DeletedFigures.Push(activeFigure);
                if (ActiveLayer.Figures.Contains(activeFigure))
                   ActiveLayer.Figures.Remove(activeFigure);
@@ -582,7 +581,7 @@ public class MainWindowVM : INotifyPropertyChanged
                   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
                }
          }, isModifyingAvailable);
-         modifyingCommands.Add(deleteFigure);
+         palletCommands.Add(deleteFigure);
          return deleteFigure;
       }
    }
@@ -596,8 +595,7 @@ public class MainWindowVM : INotifyPropertyChanged
       DeletedFigures = new Stack<Figure>();
       activeFigure = null;
       СurrentFigureType = FigureCreationMode.None;
-      drawingCommands = new List<RelayCommand> { };
-      modifyingCommands = new List<RelayCommand> { };
+      palletCommands = new List<RelayCommand> { };
       CreationDrawingParameters = new DrawingParameters();
       summary_moving_delta = new Vector();
    }
