@@ -128,7 +128,7 @@
                        Grid.Column="0"
                        Grid.Row="0"
                        Margin="0 10 0 0"/>
-            <r:Spinner Value="{Binding CurrentSrokeThickness}"
+            <r:Spinner Value="{Binding CreationDrawingParameters.StrokeThickness}"
                        Grid.Column="1"
                        Grid.Row="0"
                        Margin="0 10 0 0"
@@ -141,7 +141,7 @@
                       Grid.Row="1"
                       Margin="0 10 0 0"
                       Width="90"
-                      SelectedItem="{Binding CurrentStrokeDashCap}">
+                      SelectedItem="{Binding CreationDrawingParameters.PenLineCap}">
               <ComboBoxItem Content="Flat"/>
               <ComboBoxItem Content="Square"/>
               <ComboBoxItem Content="Round"/>
@@ -226,14 +226,17 @@
                 <Rectangle Width="32"
                            Height="32"
                            HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Fill="{Binding DrawParametrs.Fill}"
+                           VerticalAlignment="Center"                           
                            Stroke="AliceBlue"
-                           StrokeThickness="2"/>
+                           StrokeThickness="2">
+                  <Rectangle.Fill>
+                    <SolidColorBrush Color="{Binding ActiveFigure.DrawingParameters.Fill, Mode=TwoWay}" />
+                  </Rectangle.Fill>
+                </Rectangle>
               </Grid>
             </r:DropDownButton.Icon>
             <r:ColorGallery Columns="10"
-                            SelectedColor="{Binding DrawingParameters.Fill}"
+                            SelectedColor="{Binding ActiveFigure.DrawingParameters.Fill, Mode=TwoWay}"
                             IsNoColorButtonVisible="False"
                             StandardColorGridRows="3"
                             ThemeColorGridRows="5" />
@@ -246,13 +249,16 @@
                            Height="32"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           Fill="{Binding DrawParametrs.Stroke}"
                            Stroke="AliceBlue"
-                           StrokeThickness="2"/>
+                           StrokeThickness="2">
+                  <Rectangle.Fill>
+                    <SolidColorBrush Color="{Binding ActiveFigure.DrawingParameters.Stroke, Mode=TwoWay}" />
+                  </Rectangle.Fill>
+                </Rectangle>
               </Grid>
             </r:DropDownButton.Icon>
             <r:ColorGallery Columns="10"
-                            SelectedColor="{Binding DrawingParameters.Stroke}"
+                            SelectedColor="{Binding ActiveFigure.DrawingParameters.Stroke, Mode=TwoWay}"
                             IsNoColorButtonVisible="False"
                             StandardColorGridRows="3"
                             ThemeColorGridRows="5" />
@@ -272,7 +278,7 @@
                        Grid.Column="0"
                        Grid.Row="0"
                        Margin="0 10 0 0"/>
-            <r:Spinner Value="{Binding DrawingParameters.StrokeThickness}"
+            <r:Spinner Value="{Binding ActiveFigure.DrawingParameters.StrokeThickness, Mode=TwoWay}"
                        Grid.Column="1"
                        Grid.Row="0"
                        Margin="0 5 0 0"
@@ -285,7 +291,7 @@
                       Grid.Row="1"
                       Margin="0 5 0 0"
                       Width="90"
-                      SelectedItem="{Binding DrawingParameters.StrokeDashCap}">
+                      SelectedItem="{Binding ActiveFigure.DrawingParameters.PenLineCap, Mode=TwoWay}">
               <ComboBoxItem Content="Flat"/>
               <ComboBoxItem Content="Square"/>
               <ComboBoxItem Content="Round"/>
@@ -295,7 +301,7 @@
                        Grid.Column="2"
                        Grid.Row="0"
                        Margin="10 10 0 0"/>
-            <r:Spinner Value="1"
+            <r:Spinner Value="{Binding ActiveFigure.DrawingParameters.Opacity, Mode=TwoWay}"
                        Maximum="1"
                        Grid.Column="3"
                        Grid.Row="0"

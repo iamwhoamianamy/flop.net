@@ -21,6 +21,15 @@ public class MainWindowVM : INotifyPropertyChanged
    public Stack<UserCommands> RedoStack { get; set; } 
    public Stack<Figure> DeletedFigures;
    private Figure activeFigure;
+   public Figure ActiveFigure
+   {
+      get { return activeFigure; }
+      set
+      {
+         activeFigure = value;
+         OnPropertyChanged();
+      }
+   }
    public Layer ActiveLayer { get; set; }
    public ObservableCollection<Layer> Layers { get; set; }
    public Figure FigureOnCreating { get; set; }
@@ -102,9 +111,7 @@ public class MainWindowVM : INotifyPropertyChanged
          if (selectedCommand != command)
             command.IsPressed = false;
       }
-   }
-
-   public Figure ActiveFigure { get => activeFigure; set { activeFigure = value; } }
+   }   
    public RelayCommand SetActiveFigure
    {
       get

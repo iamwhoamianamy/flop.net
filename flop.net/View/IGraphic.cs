@@ -35,20 +35,18 @@ namespace flop.net.View
         {
             Polygon polygon = new Polygon();
           
-            //polygon.Fill = new SolidColorBrush(Colors.Green);
             polygon.Fill = new SolidColorBrush(drawingParametrs.Fill);
-            //polygon.Stroke = new SolidColorBrush(drawingParametrs.Stroke);
-            //polygon.StrokeThickness = drawingParametrs.StrokeThickness;
-            //polygon.StrokeDashCap = drawingParametrs.PenLineCap;
-            //polygon.Opacity = drawingParametrs.Opacity;
-            //polygon.Name = "Polygon" + 1.ToString();
+            polygon.Stroke = new SolidColorBrush(drawingParametrs.Stroke);
+            polygon.StrokeThickness = drawingParametrs.StrokeThickness;
+            polygon.StrokeDashCap = drawingParametrs.PenLineCap;
+            polygon.Opacity = drawingParametrs.Opacity;
 
-            //foreach (var x in drawingParametrs.StrokeDashArray)
-            //{
-            //    polygon.StrokeDashArray.Add(x);
-            //}
+         foreach (var x in drawingParametrs.StrokeDashArray)
+         {
+            polygon.StrokeDashArray.Add(x);
+         }
 
-            foreach (Point point in points)
+         foreach (Point point in points)
             {
                 polygon.Points.Add(point);
             }
