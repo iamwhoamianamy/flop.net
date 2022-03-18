@@ -197,8 +197,8 @@
       </r:RibbonTabItem>
 
       <r:RibbonTabItem Header="Фигура" >
-                <!--DataContext="{Binding ElementName=MainWin, Path=MainWindowVM.SelectedFigure}"-->
-                       
+        <!--DataContext="{Binding ElementName=MainWin, Path=MainWindowVM.SelectedFigure}"-->
+
         <r:RibbonGroupBox Header="Параметры фигуры">
           <r:DropDownButton x:Name="SelectedFillColorButton"
                             Header="Цвет заливки">
