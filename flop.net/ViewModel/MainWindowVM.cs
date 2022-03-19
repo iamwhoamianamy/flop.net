@@ -614,7 +614,7 @@ public class MainWindowVM : INotifyPropertyChanged
             switch (saveDialog.FilterIndex)
             {
                case (int)SaveTypes.Svg:
-                  var saver = new SvgSaver(ActiveLayer, parameters.Width, parameters.Height);
+                  var saver = new SvgSaver(saveDialog.FileName,ActiveLayer, parameters.Width, parameters.Height);
                   saver.Save();
                   break;
                case (int)SaveTypes.Json:
