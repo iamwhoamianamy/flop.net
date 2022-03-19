@@ -24,7 +24,7 @@ public class SvgSaver
     public string Filepath => _filepath;
     
     
-    public SvgSaver(Layer layers,int width,int height)
+    public SvgSaver(Layer layers, int width, int height)
     {
         _layers = layers;
         _width = width;

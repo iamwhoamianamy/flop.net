@@ -8,7 +8,10 @@ using System.Windows;
 using flop.net.Annotations;
 using flop.net.Model;
 using System.Windows.Media;
+using System.Xml;
 using flop.net.Enums;
+using flop.net.Save;
+using Microsoft.Win32;
 
 namespace flop.net.ViewModel;
 
@@ -170,7 +173,7 @@ public class MainWindowVM : INotifyPropertyChanged
             Point a = new Point(lwidth, lheight);
             Point b = new Point(lwidth + 20, lheight + 20);
             Polygon rectangle = PolygonBuilder.CreateRectangle(a, b);
-            activeFigure = new Figure(rectangle, null);
+            activeFigure = new Figure(rectangle, null, FigureCreationMode.Rectangle);
             ActiveLayer.Figures.Add(activeFigure);
             UndoStack.Push(new UserCommands(redo, undo));
          });
@@ -235,17 +238,17 @@ public class MainWindowVM : INotifyPropertyChanged
             switch (СurrentFigureType)
             {
                case FigureCreationMode.Triangle:
-                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateTriangle(new Point(0, 0), new Point(0, 0)), new DrawingParameters(CreationDrawingParameters)));
+                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateTriangle(new Point(0, 0), new Point(0, 0)), new DrawingParameters(CreationDrawingParameters), FigureCreationMode.Triangle));
                   break;
                case FigureCreationMode.Ellipse:
-                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateEllipse(new Point(0, 0), new Point(0, 0)), new DrawingParameters(CreationDrawingParameters)));
+                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateEllipse(new Point(0, 0), new Point(0, 0)), new DrawingParameters(CreationDrawingParameters), FigureCreationMode.Ellipse));
                   break;
                case FigureCreationMode.Polygon:
                   break;
                case FigureCreationMode.Polyline:
                   break;
                case FigureCreationMode.Rectangle:
-                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateRectangle(new Point(0, 0), new Point(0, 0)), new DrawingParameters(CreationDrawingParameters)));
+                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateRectangle(new Point(0, 0), new Point(0, 0)), new DrawingParameters(CreationDrawingParameters), FigureCreationMode.Rectangle));
                   break;
                case FigureCreationMode.None:
                   break;
@@ -298,12 +301,12 @@ public class MainWindowVM : INotifyPropertyChanged
             {
                case FigureCreationMode.Triangle:
                   ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] 
-                  = new Figure(PolygonBuilder.CreateTriangle(points.Value.Item1, points.Value.Item2), selfDrawingParametrs);
+                  = new Figure(PolygonBuilder.CreateTriangle(points.Value.Item1, points.Value.Item2), selfDrawingParametrs, FigureCreationMode.Triangle);
                   ActiveFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
                   break;
                case FigureCreationMode.Ellipse:
                   ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] 
-                  = new Figure(PolygonBuilder.CreateEllipse(points.Value.Item1, points.Value.Item2), selfDrawingParametrs);
+                  = new Figure(PolygonBuilder.CreateEllipse(points.Value.Item1, points.Value.Item2), selfDrawingParametrs, FigureCreationMode.Ellipse);
                   ActiveFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
                   break;
                case FigureCreationMode.Polygon:
@@ -312,7 +315,7 @@ public class MainWindowVM : INotifyPropertyChanged
                   break;
                case FigureCreationMode.Rectangle:
                   ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] 
-                  = new Figure(PolygonBuilder.CreateRectangle(points.Value.Item1, points.Value.Item2), selfDrawingParametrs);
+                  = new Figure(PolygonBuilder.CreateRectangle(points.Value.Item1, points.Value.Item2), selfDrawingParametrs, FigureCreationMode.Rectangle);
                   ActiveFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
                   break;
                case FigureCreationMode.None:
@@ -590,6 +593,38 @@ public class MainWindowVM : INotifyPropertyChanged
          }, isModifyingAvailable);
          palletCommands.Add(deleteFigure);
          return deleteFigure;
+      }
+   }
+
+   private RelayCommand save;
+
+   public RelayCommand Save
+   {
+      get
+      {
+         save ??= new RelayCommand(o =>
+         {
+            var parameters = (SaveParameters) o;
+            var saveDialog = new SaveFileDialog
+            {
+               Filter = $"{parameters.Format} files (.{parameters.Format})|.{parameters.Format}",
+               RestoreDirectory = true
+            };
+            if (saveDialog.ShowDialog() != true) return;
+            switch (saveDialog.FilterIndex)
+            {
+               case (int)SaveTypes.Svg:
+                  var saver = new SvgSaver(ActiveLayer, parameters.Width, parameters.Height);
+                  saver.Save();
+                  break;
+               case (int)SaveTypes.Json:
+                  break;
+               case (int)SaveTypes.Png:
+                  break;
+            }
+
+         });
+         return save;
       }
    }
 

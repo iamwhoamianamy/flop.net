@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
+using flop.net.Enums;
 
 namespace flop.net.Model
 {
@@ -12,6 +14,7 @@ namespace flop.net.Model
         }
         
         private IGeometric geometric;
+        public FigureCreationMode FigureType { get; private set; }
         public IGeometric Geometric 
         {
             get => geometric;
@@ -33,10 +36,11 @@ namespace flop.net.Model
             }
         }
 
-        public Figure(IGeometric geometric, DrawingParameters drawingParameters)
+        public Figure(IGeometric geometric, DrawingParameters drawingParameters, FigureCreationMode figureType)
         {
             Geometric = geometric;
             DrawingParameters = drawingParameters;
+            FigureType = figureType;
         }
     }
 }
