@@ -119,9 +119,9 @@ namespace flop.net.Model
          }
       }
 
-      public void Scale(Point scale)
+      public void Scale(Point scale, Point? scalePoint=null)
       {
-         var shift = Center;
+         var shift = scalePoint.HasValue ? scalePoint : Center;
          for (var i = 0; i < Points.Count; i++)
          {
             var point = Point.Subtract(Points[i], (Vector)shift);
