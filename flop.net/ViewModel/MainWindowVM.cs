@@ -622,7 +622,6 @@ public class MainWindowVM : INotifyPropertyChanged
                case (int)SaveTypes.Png:
                   break;
             }
-
          });
          return save;
       }
