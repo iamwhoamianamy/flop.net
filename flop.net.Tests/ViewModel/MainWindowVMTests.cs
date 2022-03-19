@@ -18,7 +18,7 @@ namespace flop.net.Tests.ViewModel
         {
             var vm = new MainWindowVM(); 
             var rectangle = PolygonBuilder.CreateRectangle(new Point(100, 100), new Point(250, 250));
-            var figure = new Figure(rectangle, null, FigureCreationMode.Rectangle);
+            var figure = new Figure(rectangle, null);
             vm.ActiveLayer.Figures.Add(figure);
 
             var pointInFigure = new Point(150, 200);
@@ -32,7 +32,7 @@ namespace flop.net.Tests.ViewModel
         {
             var vm = new MainWindowVM();
             var rectangle = PolygonBuilder.CreateRectangle(new Point(100, 100), new Point(250, 250));
-            var figure = new Figure(rectangle, null, FigureCreationMode.Rectangle);
+            var figure = new Figure(rectangle, null);
             vm.ActiveLayer.Figures.Add(figure);
 
             var pointOutsideFigure = new Point(50, 30);
@@ -47,8 +47,8 @@ namespace flop.net.Tests.ViewModel
             var vm = new MainWindowVM();
             var rectangle1 = PolygonBuilder.CreateRectangle(new Point(100, 100), new Point(250, 250));
             var rectangle2 = PolygonBuilder.CreateRectangle(new Point(80, 80), new Point(300, 300));
-            var figure1 = new Figure(rectangle1, null, FigureCreationMode.Rectangle);
-            var figure2 = new Figure(rectangle2, null, FigureCreationMode.Rectangle);
+            var figure1 = new Figure(rectangle1, null);
+            var figure2 = new Figure(rectangle2, null);
             vm.ActiveLayer.Figures.Add(figure1);
             vm.ActiveLayer.Figures.Add(figure2);
 
