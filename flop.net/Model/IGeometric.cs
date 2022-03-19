@@ -13,7 +13,7 @@ namespace flop.net.Model
    {
       void Move(Vector delta);
       void Rotate(double angle, Point? rotationCenter=null);
-      void Scale(Point scale);
+      void Scale(Point scale, Point? scalePoint=null);
       PointCollection Points { get; }
       bool IsClosed { get; }
       Point Center { get; }
