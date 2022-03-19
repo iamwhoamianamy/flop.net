@@ -173,7 +173,7 @@ public class MainWindowVM : INotifyPropertyChanged
             Point a = new Point(lwidth, lheight);
             Point b = new Point(lwidth + 20, lheight + 20);
             Polygon rectangle = PolygonBuilder.CreateRectangle(a, b);
-            activeFigure = new Figure(rectangle, null, FigureCreationMode.Rectangle);
+            activeFigure = new Figure(rectangle, null);
             ActiveLayer.Figures.Add(activeFigure);
             UndoStack.Push(new UserCommands(redo, undo));
          });
@@ -238,17 +238,17 @@ public class MainWindowVM : INotifyPropertyChanged
             switch (СurrentFigureType)
             {
                case FigureCreationMode.Triangle:
-                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateTriangle(new Point(0, 0), new Point(0, 0)), new DrawingParameters(CreationDrawingParameters), FigureCreationMode.Triangle));
+                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateTriangle(new Point(0, 0), new Point(0, 0)), new DrawingParameters(CreationDrawingParameters)));
                   break;
                case FigureCreationMode.Ellipse:
-                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateEllipse(new Point(0, 0), new Point(0, 0)), new DrawingParameters(CreationDrawingParameters), FigureCreationMode.Ellipse));
+                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateEllipse(new Point(0, 0), new Point(0, 0)), new DrawingParameters(CreationDrawingParameters)));
                   break;
                case FigureCreationMode.Polygon:
                   break;
                case FigureCreationMode.Polyline:
                   break;
                case FigureCreationMode.Rectangle:
-                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateRectangle(new Point(0, 0), new Point(0, 0)), new DrawingParameters(CreationDrawingParameters), FigureCreationMode.Rectangle));
+                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateRectangle(new Point(0, 0), new Point(0, 0)), new DrawingParameters(CreationDrawingParameters)));
                   break;
                case FigureCreationMode.None:
                   break;
@@ -301,12 +301,12 @@ public class MainWindowVM : INotifyPropertyChanged
             {
                case FigureCreationMode.Triangle:
                   ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] 
-                  = new Figure(PolygonBuilder.CreateTriangle(points.Value.Item1, points.Value.Item2), selfDrawingParametrs, FigureCreationMode.Triangle);
+                  = new Figure(PolygonBuilder.CreateTriangle(points.Value.Item1, points.Value.Item2), selfDrawingParametrs);
                   ActiveFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
                   break;
                case FigureCreationMode.Ellipse:
                   ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] 
-                  = new Figure(PolygonBuilder.CreateEllipse(points.Value.Item1, points.Value.Item2), selfDrawingParametrs, FigureCreationMode.Ellipse);
+                  = new Figure(PolygonBuilder.CreateEllipse(points.Value.Item1, points.Value.Item2), selfDrawingParametrs);
                   ActiveFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
                   break;
                case FigureCreationMode.Polygon:
@@ -315,7 +315,7 @@ public class MainWindowVM : INotifyPropertyChanged
                   break;
                case FigureCreationMode.Rectangle:
                   ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] 
-                  = new Figure(PolygonBuilder.CreateRectangle(points.Value.Item1, points.Value.Item2), selfDrawingParametrs, FigureCreationMode.Rectangle);
+                  = new Figure(PolygonBuilder.CreateRectangle(points.Value.Item1, points.Value.Item2), selfDrawingParametrs);
                   ActiveFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
                   break;
                case FigureCreationMode.None:

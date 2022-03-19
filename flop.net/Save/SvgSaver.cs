@@ -77,7 +77,30 @@ public class SvgSaver
       _xmlWriter.Flush();
       _xmlWriter.Close();
    }
-
+   private void WritePolygon(Model.Figure figure)
+   {
+      _xmlWriter.WriteStartElement("polygon");
+      _xmlWriter.WriteAttributeString("points", WritePoints(figure.Geometric));
+      _xmlWriter.WriteAttributeString("fill", $"{HexConverter(figure.DrawingParameters.Fill)}");
+      _xmlWriter.WriteAttributeString("stroke",$"{HexConverter(figure.DrawingParameters.Stroke)}");
+      _xmlWriter.WriteAttributeString("stroke-width",$"{figure.DrawingParameters.StrokeThickness}");
+      _xmlWriter.WriteEndElement();
+   }
+   private String HexConverter(Color c)
+   {
+      return "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2");
+   }
+   private string WritePoints(IGeometric geometric)
+   {
+      string result = null;
+      foreach (var item in geometric.Points)
+      {
+         result += (int)item.X + "," + (int)item.Y;
+         result += " ";
+      }
+      return result;
+   }
+   // inactive methods
    private void WriteRectangle(IGeometric geometric)
    {
       _xmlWriter.WriteStartElement("rect");
@@ -93,35 +116,12 @@ public class SvgSaver
    {
    }
    
-   private void WritePolygon(Model.Figure figure)
-   {
-      _xmlWriter.WriteStartElement("polygon");
-      _xmlWriter.WriteAttributeString("points", WritePoints(figure.Geometric));
-      _xmlWriter.WriteAttributeString("fill", $"{HexConverter(figure.DrawingParameters.Fill)}");
-      _xmlWriter.WriteAttributeString("stroke",$"{HexConverter(figure.DrawingParameters.Stroke)}");
-      _xmlWriter.WriteAttributeString("stroke-width",$"{figure.DrawingParameters.StrokeThickness}");
-      _xmlWriter.WriteEndElement();
-   }
+ 
    private void WriteEllipse()
    {
    }
 
    private void WriteCircle()
    {
-   }
-
-   private String HexConverter(Color c)
-   {
-      return "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2");
-   }
-   private string WritePoints(IGeometric geometric)
-   {
-      string result = null;
-      foreach (var item in geometric.Points)
-      {
-         result += (int)item.X + "," + (int)item.Y;
-         result += " ";
-      }
-      return result;
    }
 }

@@ -14,7 +14,6 @@ namespace flop.net.Model
         }
         
         private IGeometric geometric;
-        public FigureCreationMode FigureType { get; private set; }
         public IGeometric Geometric 
         {
             get => geometric;
@@ -36,11 +35,10 @@ namespace flop.net.Model
             }
         }
 
-        public Figure(IGeometric geometric, DrawingParameters drawingParameters, FigureCreationMode figureType)
+        public Figure(IGeometric geometric, DrawingParameters drawingParameters)
         {
             Geometric = geometric;
             DrawingParameters = drawingParameters;
-            FigureType = figureType;
         }
     }
 }

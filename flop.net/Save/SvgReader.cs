@@ -2,5 +2,5 @@
 
 public class SvgReader
 {
-   //todo read from .svg points and build with Polygon, Polygon.IsIn
+   //todo read from .svg points and try build figure with Polygon, Polygon.IsIn
 }
