@@ -95,6 +95,7 @@
     <Compile Include="Save\SvgSaver.cs" />
     <Compile Include="ViewModel\MainWindowVM.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
+    <Compile Include="Model\TrulyObservableCollection.cs" />
     <Compile Include="ViewModel\UserCommands.cs" />
     <Compile Include="View\IGraphic.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
