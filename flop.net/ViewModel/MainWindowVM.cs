@@ -22,7 +22,7 @@ public class MainWindowVM : INotifyPropertyChanged
 
    private List<RelayCommand> palletCommands;
    public Stack<UserCommands> UndoStack { get; set; }
-   public Stack<UserCommands> RedoStack { get; set; } 
+   public Stack<UserCommands> RedoStack { get; set; }
    public Stack<Figure> DeletedFigures;
    private Figure activeFigure;
    public Figure ActiveFigure
@@ -115,7 +115,7 @@ public class MainWindowVM : INotifyPropertyChanged
          if (selectedCommand != command)
             command.IsPressed = false;
       }
-   }   
+   }
    public RelayCommand SetActiveFigure
    {
       get
@@ -200,7 +200,7 @@ public class MainWindowVM : INotifyPropertyChanged
          return toggleMoving;
       }
    }
-   
+
    private RelayCommand toggleScaling;
    public RelayCommand ToggleScaling
    {
@@ -294,16 +294,16 @@ public class MainWindowVM : INotifyPropertyChanged
          {
             var points = obj as (Point, Point)?;
             var selfDrawingParametrs = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1].DrawingParameters;
-            
+
             switch (СurrentFigureType)
             {
                case FigureCreationMode.Triangle:
-                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] 
+                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1]
                   = new Figure(PolygonBuilder.CreateTriangle(points.Value.Item1, points.Value.Item2), selfDrawingParametrs);
                   ActiveFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
                   break;
                case FigureCreationMode.Ellipse:
-                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] 
+                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1]
                   = new Figure(PolygonBuilder.CreateEllipse(points.Value.Item1, points.Value.Item2), selfDrawingParametrs);
                   ActiveFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
                   break;
@@ -312,7 +312,7 @@ public class MainWindowVM : INotifyPropertyChanged
                case FigureCreationMode.Polyline:
                   break;
                case FigureCreationMode.Rectangle:
-                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] 
+                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1]
                   = new Figure(PolygonBuilder.CreateRectangle(points.Value.Item1, points.Value.Item2), selfDrawingParametrs);
                   ActiveFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
                   break;
@@ -354,7 +354,7 @@ public class MainWindowVM : INotifyPropertyChanged
          });
       }
    }
-  
+
    private Vector summary_moving_delta;
    private Point summary_scale_value;
    public RelayCommand OnFigureMovingFinished
@@ -540,7 +540,7 @@ public class MainWindowVM : INotifyPropertyChanged
          return rotateFigure;
       }
    }
-   
+
    private RelayCommand deleteFigure;
    public RelayCommand DeleteFigure
    {
@@ -587,13 +587,13 @@ public class MainWindowVM : INotifyPropertyChanged
                   activeFigure = null;
                if (ActiveLayer.Figures.Count != 0)
                   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
-               }
+            }
          }, isModifyingAvailable);
          palletCommands.Add(deleteFigure);
          return deleteFigure;
       }
    }
-   
+
    public string CurrentBaseColor
    {
       get => this.CurrentTheme.BaseColorScheme;
@@ -610,7 +610,7 @@ public class MainWindowVM : INotifyPropertyChanged
          this.OnPropertyChanged(nameof(this.CurrentTheme));
       }
    }
-   
+
    public Theme CurrentTheme
    {
       get => ThemeManager.Current.DetectTheme(Application.Current);
@@ -627,7 +627,7 @@ public class MainWindowVM : INotifyPropertyChanged
          this.OnPropertyChanged(nameof(this.CurrentBaseColor));
       }
    }
-   
+
    private RelayCommand save;
 
    public RelayCommand Save
@@ -636,7 +636,7 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          save ??= new RelayCommand(o =>
          {
-            var parameters = (SaveParameters) o;
+            var parameters = (SaveParameters)o;
             var saveDialog = new SaveFileDialog
             {
                Filter = $"{parameters.Format} files (.{parameters.Format})|.{parameters.Format}",
@@ -657,6 +657,8 @@ public class MainWindowVM : INotifyPropertyChanged
                   jsonSaver.SaveLayersToJson(Layers);
                   break;
                case SaveTypes.Png:
+                  var saverPng = new PngSaver(saveDialog.FileName, parameters.Canv, parameters.Width, parameters.Height);
+                  saverPng.Save();
                   break;
             }
          });
