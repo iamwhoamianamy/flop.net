@@ -8,7 +8,9 @@ namespace flop.net.Model
    public class Polygon : IGeometric
    {
       public double RotationAngle { get; private set; }
-      public PointCollection Points { get; }
+      
+      public PointCollection Points { get; private set; }
+
       public Point Center { get 
          {
             var sumPoints = new Point(0, 0);
@@ -30,22 +32,46 @@ namespace flop.net.Model
          RotationAngle = rotationAngle;
       }
 
-      public Polygon BoundingBox
+      public Rectangle BoundingBox
       {
          get
          {
-            var maxX = Points.Max(x => x.X);
-            var maxY = Points.Max(y => y.Y);
-            var minX = Points.Min(x => x.X);
-            var minY = Points.Min(y => y.Y);
+            var defaultPoints = Points.Clone();
+            // Разворот фигуры к осям параллельным X и Y
+            for (var i = 0; i < Points.Count; i++)
+            {
+               var point = Point.Subtract(defaultPoints[i], (Vector)Center);
+               var oldX = point.X;
+               var oldY = point.Y;
+               point.X = oldX * Math.Cos(RotationAngle) + oldY * Math.Sin(RotationAngle);
+               point.Y = -oldX * Math.Sin(RotationAngle) + oldY * Math.Cos(RotationAngle);
+               defaultPoints[i] = Point.Add(point, (Vector)Center);
+            }
+
+            var maxX = defaultPoints.Max(x => x.X);
+            var maxY = defaultPoints.Max(y => y.Y);
+            var minX = defaultPoints.Min(x => x.X);
+            var minY = defaultPoints.Min(y => y.Y);
             var points = new PointCollection()
             {
-               new Point(minX, minY),
                new Point(minX, maxY),
                new Point(maxX, maxY),
-               new Point(maxX, minY)
+               new Point(maxX, minY),
+               new Point(minX, minY)
             };
-            return new Polygon(points, true);
+
+            // Разворот BoundingBox обратно к исходному положению
+            Point rectangleCenter = new((points[0].X + points[2].X) / 2, (points[0].Y + points[2].Y) / 2);
+            for (var i = 0; i < Points.Count; i++)
+            {
+               var point = Point.Subtract(points[i], (Vector)rectangleCenter);
+               var oldX = point.X;
+               var oldY = point.Y;
+               point.X = oldX * Math.Cos(RotationAngle) - oldY * Math.Sin(RotationAngle);
+               point.Y = oldX * Math.Sin(RotationAngle) + oldY * Math.Cos(RotationAngle);
+               points[i] = Point.Add(point, (Vector)rectangleCenter);
+            }
+            return new Rectangle(points);
          }
       }
 
