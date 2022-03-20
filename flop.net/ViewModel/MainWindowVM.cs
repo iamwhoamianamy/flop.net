@@ -86,8 +86,8 @@ public class MainWindowVM : INotifyPropertyChanged
          var undoCommand = UndoStack.Pop();
          RedoStack.Push(undoCommand);
          undoCommand.UnExecute.Execute(null);
-         if (ActiveLayer.Figures.Count != 0)
-            ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
+         //if (ActiveLayer.Figures.Count != 0)
+         //   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
       }
    }
 
@@ -98,8 +98,8 @@ public class MainWindowVM : INotifyPropertyChanged
          var redoCommand = RedoStack.Pop();
          UndoStack.Push(redoCommand);
          redoCommand.Execute.Execute(null);
-         if (ActiveLayer.Figures.Count != 0)
-            ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
+         //if (ActiveLayer.Figures.Count != 0)
+         //   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
       }
    }
 
@@ -123,6 +123,8 @@ public class MainWindowVM : INotifyPropertyChanged
          return new RelayCommand(obj =>
          {
             var mouseCoords = obj as Point?;
+
+            ActiveFigure = null;
 
             foreach (var figure in ActiveLayer.Figures)
             {
@@ -265,7 +267,8 @@ public class MainWindowVM : INotifyPropertyChanged
          {
             var delta = obj as Vector?;
             summary_moving_delta += (Vector)delta;
-            ActiveFigure.Move((Vector)delta);
+            if (ActiveFigure != null)
+               ActiveFigure.Move((Vector)delta);
          });
       }
    }
@@ -278,10 +281,8 @@ public class MainWindowVM : INotifyPropertyChanged
          {
             var scale = obj as Point?;
             summary_scale_value = (Point)scale;
-            ActiveFigure.Geometric.Scale((Point)scale);
-
-            ActiveLayer.Figures.Add(null);
-            ActiveLayer.Figures.RemoveAt(ActiveLayer.Figures.Count - 1);
+            if (ActiveFigure != null)
+               ActiveFigure.Geometric.Scale((Point)scale);
          });
       }
    }
@@ -506,8 +507,8 @@ public class MainWindowVM : INotifyPropertyChanged
                UndoStack.Push(new UserCommands(
                       _ => { activeFigure.Geometric.Scale(new Point(2, 2)); },
                       _ => { activeFigure.Geometric.Scale(new Point(0.5, 0.5)); }));
-               if (ActiveLayer.Figures.Count != 0)
-                  ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
+               //if (ActiveLayer.Figures.Count != 0)
+               //   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
             }
          }, isModifyingAvailable);
          palletCommands.Add(scaleFigure);
