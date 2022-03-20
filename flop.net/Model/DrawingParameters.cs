@@ -6,84 +6,84 @@ using flop.net.Annotations;
 
 namespace flop.net.Model
 {
-    public class DrawingParameters : INotifyPropertyChanged
-    {
-        private Color fill;
-        public Color Fill
-        {
-            get => fill;
-            set
-            {
-                fill = value;
-                OnPropertyChanged();
-            }
-        }
+   public class DrawingParameters : INotifyPropertyChanged
+   {
+      private Color fill;
+      public Color Fill
+      {
+         get => fill;
+         set
+         {
+            fill = value;
+            OnPropertyChanged();
+         }
+      }
 
-        private Color stroke;
-        public Color Stroke
-        {
-            get => stroke;
-            set
-            {
-                stroke = value;
-                OnPropertyChanged();
-            }
-        }
+      private Color stroke;
+      public Color Stroke
+      {
+         get => stroke;
+         set
+         {
+            stroke = value;
+            OnPropertyChanged();
+         }
+      }
 
-        private int strokeThickness;
-        public int StrokeThickness
-        {
-            get => strokeThickness;
-            set
-            {
-                strokeThickness = value;
-                OnPropertyChanged();
-            }
-        }
+      private int strokeThickness;
+      public int StrokeThickness
+      {
+         get => strokeThickness;
+         set
+         {
+            strokeThickness = value;
+            OnPropertyChanged();
+         }
+      }
 
-        private PenLineCap penLineCap;
-        public PenLineCap PenLineCap
-        {
-            get => penLineCap;
-            set
-            {
-                penLineCap = value;
-                OnPropertyChanged();
-            }
-        }
+      private PenLineCap penLineCap;
+      public PenLineCap PenLineCap
+      {
+         get => penLineCap;
+         set
+         {
+            penLineCap = value;
+            OnPropertyChanged();
+         }
+      }
 
-        private List<double> strokeDashArray;
-        public List<double> StrokeDashArray
-        {
-            get => strokeDashArray;
-            set
-            {
-                strokeDashArray = value;
-                OnPropertyChanged();
-            }
-        }
+      private List<double> strokeDashArray;
+      public List<double> StrokeDashArray
+      {
+         get => strokeDashArray;
+         set
+         {
+            strokeDashArray = value;
+            OnPropertyChanged();
+         }
+      }
 
-        private double opacity;
-        public double Opacity
-        {
-            get => opacity;
-            set
-            {
-                opacity = value;
-                OnPropertyChanged();
-            }
-        }
+      private double opacity;
+      public double Opacity
+      {
+         get => opacity;
+         set
+         {
+            opacity = value;
+            OnPropertyChanged();
+         }
+      }
 
-        private int zIndex;
-        public int ZIndex
-        {
-            get => zIndex;
-            set
-            {
-                zIndex = value;
-                OnPropertyChanged();
-            }
-        }
+      private int zIndex;
+      public int ZIndex
+      {
+         get => zIndex;
+         set
+         {
+            zIndex = value;
+            OnPropertyChanged();
+         }
+      }
       public DrawingParameters()
       {
          this.Fill = Colors.Black;
@@ -104,14 +104,14 @@ namespace flop.net.Model
          this.PenLineCap = parameters.PenLineCap;
       }
 
-        
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
+      public event PropertyChangedEventHandler PropertyChanged;
+
+      [NotifyPropertyChangedInvocator]
+      protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+      {
+         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+      }
+   }
 }
