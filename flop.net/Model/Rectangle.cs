@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
+
+namespace flop.net.Model
+{
+   public class Rectangle
+   {
+      public Point TopLeft { get; }
+      public Point TopRight { get; }
+      public Point BotRight{ get; }
+      public Point BotLeft { get; }
+      public Point TopCenter => new ((TopLeft.X + TopRight.X) / 2, (TopLeft.Y + TopRight.Y) / 2);
+      public Point BotCenter => new ((BotLeft.X + BotRight.X) / 2, (BotRight.Y + BotLeft.Y) / 2);
+      public Point LeftCenter => new ((TopLeft.X + BotLeft.X) / 2, (TopLeft.Y + BotLeft.Y) / 2);
+      public Point RightCenter => new ((BotRight.X + TopRight.X) / 2, (BotRight.Y + TopRight.Y) / 2);
+      public Point Center => new((BotRight.X + TopLeft.X) / 2, (BotRight.Y + TopLeft.Y) / 2);
+      public Rectangle(IList<Point> points)
+      {
+         TopLeft = points[0];
+         TopRight = points[1];
+         BotRight = points[2];
+         BotLeft = points[3];
+      }
+   }
+}
