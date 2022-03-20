@@ -17,16 +17,31 @@ namespace flop.net.Save
       public string FilePath { get; private set; }
       public string FileName { get; private set; }
       
-      public JsonSaver(string filePath, string fileName)
+      public JsonSaver(string fullFileName)
       {
-         FilePath = filePath;
-         FileName = fileName;
+         FilePath = Path.GetDirectoryName(fullFileName);
+         FileName = Path.GetFileNameWithoutExtension(fullFileName);
+      }
+
+      public void Save(Collection<Layer> layers)
+      {
+         DecompressJson();
+         SaveLayersToJson(layers);
+         CompressJson();
+      }
+
+      public ObservableCollection<Layer> Restore()
+      {
+         DecompressJson();
+         var result = RestoreLayersFromJson();
+         CompressJson();
+         return result;
       }
 
 
       public void SaveLayersToJson(Collection<Layer> layers)
       {
-         Directory.CreateDirectory(FilePath);
+         //Directory.CreateDirectory(FilePath);
          var settings = new JsonSerializerSettings();
          settings.TypeNameHandling = TypeNameHandling.All;
          settings.Formatting = Formatting.Indented;
@@ -45,7 +60,7 @@ namespace flop.net.Save
 
       public void CompressJson()
       {
-         using (var zip = ZipFile.Open(FilePath + FileName + ".zip", ZipArchiveMode.Create))
+         using (var zip = ZipFile.Open(FilePath + FileName + ".flp", ZipArchiveMode.Create))
          {
             zip.CreateEntryFromFile(FilePath + FileName + ".json", FileName + ".json");
          }
@@ -54,10 +69,10 @@ namespace flop.net.Save
 
       public void DecompressJson()
       {
-         if (File.Exists(FilePath + FileName + ".zip"))
+         if (File.Exists(FilePath + FileName + ".flp"))
          {
-            ZipFile.ExtractToDirectory(FilePath + FileName + ".zip", FilePath);
-            File.Delete(FilePath + FileName + ".zip");
+            ZipFile.ExtractToDirectory(FilePath + FileName + ".flp", FilePath);
+            File.Delete(FilePath + FileName + ".flp");
          }
       }  
    }

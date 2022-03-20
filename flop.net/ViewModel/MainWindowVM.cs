@@ -637,28 +637,24 @@ public class MainWindowVM : INotifyPropertyChanged
          save ??= new RelayCommand(o =>
          {
             var parameters = (SaveParameters)o;
-            var saveDialog = new SaveFileDialog
-            {
-               Filter = $"{parameters.Format} files (.{parameters.Format})|.{parameters.Format}",
-               RestoreDirectory = true
-            };
-            if (saveDialog.ShowDialog() != true) return;
             switch (Enum.Parse(typeof(SaveTypes), parameters.Format, true))
             {
                case SaveTypes.Svg:
-                  var saver = new SvgSaver(saveDialog.FileName, ActiveLayer, parameters.Width, parameters.Height);
+                  var saver = new SvgSaver(parameters.FileName, ActiveLayer, parameters.Width, parameters.Height);
                   saver.Save();
                   break;
-               case SaveTypes.Json:
-                  var path = saveDialog.FileName.Replace(saveDialog.SafeFileName, string.Empty);
-                  var fileName = saveDialog.SafeFileName.Replace($".{parameters.Format}", string.Empty);
-                  var jsonSaver = new JsonSaver(path, fileName);
+               case SaveTypes.Flp:
+                  var jsonSaver = new JsonSaver(parameters.FileName);
                   //TODO: Проблема при сохранении эллипса
-                  jsonSaver.SaveLayersToJson(Layers);
+                  jsonSaver.Save(Layers);
                   break;
                case SaveTypes.Png:
-                  var saverPng = new PngSaver(saveDialog.FileName, parameters.Canv, parameters.Width, parameters.Height);
+                  var saverPng = new PngSaver(parameters.FileName, parameters.Canv, parameters.Width, parameters.Height);
                   saverPng.Save();
+                  break;
+               case SaveTypes.Pdf:
+                  var pdfSaver = new PdfSaver(parameters.FileName, parameters.Width, parameters.Height);
+                  pdfSaver.SaveLayersToPdf(Layers);
                   break;
             }
          });

@@ -9,5 +9,6 @@ namespace flop.net.Save
       public int Width { get; set; }
       public int Height { get; set; }
       public Canvas Canv { get; set; }
+      public string FileName { get; set; }
    }
 }
