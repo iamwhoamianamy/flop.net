@@ -21,7 +21,7 @@ namespace flop.net.Model
       public static Polygon CreateTriangle(Point pointA, Point pointB)
       {
          PointCollection points;
-         if (pointA.Y > pointB.Y)
+         if (pointA.Y < pointB.Y)
          {
             points = new PointCollection()
             {
