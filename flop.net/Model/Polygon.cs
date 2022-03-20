@@ -7,7 +7,7 @@ namespace flop.net.Model
 {
    public class Polygon : IGeometric
    {
-      public double RotationAngle { get; set; }
+      public double RotationAngle { get; private set; }
       public PointCollection Points { get; }
       public Point Center { get 
          {
