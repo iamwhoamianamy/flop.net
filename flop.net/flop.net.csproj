@@ -79,6 +79,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Enums\FigureCreationMode.cs" />
+    <Compile Include="Enums\SaveTypes.cs" />
     <Compile Include="Enums\ViewMode.cs" />
     <Compile Include="Model\DrawingParameters.cs" />
     <Compile Include="Model\Figure.cs" />
@@ -86,8 +87,11 @@
     <Compile Include="Model\Layer.cs" />
     <Compile Include="Model\Polygon.cs" />
     <Compile Include="Model\PolygonBuilder.cs" />
+    <Compile Include="Save\SaveParameters.cs" />
     <Compile Include="Save\JsonSaver.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Save\SvgReader.cs" />
+    <Compile Include="Save\SvgSaver.cs" />
     <Compile Include="ViewModel\MainWindowVM.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="ViewModel\UserCommands.cs" />
@@ -165,5 +169,6 @@
   <ItemGroup>
     <Resource Include="Images\reset.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -8,7 +8,10 @@ using System.Windows;
 using flop.net.Annotations;
 using flop.net.Model;
 using System.Windows.Media;
+using System.Xml;
 using flop.net.Enums;
+using flop.net.Save;
+using Microsoft.Win32;
 
 namespace flop.net.ViewModel;
 
@@ -590,6 +593,37 @@ public class MainWindowVM : INotifyPropertyChanged
          }, isModifyingAvailable);
          palletCommands.Add(deleteFigure);
          return deleteFigure;
+      }
+   }
+
+   private RelayCommand save;
+
+   public RelayCommand Save
+   {
+      get
+      {
+         save ??= new RelayCommand(o =>
+         {
+            var parameters = (SaveParameters) o;
+            var saveDialog = new SaveFileDialog
+            {
+               Filter = $"{parameters.Format} files (.{parameters.Format})|.{parameters.Format}",
+               RestoreDirectory = true
+            };
+            if (saveDialog.ShowDialog() != true) return;
+            switch (saveDialog.FilterIndex)
+            {
+               case (int)SaveTypes.Svg:
+                  var saver = new SvgSaver(saveDialog.FileName,ActiveLayer, parameters.Width, parameters.Height);
+                  saver.Save();
+                  break;
+               case (int)SaveTypes.Json:
+                  break;
+               case (int)SaveTypes.Png:
+                  break;
+            }
+         });
+         return save;
       }
    }
 

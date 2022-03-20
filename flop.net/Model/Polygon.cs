@@ -7,6 +7,7 @@ namespace flop.net.Model
 {
    public class Polygon : IGeometric
    {
+      public double RotationAngle { get; private set; }
       public PointCollection Points { get; }
       public Point Center { get 
          {
@@ -22,10 +23,11 @@ namespace flop.net.Model
 
       public Polygon() { Points = new PointCollection(); }
 
-      public Polygon(PointCollection points, bool isClosed)
+      public Polygon(PointCollection points, bool isClosed, double rotationAngle=0)
       {
          Points = points.Clone();
          IsClosed = isClosed;
+         RotationAngle = rotationAngle;
       }
 
       public Polygon BoundingBox
@@ -108,6 +110,7 @@ namespace flop.net.Model
             rotationCenter = Center;
          }
          var degToRad = angle * Math.PI / 180;
+         RotationAngle += degToRad;
          for (var i = 0; i < Points.Count; i++)
          {
             var point = Point.Subtract(Points[i], (Vector)rotationCenter);
@@ -119,9 +122,9 @@ namespace flop.net.Model
          }
       }
 
-      public void Scale(Point scale)
+      public void Scale(Point scale, Point? scalePoint=null)
       {
-         var shift = Center;
+         var shift = scalePoint.HasValue ? scalePoint : Center;
          for (var i = 0; i < Points.Count; i++)
          {
             var point = Point.Subtract(Points[i], (Vector)shift);
