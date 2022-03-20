@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using flop.net.Enums;
 using Xunit;
 
 namespace flop.net.Tests.ViewModel
