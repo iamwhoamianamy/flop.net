@@ -633,36 +633,38 @@ public class MainWindowVM : INotifyPropertyChanged
    
    private RelayCommand save;
 
-   public RelayCommand Save
-   {
-      get
-      {
-         save ??= new RelayCommand(o =>
-         {
-            var parameters = (SaveParameters) o;
-            var saveDialog = new SaveFileDialog
+    public RelayCommand Save
+    {
+        get
+        {
+            save ??= new RelayCommand(o =>
             {
-               Filter = $"{parameters.Format} files (.{parameters.Format})|.{parameters.Format}",
-               RestoreDirectory = true
-            };
-            if (saveDialog.ShowDialog() != true) return;
-            switch (saveDialog.FilterIndex)
-            {
-               case (int)SaveTypes.Svg:
-                  var saver = new SvgSaver(saveDialog.FileName,ActiveLayer, parameters.Width, parameters.Height);
-                  saver.Save();
-                  break;
-               case (int)SaveTypes.Json:
-                  break;
-               case (int)SaveTypes.Png:
-                  break;
-            }
-         });
-         return save;
-      }
-   }
+                var parameters = (SaveParameters)o;
+                var saveDialog = new SaveFileDialog
+                {
+                    Filter = $"{parameters.Format} files (.{parameters.Format})|.{parameters.Format}",
+                    RestoreDirectory = true
+                };
+                if (saveDialog.ShowDialog() != true) return;
+                switch (Enum.Parse(typeof(SaveTypes), parameters.Format, true))
+                {
+                    case SaveTypes.Svg:
+                        var saver = new SvgSaver(saveDialog.FileName, ActiveLayer, parameters.Width, parameters.Height);
+                        saver.Save();
+                        break;
+                    case SaveTypes.Json:
+                        break;
+                    case SaveTypes.Png:
+                        var saverPng = new PngSaver(saveDialog.FileName, parameters.Canv, parameters.Width, parameters.Height);
+                        saverPng.Save();
+                        break;
+                }
+            });
+            return save;
+        }
+    }
 
-   public MainWindowVM()
+    public MainWindowVM()
    {
       ActiveLayer = new Layer();
       ActiveLayer.Figures = new ObservableCollection<Figure>();

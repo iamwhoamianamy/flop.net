@@ -72,7 +72,7 @@ namespace flop.net
 
       private void SaveOnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
       {
-         MainWindowVM.Save.Execute(new SaveParameters { Format = "svg" , Width = (int)MainCanvas.ActualWidth, Height = (int)MainCanvas.ActualHeight });
+         MainWindowVM.Save.Execute(new SaveParameters { Format = "png" , Width = (int)MainCanvas.ActualWidth, Height = (int)MainCanvas.ActualHeight, Canv = MainCanvas});
       }
 
       private void Figures_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
