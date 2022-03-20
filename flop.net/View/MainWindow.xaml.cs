@@ -66,7 +66,7 @@ namespace flop.net
          MainWindowVM.ActiveLayer.Figures.CollectionChanged += Figures_CollectionChanged;
          Graphic = new Graphic(MainCanvas);
 
-         Save.MouseLeftButtonDown += SaveOnMouseLeftButtonDown; 
+         // Save.MouseLeftButtonDown += SaveOnMouseLeftButtonDown; 
          DrawAll();
       }
 

@@ -35,7 +35,7 @@ public class MainWindowVM : INotifyPropertyChanged
       }
    }
    public Layer ActiveLayer { get; set; }
-   public ObservableCollection<Layer> Layers { get; set; }
+   public TrulyObservableCollection<Layer> Layers { get; set; }
    public Figure FigureOnCreating { get; set; }
    public ViewMode WorkingMode { get; set; }
    public FigureCreationMode СurrentFigureType { get; set; }
@@ -265,10 +265,7 @@ public class MainWindowVM : INotifyPropertyChanged
          {
             var delta = obj as Vector?;
             summary_moving_delta += (Vector)delta;
-            ActiveFigure.Geometric.Move((Vector)delta);
-
-            ActiveLayer.Figures.Add(null);
-            ActiveLayer.Figures.RemoveAt(ActiveLayer.Figures.Count - 1);
+            ActiveFigure.Move((Vector)delta);
          });
       }
    }
@@ -653,6 +650,11 @@ public class MainWindowVM : INotifyPropertyChanged
                   saver.Save();
                   break;
                case SaveTypes.Json:
+                  var path = saveDialog.FileName.Replace(saveDialog.SafeFileName, string.Empty);
+                  var fileName = saveDialog.SafeFileName.Replace($".{parameters.Format}", string.Empty);
+                  var jsonSaver = new JsonSaver(path, fileName);
+                  //TODO: Проблема при сохранении эллипса
+                  jsonSaver.SaveLayersToJson(Layers);
                   break;
                case SaveTypes.Png:
                   var saverPng = new PngSaver(saveDialog.FileName, parameters.Canv, parameters.Width, parameters.Height);
@@ -666,8 +668,10 @@ public class MainWindowVM : INotifyPropertyChanged
 
    public MainWindowVM()
    {
-      ActiveLayer = new Layer();
-      ActiveLayer.Figures = new ObservableCollection<Figure>();
+      Layers = new TrulyObservableCollection<Layer>();
+      Layers.Add(new Layer());
+      ActiveLayer = Layers.Last();
+
       RedoStack = new Stack<UserCommands>();
       UndoStack = new Stack<UserCommands>();
       DeletedFigures = new Stack<Figure>();
