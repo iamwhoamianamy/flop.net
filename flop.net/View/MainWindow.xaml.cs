@@ -22,7 +22,6 @@ using flop.net.Model;
 using flop.net.Enums;
 using flop.net.Save;
 
-
 namespace flop.net
 {
    /// <summary>

@@ -10,6 +10,7 @@ using flop.net.Model;
 using System.Windows.Media;
 using System.Xml;
 using flop.net.Enums;
+using ControlzEx.Theming;
 using flop.net.Save;
 using Microsoft.Win32;
 
@@ -595,7 +596,41 @@ public class MainWindowVM : INotifyPropertyChanged
          return deleteFigure;
       }
    }
+   
+   public string CurrentBaseColor
+   {
+      get => this.CurrentTheme.BaseColorScheme;
 
+      set
+      {
+         if (value is null)
+         {
+            return;
+         }
+
+         ThemeManager.Current.ChangeThemeBaseColor(Application.Current, value);
+         this.OnPropertyChanged();
+         this.OnPropertyChanged(nameof(this.CurrentTheme));
+      }
+   }
+   
+   public Theme CurrentTheme
+   {
+      get => ThemeManager.Current.DetectTheme(Application.Current);
+
+      set
+      {
+         if (value is null)
+         {
+            return;
+         }
+
+         ThemeManager.Current.ChangeTheme(Application.Current, value);
+         this.OnPropertyChanged();
+         this.OnPropertyChanged(nameof(this.CurrentBaseColor));
+      }
+   }
+   
    private RelayCommand save;
 
    public RelayCommand Save
