@@ -7,7 +7,10 @@ namespace flop.net.Model
 {
    public class Polygon : IGeometric
    {
-      public PointCollection Points { get; }
+      public double RotationAngle { get; private set; }
+      
+      public PointCollection Points { get; private set; }
+
       public Point Center { get 
          {
             var sumPoints = new Point(0, 0);
@@ -22,28 +25,53 @@ namespace flop.net.Model
 
       public Polygon() { Points = new PointCollection(); }
 
-      public Polygon(PointCollection points, bool isClosed)
+      public Polygon(PointCollection points, bool isClosed, double rotationAngle=0)
       {
          Points = points.Clone();
          IsClosed = isClosed;
+         RotationAngle = rotationAngle;
       }
 
-      public Polygon BoundingBox
+      public Rectangle BoundingBox
       {
          get
          {
-            var maxX = Points.Max(x => x.X);
-            var maxY = Points.Max(y => y.Y);
-            var minX = Points.Min(x => x.X);
-            var minY = Points.Min(y => y.Y);
+            var defaultPoints = Points.Clone();
+            // Разворот фигуры к осям параллельным X и Y
+            for (var i = 0; i < Points.Count; i++)
+            {
+               var point = Point.Subtract(defaultPoints[i], (Vector)Center);
+               var oldX = point.X;
+               var oldY = point.Y;
+               point.X = oldX * Math.Cos(RotationAngle) + oldY * Math.Sin(RotationAngle);
+               point.Y = -oldX * Math.Sin(RotationAngle) + oldY * Math.Cos(RotationAngle);
+               defaultPoints[i] = Point.Add(point, (Vector)Center);
+            }
+
+            var maxX = defaultPoints.Max(x => x.X);
+            var maxY = defaultPoints.Max(y => y.Y);
+            var minX = defaultPoints.Min(x => x.X);
+            var minY = defaultPoints.Min(y => y.Y);
             var points = new PointCollection()
             {
-               new Point(minX, minY),
                new Point(minX, maxY),
                new Point(maxX, maxY),
-               new Point(maxX, minY)
+               new Point(maxX, minY),
+               new Point(minX, minY)
             };
-            return new Polygon(points, true);
+
+            // Разворот BoundingBox обратно к исходному положению
+            Point rectangleCenter = new((points[0].X + points[2].X) / 2, (points[0].Y + points[2].Y) / 2);
+            for (var i = 0; i < Points.Count; i++)
+            {
+               var point = Point.Subtract(points[i], (Vector)rectangleCenter);
+               var oldX = point.X;
+               var oldY = point.Y;
+               point.X = oldX * Math.Cos(RotationAngle) - oldY * Math.Sin(RotationAngle);
+               point.Y = oldX * Math.Sin(RotationAngle) + oldY * Math.Cos(RotationAngle);
+               points[i] = Point.Add(point, (Vector)rectangleCenter);
+            }
+            return new Rectangle(points);
          }
       }
 
@@ -108,6 +136,7 @@ namespace flop.net.Model
             rotationCenter = Center;
          }
          var degToRad = angle * Math.PI / 180;
+         RotationAngle += degToRad;
          for (var i = 0; i < Points.Count; i++)
          {
             var point = Point.Subtract(Points[i], (Vector)rotationCenter);
@@ -119,9 +148,9 @@ namespace flop.net.Model
          }
       }
 
-      public void Scale(Point scale)
+      public void Scale(Point scale, Point? scalePoint=null)
       {
-         var shift = Center;
+         var shift = scalePoint.HasValue ? scalePoint : Center;
          for (var i = 0; i < Points.Count; i++)
          {
             var point = Point.Subtract(Points[i], (Vector)shift);

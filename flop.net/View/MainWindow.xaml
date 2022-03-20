@@ -33,7 +33,7 @@
           <r:BackstageTabControl>
             <r:BackstageTabItem Header="Создать" />
             <r:BackstageTabItem Header="Загрузить" />
-            <r:BackstageTabItem Header="Сохранить" />
+            <r:BackstageTabItem Header="Сохранить" x:Name="Save"/>
             <r:SeparatorTabItem />
             <r:BackstageTabItem Header="Настройки">
               <StackPanel VerticalAlignment="Top" 

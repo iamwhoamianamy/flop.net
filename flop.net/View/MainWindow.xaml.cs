@@ -20,6 +20,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using flop.net.Model;
 using flop.net.Enums;
+using flop.net.Save;
 
 namespace flop.net
 {
@@ -65,7 +66,13 @@ namespace flop.net
          MainWindowVM.ActiveLayer.Figures.CollectionChanged += Figures_CollectionChanged;
          Graphic = new Graphic(MainCanvas);
 
+         Save.MouseLeftButtonDown += SaveOnMouseLeftButtonDown; 
          DrawAll();
+      }
+
+      private void SaveOnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+      {
+         MainWindowVM.Save.Execute(new SaveParameters { Format = "svg" , Width = (int)MainCanvas.ActualWidth, Height = (int)MainCanvas.ActualHeight });
       }
 
       private void Figures_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
