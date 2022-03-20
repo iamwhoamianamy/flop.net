@@ -54,10 +54,10 @@ namespace flop.net.Model
             var minY = defaultPoints.Min(y => y.Y);
             var points = new PointCollection()
             {
-               new Point(minX, minY),
-               new Point(maxX, minY),
-               new Point(maxX, maxY),
                new Point(minX, maxY),
+               new Point(maxX, maxY),
+               new Point(maxX, minY),
+               new Point(minX, minY)
             };
 
             // Разворот BoundingBox обратно к исходному положению
