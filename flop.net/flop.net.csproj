@@ -96,6 +96,7 @@
     <Compile Include="Model\PolygonBuilder.cs" />
     <Compile Include="Model\Rectangle.cs" />
     <Compile Include="Save\PdfSaver.cs" />
+    <Compile Include="Save\PngSaver.cs" />
     <Compile Include="Save\SaveParameters.cs" />
     <Compile Include="Save\JsonSaver.cs" />
     <Compile Include="Properties\Annotations.cs" />
