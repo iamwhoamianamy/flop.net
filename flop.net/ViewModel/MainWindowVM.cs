@@ -9,6 +9,7 @@ using flop.net.Annotations;
 using flop.net.Model;
 using System.Windows.Media;
 using flop.net.Enums;
+using ControlzEx.Theming;
 
 namespace flop.net.ViewModel;
 
@@ -592,7 +593,38 @@ public class MainWindowVM : INotifyPropertyChanged
          return deleteFigure;
       }
    }
+   public string CurrentBaseColor
+   {
+      get => this.CurrentTheme.BaseColorScheme;
 
+      set
+      {
+         if (value is null)
+         {
+            return;
+         }
+
+         ThemeManager.Current.ChangeThemeBaseColor(Application.Current, value);
+         this.OnPropertyChanged();
+         this.OnPropertyChanged(nameof(this.CurrentTheme));
+      }
+   }
+   public Theme CurrentTheme
+   {
+      get => ThemeManager.Current.DetectTheme(Application.Current);
+
+      set
+      {
+         if (value is null)
+         {
+            return;
+         }
+
+         ThemeManager.Current.ChangeTheme(Application.Current, value);
+         this.OnPropertyChanged();
+         this.OnPropertyChanged(nameof(this.CurrentBaseColor));
+      }
+   }
    public MainWindowVM()
    {
       ActiveLayer = new Layer();

@@ -5,6 +5,7 @@
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                 xmlns:local="clr-namespace:flop.net"
                 xmlns:r="urn:fluent-ribbon"
+                xmlns:controlzEx="urn:controlzex"
                 mc:Ignorable="d"
                 FontSize="13"
                 WindowStyle="None"
@@ -34,7 +35,49 @@
             <r:BackstageTabItem Header="Загрузить" />
             <r:BackstageTabItem Header="Сохранить" />
             <r:SeparatorTabItem />
-            <r:BackstageTabItem Header="Настройки" />
+            <r:BackstageTabItem Header="Настройки">
+              <StackPanel VerticalAlignment="Top" 
+                          HorizontalAlignment="Left"
+                          Height="300" Margin="40">
+                <Grid>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                  </Grid.RowDefinitions>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                  </Grid.ColumnDefinitions>
+
+                  <TextBlock Text="Базовый цвет приложения:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
+                  <r:ComboBox MinWidth="140"
+                              Grid.Row="1"
+                              Grid.Column="1"
+                              IsEditable="False"
+                              ItemsSource="{Binding Source={x:Static controlzEx:ThemeManager.Current}, Path=BaseColors}"
+                              SelectedItem="{Binding CurrentBaseColor, Mode=TwoWay}" />
+                  <TextBlock Text="Дополнительный цвет приложения:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" />
+                  <r:ComboBox MinWidth="150"
+                              Grid.Row="2"
+                              Grid.Column="1"
+                              IsEditable="False"
+                              ItemsSource="{Binding Source={x:Static controlzEx:ThemeManager.Current}, Path=Themes}"
+                              SelectedItem="{Binding CurrentTheme, Mode=TwoWay}">
+                    <r:ComboBox.ItemTemplate>
+                      <DataTemplate DataType="{x:Type controlzEx:Theme}">
+                        <StackPanel Orientation="Horizontal">
+                          <Ellipse Width="16"
+                                   Height="16"
+                                   Fill="{Binding ShowcaseBrush, Mode=OneWay}" />
+                          <TextBlock Text="{Binding DisplayName}" />
+                        </StackPanel>
+                      </DataTemplate>
+                    </r:ComboBox.ItemTemplate>
+                  </r:ComboBox>
+                </Grid>
+              </StackPanel>
+            </r:BackstageTabItem>
           </r:BackstageTabControl>
         </r:Backstage>
       </r:Ribbon.Menu>
