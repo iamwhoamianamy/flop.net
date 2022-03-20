@@ -646,13 +646,19 @@ public class MainWindowVM : INotifyPropertyChanged
                RestoreDirectory = true
             };
             if (saveDialog.ShowDialog() != true) return;
+            //Сохранение только активного слоя, так как работа со слоями еще не реализована и Layers пустая
             switch (Enum.Parse(typeof(SaveTypes), parameters.Format, true))
             {
                case SaveTypes.Svg:
-                  var saver = new SvgSaver(saveDialog.FileName,ActiveLayer, parameters.Width, parameters.Height);
+                  var saver = new SvgSaver(saveDialog.FileName, ActiveLayer, parameters.Width, parameters.Height);
                   saver.Save();
                   break;
                case SaveTypes.Json:
+                  var path = saveDialog.FileName.Replace(saveDialog.SafeFileName, string.Empty);
+                  var fileName = saveDialog.SafeFileName.Replace($".{parameters.Format}", string.Empty);
+                  var jsonSaver = new JsonSaver(path, fileName);
+                  //TODO: Проблема при сохранении эллипса
+                  jsonSaver.SaveLayersToJson(new ObservableCollection<Layer> {ActiveLayer});
                   break;
                case SaveTypes.Png:
                   break;
