@@ -8,7 +8,9 @@ namespace flop.net.Model
    public class Polygon : IGeometric
    {
       public double RotationAngle { get; private set; }
+      
       public PointCollection Points { get; private set; }
+
       public Point Center { get 
          {
             var sumPoints = new Point(0, 0);
