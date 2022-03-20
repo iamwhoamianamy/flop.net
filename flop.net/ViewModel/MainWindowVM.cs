@@ -646,15 +646,15 @@ public class MainWindowVM : INotifyPropertyChanged
                RestoreDirectory = true
             };
             if (saveDialog.ShowDialog() != true) return;
-            switch (saveDialog.FilterIndex)
+            switch (Enum.Parse(typeof(SaveTypes), parameters.Format, true))
             {
-               case (int)SaveTypes.Svg:
+               case SaveTypes.Svg:
                   var saver = new SvgSaver(saveDialog.FileName,ActiveLayer, parameters.Width, parameters.Height);
                   saver.Save();
                   break;
-               case (int)SaveTypes.Json:
+               case SaveTypes.Json:
                   break;
-               case (int)SaveTypes.Png:
+               case SaveTypes.Png:
                   break;
             }
          });
