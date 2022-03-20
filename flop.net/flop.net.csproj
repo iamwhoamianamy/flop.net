@@ -88,6 +88,7 @@
     <Compile Include="Model\PolygonBuilder.cs" />
     <Compile Include="Save\JsonSaver.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Save\SvgSaver.cs" />
     <Compile Include="ViewModel\MainWindowVM.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="ViewModel\UserCommands.cs" />
