@@ -14,7 +14,7 @@ namespace flop.net.Model
       private double Width { get; set; }
       public Ellipse() : base() { }
 
-      public Ellipse(PointCollection points, bool isClosed) : base(points, isClosed) 
+      public Ellipse(PointCollection points) : base(points, true) 
       {
          Height = points.Max(x => x.Y) - points.Min(x => x.Y);
          Width = points.Max(x => x.X) - points.Min(x => x.X);
