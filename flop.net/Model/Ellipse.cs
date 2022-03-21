@@ -20,9 +20,9 @@ namespace flop.net.Model
          Width = points.Max(x => x.X) - points.Min(x => x.X);
       }
 
-      public void Scale(Point scale)
+      public void Scale(Point scale, Point? scalePoint = null)
       {
-         var shift = Center;
+         var shift = scalePoint.HasValue ? scalePoint.Value : Center;
          Height *= scale.X;
          Width *= scale.Y;
          Points.Clear();
@@ -31,7 +31,8 @@ namespace flop.net.Model
          {
             double x = Math.Cos(2 * Math.PI * i / Convert.ToDouble(pointCount)) * Width / 2 + shift.X;
             double y = Math.Sin(2 * Math.PI * i / Convert.ToDouble(pointCount)) * Height / 2 + shift.Y;
-            Points.Add(new Point(x, y));
+            Points.Add(new Point(x * Math.Cos(RotationAngle) - y * Math.Sin(RotationAngle),
+               x * Math.Sin(RotationAngle) + y * Math.Cos(RotationAngle)));
          }
       }
    }
