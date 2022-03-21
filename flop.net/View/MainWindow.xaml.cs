@@ -18,6 +18,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
+using System.IO;
 using flop.net.Model;
 using flop.net.Enums;
 using flop.net.Save;
@@ -66,13 +68,24 @@ namespace flop.net
          MainWindowVM.ActiveLayer.Figures.CollectionChanged += Figures_CollectionChanged;
          Graphic = new Graphic(MainCanvas);
 
-         // Save.MouseLeftButtonDown += SaveOnMouseLeftButtonDown; 
+         Save.MouseLeftButtonDown += SaveOnMouseLeftButtonDown; 
          DrawAll();
       }
 
       private void SaveOnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
       {
-         MainWindowVM.Save.Execute(new SaveParameters { Format = "png" , Width = (int)MainCanvas.ActualWidth, Height = (int)MainCanvas.ActualHeight, Canv = MainCanvas});
+
+         var saveDialog = new SaveFileDialog
+         {
+            Filter = SaveDialogFilter.GetFilter(),
+            RestoreDirectory = true,
+            FileName = "Новая шлёпа"
+         };
+         if(saveDialog.ShowDialog() != true) return;
+
+         MainWindowVM.Save.Execute(new SaveParameters { Format = System.IO.Path.GetExtension(saveDialog.FileName).Replace(".", "") , 
+            Width = (int)MainCanvas.ActualWidth, Height = (int)MainCanvas.ActualHeight, Canv = MainCanvas,
+            FileName = saveDialog.FileName});
       }
 
       private void Figures_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
