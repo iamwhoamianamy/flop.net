@@ -73,7 +73,7 @@ namespace flop.net.Model
             double y = Math.Sin(2 * Math.PI * i / Convert.ToDouble(pointCount)) * h / 2 + center.Y;
             points.Add(new Point(x, y));
          }
-         return new Polygon(points, true);
+         return new Ellipse(points);
       }
 
       public static Polygon CreateCircle(Point center, double radius)
@@ -86,7 +86,7 @@ namespace flop.net.Model
             double y = Math.Sin(2 * Math.PI * i / pointCount) * radius + center.Y;
             points.Add(new Point(x, y));
          }
-         return new Polygon(points, true);
+         return new Ellipse(points);
       }
    }
 }
