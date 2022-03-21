@@ -62,7 +62,7 @@ namespace flop.net.Model
 
             // Разворот BoundingBox обратно к исходному положению
             Point rectangleCenter = new((points[0].X + points[2].X) / 2, (points[0].Y + points[2].Y) / 2);
-            for (var i = 0; i < Points.Count; i++)
+            for (var i = 0; i < points.Count; i++)
             {
                var point = Point.Subtract(points[i], (Vector)rectangleCenter);
                var oldX = point.X;
