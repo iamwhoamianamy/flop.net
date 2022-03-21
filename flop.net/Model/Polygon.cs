@@ -148,7 +148,7 @@ namespace flop.net.Model
          }
       }
 
-      public void Scale(Point scale, Point? scalePoint=null)
+      public virtual void Scale(Point scale, Point? scalePoint=null)
       {
          var shift = scalePoint.HasValue ? scalePoint : Center;
          for (var i = 0; i < Points.Count; i++)

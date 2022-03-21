@@ -20,7 +20,7 @@ namespace flop.net.Model
          Width = points.Max(x => x.X) - points.Min(x => x.X);
       }
 
-      public void Scale(Point scale, Point? scalePoint = null)
+      public override void Scale(Point scale, Point? scalePoint = null)
       {
          var shift = scalePoint.HasValue ? scalePoint.Value : Center;
          Height *= scale.X;
