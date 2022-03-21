@@ -5,6 +5,7 @@
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                 xmlns:local="clr-namespace:flop.net"
                 xmlns:r="urn:fluent-ribbon"
+                xmlns:controlzEx="urn:controlzex"
                 mc:Ignorable="d"
                 FontSize="13"
                 WindowStyle="None"
@@ -32,9 +33,51 @@
           <r:BackstageTabControl>
             <r:BackstageTabItem Header="Создать" />
             <r:BackstageTabItem Header="Загрузить" />
-            <r:BackstageTabItem Header="Сохранить" />
+            <r:BackstageTabItem Header="Сохранить" x:Name="Save"/>
             <r:SeparatorTabItem />
-            <r:BackstageTabItem Header="Настройки" />
+            <r:BackstageTabItem Header="Настройки">
+              <StackPanel VerticalAlignment="Top" 
+                          HorizontalAlignment="Left"
+                          Height="300" Margin="40">
+                <Grid>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                  </Grid.RowDefinitions>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                  </Grid.ColumnDefinitions>
+
+                  <TextBlock Text="Базовый цвет приложения:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
+                  <r:ComboBox MinWidth="140"
+                              Grid.Row="1"
+                              Grid.Column="1"
+                              IsEditable="False"
+                              ItemsSource="{Binding Source={x:Static controlzEx:ThemeManager.Current}, Path=BaseColors}"
+                              SelectedItem="{Binding CurrentBaseColor, Mode=TwoWay}" />
+                  <TextBlock Text="Дополнительный цвет приложения:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" />
+                  <r:ComboBox MinWidth="150"
+                              Grid.Row="2"
+                              Grid.Column="1"
+                              IsEditable="False"
+                              ItemsSource="{Binding Source={x:Static controlzEx:ThemeManager.Current}, Path=Themes}"
+                              SelectedItem="{Binding CurrentTheme, Mode=TwoWay}">
+                    <r:ComboBox.ItemTemplate>
+                      <DataTemplate DataType="{x:Type controlzEx:Theme}">
+                        <StackPanel Orientation="Horizontal">
+                          <Ellipse Width="16"
+                                   Height="16"
+                                   Fill="{Binding ShowcaseBrush, Mode=OneWay}" />
+                          <TextBlock Text="{Binding DisplayName}" />
+                        </StackPanel>
+                      </DataTemplate>
+                    </r:ComboBox.ItemTemplate>
+                  </r:ComboBox>
+                </Grid>
+              </StackPanel>
+            </r:BackstageTabItem>
           </r:BackstageTabControl>
         </r:Backstage>
       </r:Ribbon.Menu>
@@ -79,13 +122,16 @@
                            Height="32"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           Fill="{Binding CurrentFillColor}"
                            Stroke="AliceBlue"
-                           StrokeThickness="2"/>
+                           StrokeThickness="2">
+                  <Rectangle.Fill>
+                    <SolidColorBrush Color="{Binding CreationDrawingParameters.Fill, Mode=TwoWay}" />
+                  </Rectangle.Fill>
+                </Rectangle>
               </Grid>
             </r:DropDownButton.Icon>
             <r:ColorGallery Columns="10"
-                            SelectedColor="{Binding CurrentFillColor}"
+                            SelectedColor="{Binding CreationDrawingParameters.Fill, Mode=TwoWay}"
                             IsNoColorButtonVisible="False"
                             StandardColorGridRows="3"
                             ThemeColorGridRows="5" />
@@ -98,13 +144,16 @@
                            Height="32"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           Fill="{Binding CurrentStrokeColor}"
                            Stroke="AliceBlue"
-                           StrokeThickness="2"/>
+                           StrokeThickness="2">
+                  <Rectangle.Fill>
+                    <SolidColorBrush Color="{Binding CreationDrawingParameters.Stroke, Mode=TwoWay}" />
+                  </Rectangle.Fill>
+                </Rectangle>
               </Grid>
             </r:DropDownButton.Icon>
             <r:ColorGallery Columns="10"
-                            SelectedColor="{Binding CurrentStrokeColor}"
+                            SelectedColor="{Binding CreationDrawingParameters.Stroke, Mode=TwoWay}"
                             IsNoColorButtonVisible="False"
                             StandardColorGridRows="3"
                             ThemeColorGridRows="5" />
@@ -122,7 +171,7 @@
                        Grid.Column="0"
                        Grid.Row="0"
                        Margin="0 10 0 0"/>
-            <r:Spinner Value="{Binding CurrentSrokeThickness}"
+            <r:Spinner Value="{Binding CreationDrawingParameters.StrokeThickness}"
                        Grid.Column="1"
                        Grid.Row="0"
                        Margin="0 10 0 0"
@@ -135,7 +184,7 @@
                       Grid.Row="1"
                       Margin="0 10 0 0"
                       Width="90"
-                      SelectedItem="{Binding CurrentStrokeDashCap}">
+                      SelectedItem="{Binding CreationDrawingParameters.PenLineCap}">
               <ComboBoxItem Content="Flat"/>
               <ComboBoxItem Content="Square"/>
               <ComboBoxItem Content="Round"/>
@@ -148,47 +197,60 @@
           <r:ToggleButton Header="Линия"
                           Icon="/Images/line.png"
                           ToolTip="Рисование линии произвольной толщины"
+                          Command="{Binding ToggleLineCreation}"
+                          IsChecked="{Binding ToggleLineCreation.IsPressed}"
                           Style="{StaticResource RibbonMenuButton}" />
           <r:ToggleButton Header="Ломанная линия"
-                          ToolTip="Рисование ломанной линии произвольной толщины"
+                          ToolTip="Рисование ломанной линии произвольной толщины"                          
+                          Command="{Binding TogglePolylineCreation}"
+                          IsChecked="{Binding TogglePolylineCreation.IsPressed}" 
                           Style="{StaticResource RibbonMenuButton}" />
           <r:ToggleButton Header="Эллипс"
                           Icon="/Images/ellipse.png"
-                          ToolTip="Рисование эллипса"
+                          ToolTip="Рисование эллипса"                          
+                          Command="{Binding ToggleEllipseCreation}"
+                          IsChecked="{Binding ToggleEllipseCreation.IsPressed}" 
                           Style="{StaticResource RibbonMenuButton}" />
           <r:ToggleButton Header="Прямоугольник"
                           Icon="/Images/rectangle.png"
                           ToolTip="Рисование прямоугольника"
-                          Command="{Binding AddRectangle}"
+                          Command="{Binding ToggleRectangleCreation}"
+                          IsChecked="{Binding ToggleRectangleCreation.IsPressed}"                          
                           Style="{StaticResource RibbonMenuButton}" />
           <r:ToggleButton Header="Треугольник"
                           Icon="/Images/rectangle.png"
-                          ToolTip="Рисование треугольника"
+                          ToolTip="Рисование треугольника"                                                    
+                          Command="{Binding ToggleTriangleCreation}"
+                          IsChecked="{Binding ToggleTriangleCreation.IsPressed}" 
                           Style="{StaticResource RibbonMenuButton}" />
         </r:RibbonGroupBox>
       </r:RibbonTabItem>
 
       <r:RibbonTabItem Header="Режимы редактирования">
-        <r:RibbonGroupBox Header="Объектный режим">
-          <r:ToggleButton Header="Перемещение"
+                <r:RibbonGroupBox Header="Объектный режим">
+                    <r:ToggleButton Header="Перемещение"
                           ToolTip="Перемещение фигуры"
-                          Command="{Binding MoveFigure}"
+                          Command="{Binding ToggleMoving}"
+                          IsChecked="{Binding ToggleMoving.IsPressed}" 
+                                    
                           Style="{StaticResource RibbonMenuButton}" />
-          <r:ToggleButton Header="Масштабирование"
+                    <r:ToggleButton Header="Масштабирование"
                           ToolTip="Масштабирование фигуры"
-                          Command="{Binding ScaleFigure}"
+                          Command="{Binding ToggleScaling}"
+                          IsChecked="{Binding ToggleScaling.IsPressed}" 
+                                    
                           Style="{StaticResource RibbonMenuButton}" />
-          <r:ToggleButton Header="Поворот"
+                    <r:ToggleButton Header="Поворот"
                           ToolTip="Поворот фигуры"
                           Command="{Binding RotateFigure}"
                           Style="{StaticResource RibbonMenuButton}" />
-          <r:ToggleButton Header="Удаление"
+                    <r:ToggleButton Header="Удаление"
                           ToolTip="Удаление фигуры"
                           Command="{Binding DeleteFigure}"
                           Style="{StaticResource RibbonMenuButton}" />
-        </r:RibbonGroupBox>
+                </r:RibbonGroupBox>
 
-        <r:RibbonGroupBox Header="Режим трансформации">
+                <r:RibbonGroupBox Header="Режим трансформации">
           <r:ToggleButton Header="Добавление вершины"
                           ToolTip="Добавить вершину"/>
           <r:ToggleButton Header="Удаление вершины"
@@ -207,14 +269,17 @@
                 <Rectangle Width="32"
                            Height="32"
                            HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Fill="{Binding DrawParametrs.Fill}"
+                           VerticalAlignment="Center"                           
                            Stroke="AliceBlue"
-                           StrokeThickness="2"/>
+                           StrokeThickness="2">
+                  <Rectangle.Fill>
+                    <SolidColorBrush Color="{Binding ActiveFigure.DrawingParameters.Fill, Mode=TwoWay}" />
+                  </Rectangle.Fill>
+                </Rectangle>
               </Grid>
             </r:DropDownButton.Icon>
             <r:ColorGallery Columns="10"
-                            SelectedColor="{Binding DrawingParameters.Fill}"
+                            SelectedColor="{Binding ActiveFigure.DrawingParameters.Fill, Mode=TwoWay}"
                             IsNoColorButtonVisible="False"
                             StandardColorGridRows="3"
                             ThemeColorGridRows="5" />
@@ -227,13 +292,16 @@
                            Height="32"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           Fill="{Binding DrawParametrs.Stroke}"
                            Stroke="AliceBlue"
-                           StrokeThickness="2"/>
+                           StrokeThickness="2">
+                  <Rectangle.Fill>
+                    <SolidColorBrush Color="{Binding ActiveFigure.DrawingParameters.Stroke, Mode=TwoWay}" />
+                  </Rectangle.Fill>
+                </Rectangle>
               </Grid>
             </r:DropDownButton.Icon>
             <r:ColorGallery Columns="10"
-                            SelectedColor="{Binding DrawingParameters.Stroke}"
+                            SelectedColor="{Binding ActiveFigure.DrawingParameters.Stroke, Mode=TwoWay}"
                             IsNoColorButtonVisible="False"
                             StandardColorGridRows="3"
                             ThemeColorGridRows="5" />
@@ -253,7 +321,7 @@
                        Grid.Column="0"
                        Grid.Row="0"
                        Margin="0 10 0 0"/>
-            <r:Spinner Value="{Binding DrawingParameters.StrokeThickness}"
+            <r:Spinner Value="{Binding ActiveFigure.DrawingParameters.StrokeThickness, Mode=TwoWay}"
                        Grid.Column="1"
                        Grid.Row="0"
                        Margin="0 5 0 0"
@@ -266,7 +334,7 @@
                       Grid.Row="1"
                       Margin="0 5 0 0"
                       Width="90"
-                      SelectedItem="{Binding DrawingParameters.StrokeDashCap}">
+                      SelectedItem="{Binding ActiveFigure.DrawingParameters.PenLineCap, Mode=TwoWay}">
               <ComboBoxItem Content="Flat"/>
               <ComboBoxItem Content="Square"/>
               <ComboBoxItem Content="Round"/>
@@ -276,7 +344,7 @@
                        Grid.Column="2"
                        Grid.Row="0"
                        Margin="10 10 0 0"/>
-            <r:Spinner Value="1"
+            <r:Spinner Value="{Binding ActiveFigure.DrawingParameters.Opacity, Mode=TwoWay}"
                        Maximum="1"
                        Grid.Column="3"
                        Grid.Row="0"
@@ -287,16 +355,23 @@
       </r:RibbonTabItem>
 
     </r:Ribbon>
-
-    <Canvas x:Name="MainCanvas"
-            Grid.Row="1"
-            Grid.Column="0"
+    
+    <UserControl Background="Transparent"
+                Grid.Row="1"
+                Grid.Column="0"
+                PreviewMouseLeftButtonDown="OnPreviewMouseDown"
+                PreviewMouseMove="OnPreviewMouseMove"
+                PreviewMouseRightButtonDown="OnPreviewMouseRightButtonDown">   
+      <Canvas x:Name="MainCanvas"            
             Background="White"
-            ClipToBounds="True">
-      <!--Место для вашей рекламы-->
+            ClipToBounds="True"
+            >
+        <!--Место для вашей рекламы-->
 
-    </Canvas>
+      </Canvas>
 
+    </UserControl>
+    
 
     <StackPanel Grid.Column="1"
                 Grid.Row="1"

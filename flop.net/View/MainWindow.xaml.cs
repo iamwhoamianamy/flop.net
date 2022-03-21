@@ -18,6 +18,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
+using System.IO;
+using flop.net.Model;
+using flop.net.Enums;
+using flop.net.Save;
 
 namespace flop.net
 {
@@ -49,6 +54,10 @@ namespace flop.net
             OnPropertyChanged();
          }
       }
+      public ViewMode WorkingMode { get; set; }
+      public FigureCreationMode СurrentFigureType { get; set; }
+      public Point MousePosition1;
+      public Point MousePosition2;
       public MainWindow()
       {
          InitializeComponent();
@@ -59,7 +68,24 @@ namespace flop.net
          MainWindowVM.ActiveLayer.Figures.CollectionChanged += Figures_CollectionChanged;
          Graphic = new Graphic(MainCanvas);
 
+         Save.MouseLeftButtonDown += SaveOnMouseLeftButtonDown; 
          DrawAll();
+      }
+
+      private void SaveOnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+      {
+
+         var saveDialog = new SaveFileDialog
+         {
+            Filter = SaveDialogFilter.GetFilter(),
+            RestoreDirectory = true,
+            FileName = "Новая шлёпа"
+         };
+         if(saveDialog.ShowDialog() != true) return;
+
+         MainWindowVM.Save.Execute(new SaveParameters { Format = System.IO.Path.GetExtension(saveDialog.FileName).Replace(".", "") , 
+            Width = (int)MainCanvas.ActualWidth, Height = (int)MainCanvas.ActualHeight, Canv = MainCanvas,
+            FileName = saveDialog.FileName});
       }
 
       private void Figures_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -79,16 +105,90 @@ namespace flop.net
          Graphic.CleanCanvas();
          foreach (var figure in MainWindowVM.ActiveLayer.Figures)
          {
-            switch (figure.Geometric.IsClosed)
+            if(figure != null)
             {
-               case true:
-                  Graphic.DrawPolygon(figure.Geometric.Points, figure.DrawingParameters);
-                  break;
-               case false:
-                  Graphic.DrawPolyline(figure.Geometric.Points, figure.DrawingParameters);
-                  break;
-            }
+               switch (figure.Geometric.IsClosed)
+               {
+                  case true:
+                     Graphic.DrawPolygon(figure.Geometric.Points, figure.DrawingParameters);
+                     break;
+                  case false:
+                     Graphic.DrawPolyline(figure.Geometric.Points, figure.DrawingParameters);
+                     break;
+               }
+            }            
          }
+      }
+
+      private void OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+      {
+         MousePosition1 = e.GetPosition(MainCanvas);
+
+         if (mainWindowVM.WorkingMode == ViewMode.Creation &&
+            WorkingMode == ViewMode.Default)
+         {
+            mainWindowVM.BeginFigureCreation.Execute(null);
+            WorkingMode = ViewMode.Creation;
+         }
+
+         if (mainWindowVM.WorkingMode == ViewMode.Moving &&
+            WorkingMode == ViewMode.Default)
+         {
+            mainWindowVM.BeginActiveFigureMoving.Execute(null);
+            WorkingMode = ViewMode.Moving;
+
+            MousePosition2 = e.GetPosition(MainCanvas);
+         }
+      }
+
+      private void OnPreviewMouseMove(object sender, MouseEventArgs e)
+      {
+         if (mainWindowVM.WorkingMode == ViewMode.Creation &&
+            WorkingMode == ViewMode.Creation)
+         {
+            mainWindowVM.OnFigureCreation.Execute((MousePosition1, e.GetPosition(MainCanvas)));
+         }
+
+         if (mainWindowVM.WorkingMode == ViewMode.Moving &&
+            WorkingMode == ViewMode.Moving)
+         {
+            mainWindowVM.OnActiveFigureMoving.Execute(e.GetPosition(MainCanvas) - MousePosition2);
+            MousePosition2 = e.GetPosition(MainCanvas);
+         }
+
+         if (e.LeftButton == MouseButtonState.Released &&
+            mainWindowVM.WorkingMode == ViewMode.Creation &&
+            WorkingMode == ViewMode.Creation)
+         {
+            WorkingMode = ViewMode.Default;
+            mainWindowVM.OnFigureCreationFinished.Execute(null);
+            OnPreviewMouseUp(sender, null);
+         }
+
+         if (e.LeftButton == MouseButtonState.Released &&
+            mainWindowVM.WorkingMode == ViewMode.Moving &&
+            WorkingMode == ViewMode.Moving)
+         {
+            WorkingMode = ViewMode.Default;
+            mainWindowVM.OnFigureMovingFinished.Execute(null);
+            OnPreviewMouseUp(sender, null);
+         }
+
+         if (e.LeftButton == MouseButtonState.Released)
+         {
+            WorkingMode = ViewMode.Default;
+            OnPreviewMouseUp(sender, null);
+         }
+      }
+
+      private void OnPreviewMouseUp(object sender, MouseButtonEventArgs e)
+      {
+         // Место для рекламы ваших заканчивающих команд
+      }
+
+      private void OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+      {
+         mainWindowVM.SetActiveFigure.Execute(e.GetPosition(MainCanvas));
       }
    }
 }

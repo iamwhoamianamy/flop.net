@@ -35,20 +35,18 @@ namespace flop.net.View
         {
             Polygon polygon = new Polygon();
           
-            polygon.Fill = Brushes.Green;
-            //polygon.Fill = drawingParametrs.Fill;
-            //polygon.Stroke = drawingParametrs.Stroke;
-            //polygon.StrokeThickness = drawingParametrs.StrokeThickness;
-            //polygon.StrokeDashCap = drawingParametrs.PenLineCap;
-            //polygon.Opacity = drawingParametrs.Opacity;
-            //polygon.Name = "Polygon" + 1.ToString();
+            polygon.Fill = new SolidColorBrush(drawingParametrs.Fill);
+            polygon.Stroke = new SolidColorBrush(drawingParametrs.Stroke);
+            polygon.StrokeThickness = drawingParametrs.StrokeThickness;
+            polygon.StrokeDashCap = drawingParametrs.PenLineCap;
+            polygon.Opacity = drawingParametrs.Opacity;
 
-            //foreach (var x in drawingParametrs.StrokeDashArray)
-            //{
-            //    polygon.StrokeDashArray.Add(x);
-            //}
+         foreach (var x in drawingParametrs.StrokeDashArray)
+         {
+            polygon.StrokeDashArray.Add(x);
+         }
 
-            foreach (Point point in points)
+         foreach (Point point in points)
             {
                 polygon.Points.Add(point);
             }
@@ -60,8 +58,8 @@ namespace flop.net.View
         {
             Polyline polyline = new Polyline();
 
-            //polyline.Fill = drawingParametrs.Fill;
-            //polyline.Stroke = drawingParametrs.Stroke;
+            //polyline.Fill = new SolidColorBrush(drawingParametrs.Fill);
+            //polyline.Stroke = new SolidColorBrush(drawingParametrs.Stroke);
             //polyline.StrokeThickness = drawingParametrs.StrokeThickness;
             //polyline.StrokeDashCap = drawingParametrs.PenLineCap;
             //polyline.Opacity = drawingParametrs.Opacity;

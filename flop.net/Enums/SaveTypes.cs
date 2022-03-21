@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace flop.net.Enums
 {
-   public enum ViewMode
+   public enum SaveTypes
    {
-      Default,
-      Creation,
-      Moving,
-      Rotating,
-      Scaling,
-      Deleting
+      Svg = 1, 
+      Flp = 2,
+      Png = 3,
+      Pdf = 4
    }
 }
