@@ -236,14 +236,12 @@
                     <r:ToggleButton Header="Перемещение"
                           ToolTip="Перемещение фигуры"
                           Command="{Binding ToggleMoving}"
-                          IsChecked="{Binding ToggleMoving.IsPressed}" 
-                                    
+                          IsChecked="{Binding ToggleMoving.IsPressed}"                                    
                           Style="{StaticResource RibbonMenuButton}" />
                     <r:ToggleButton Header="Масштабирование"
                           ToolTip="Масштабирование фигуры"
                           Command="{Binding ToggleScaling}"
-                          IsChecked="{Binding ToggleScaling.IsPressed}" 
-                                    
+                          IsChecked="{Binding ToggleScaling.IsPressed}"                                     
                           Style="{StaticResource RibbonMenuButton}" />
                     <r:ToggleButton Header="Поворот"
                           ToolTip="Поворот фигуры"
@@ -285,7 +283,7 @@
                             SelectedColor="{Binding ActiveFigure.DrawingParameters.Fill, Mode=TwoWay}"
                             IsNoColorButtonVisible="False"
                             StandardColorGridRows="3"
-                            ThemeColorGridRows="5" />
+                            ThemeColorGridRows="5"/>
           </r:DropDownButton>
           <r:DropDownButton x:Name="SelectedStrokeColorButton"
                             Header="Цвет обводки">

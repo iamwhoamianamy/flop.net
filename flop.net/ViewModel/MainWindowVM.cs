@@ -272,16 +272,19 @@ public class MainWindowVM : INotifyPropertyChanged
          });
       }
    }
-
    public RelayCommand OnActiveFigureScaling
    {
       get
       {
          return new RelayCommand(obj =>
          {
-            var scale = obj as Point?;
-            summary_scale_value = (Point)scale;
-            ActiveFigure.Geometric.Scale((Point)scale);
+            //var scale = obj as Point?;
+            //summary_scale_value = (Point)scale;
+            //ActiveFigure.Geometric.Scale((Point)scale);            
+
+            var scale = obj as (Point, Point)?;
+
+            ActiveFigure.Geometric.Scale(scale.Value.Item1, scale.Value.Item2);
 
             ActiveLayer.Figures.Add(null);
             ActiveLayer.Figures.RemoveAt(ActiveLayer.Figures.Count - 1);

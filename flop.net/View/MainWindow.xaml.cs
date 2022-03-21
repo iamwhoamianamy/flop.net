@@ -107,6 +107,12 @@ namespace flop.net
                }
             }            
          }
+
+         if(MainWindowVM.ActiveFigure != null && 
+            MainWindowVM.WorkingMode == ViewMode.Scaling)
+         {
+            DrawBoundaryBox(MainWindowVM.ActiveFigure);
+         }
       }
       public void DrawBoundaryBox(Figure figure)
       {
@@ -115,7 +121,6 @@ namespace flop.net
          //  3         4
          //  |         |
          //  5----6----7
-
          List<Thumb> thumbs = new List<Thumb>();
          Thumb TopLeft = new Thumb();
          Thumb TopCenter = new Thumb();
@@ -234,33 +239,36 @@ namespace flop.net
 
          Point scale = new Point((size.X + delta.X) / size.X, (size.Y + delta.Y) / size.Y);
 
-         switch (thumb.VerticalContentAlignment)
+         switch (thumb.VerticalAlignment)
          {
             case VerticalAlignment.Top:
                scalePoint.Y = box.BotCenter.Y;
                break;
             case VerticalAlignment.Center:
-               scale.X = 0;
+               scale.Y = 1;
                break;
             case VerticalAlignment.Bottom:
                scalePoint.Y = box.TopCenter.Y;
                break;
          }
 
-         switch (thumb.HorizontalContentAlignment)
+         switch (thumb.HorizontalAlignment)
          {
             case HorizontalAlignment.Left:
                scalePoint.X = box.RightCenter.X;
                break;
             case HorizontalAlignment.Center:
-               scale.Y = 0;
+               scale.X = 1;
                break;
             case HorizontalAlignment.Right:
                scalePoint.Y = box.LeftCenter.Y;
                break;
          }
 
-         MainWindowVM.ActiveFigure.Geometric.Scale(scale, scalePoint);
+         if(MainWindowVM.WorkingMode == ViewMode.Scaling)
+         {
+            MainWindowVM.OnActiveFigureScaling.Execute((scale, scalePoint));
+         }
       }
       private void OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
       {
@@ -328,6 +336,10 @@ namespace flop.net
       private void OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
       {
          mainWindowVM.SetActiveFigure.Execute(e.GetPosition(MainCanvas));
+         if (mainWindowVM.ActiveFigure != null)
+         {
+            DrawBoundaryBox(mainWindowVM.ActiveFigure);
+         }
       }
    }
 }
