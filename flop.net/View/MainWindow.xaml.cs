@@ -68,7 +68,14 @@ namespace flop.net
          MainWindowVM.ActiveLayer.Figures.CollectionChanged += Figures_CollectionChanged;
          Graphic = new Graphic(MainCanvas);
 
-         Save.MouseLeftButtonDown += SaveOnMouseLeftButtonDown; 
+         Save.MouseLeftButtonDown += SaveOnMouseLeftButtonDown;
+         Open.MouseLeftButtonDown += OpenOnMouseLeftButtonDown;
+         MainWindowVM.PropertyChanged += MainWindowVM_PropertyChanged;
+         DrawAll();
+      }
+
+      private void MainWindowVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+      {
          DrawAll();
       }
 
@@ -86,6 +93,24 @@ namespace flop.net
          MainWindowVM.Save.Execute(new SaveParameters { Format = System.IO.Path.GetExtension(saveDialog.FileName).Replace(".", "") , 
             Width = (int)MainCanvas.ActualWidth, Height = (int)MainCanvas.ActualHeight, Canv = MainCanvas,
             FileName = saveDialog.FileName});
+      }
+
+      private void OpenOnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+      {
+
+         var openDialog = new OpenFileDialog
+         {
+            Filter = OpenDialogFilter.GetFilter(),
+            RestoreDirectory = true,
+            FileName = string.Empty
+         };
+         if (openDialog.ShowDialog() != true) return;
+
+         MainWindowVM.Open.Execute(new OpenParameters
+         {
+            Format = System.IO.Path.GetExtension(openDialog.FileName).Replace(".", ""),
+            FileName = openDialog.FileName
+         });
       }
 
       private void Figures_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

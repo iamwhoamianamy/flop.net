@@ -662,6 +662,36 @@ public class MainWindowVM : INotifyPropertyChanged
       }
    }
 
+   private RelayCommand open;
+
+   public RelayCommand Open
+   {
+      get
+      {
+         open ??= new RelayCommand(o =>
+         {
+            var parameters = (OpenParameters)o;
+            switch (Enum.Parse(typeof(OpenTypes), parameters.Format, true))
+            {
+               case OpenTypes.Svg:
+                  //TODO: Открыть svg
+                  break;
+               case OpenTypes.Flp:
+                  var flpSaver = new JsonSaver(parameters.FileName);
+                  Layers = flpSaver.Restore();
+                  ActiveLayer = Layers[0];
+                  break;
+               //case OpenTypes.Json:
+               //   var jsonSaver = new JsonSaver(parameters.FileName);
+               //   Layers = jsonSaver.RestoreLayersFromJson();
+               //   break;
+            }
+            OnPropertyChanged();
+         });
+         return open;
+      }
+   }
+
    public MainWindowVM()
    {
       Layers = new TrulyObservableCollection<Layer>();
