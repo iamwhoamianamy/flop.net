@@ -18,6 +18,6 @@ namespace flop.net.Enums
    {
       Svg = 1,
       Flp = 2,
-      Json = 3
+      //Json = 3
    }
 }

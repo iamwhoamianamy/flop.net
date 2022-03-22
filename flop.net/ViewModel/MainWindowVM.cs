@@ -681,10 +681,10 @@ public class MainWindowVM : INotifyPropertyChanged
                   Layers = flpSaver.Restore();
                   ActiveLayer = Layers[0];
                   break;
-               case OpenTypes.Json:
-                  var jsonSaver = new JsonSaver(parameters.FileName);
-                  Layers = jsonSaver.RestoreLayersFromJson();
-                  break;
+               //case OpenTypes.Json:
+               //   var jsonSaver = new JsonSaver(parameters.FileName);
+               //   Layers = jsonSaver.RestoreLayersFromJson();
+               //   break;
             }
             OnPropertyChanged();
          });
