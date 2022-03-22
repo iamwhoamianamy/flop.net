@@ -126,5 +126,65 @@ namespace flop.net.Tests.Geometry
 
          Assert.True(points.SequenceEqual(ellipse.Points));
       }
+      
+      [Fact]
+      public void ScaleRectangleTest()
+      {
+         var pointA = new Point(0, 0);
+         var pointB = new Point(2, 2);
+         var scale = new Point(2, 2);
+         var scalePoint = new Point(0, 0);
+         var rectangle = PolygonBuilder.CreateRectangle(pointA, pointB);
+
+         rectangle.Scale(scale, scalePoint);
+
+         for (var i = 0; i < rectangle.Points.Count; i++)
+         {
+            if (Math.Abs(rectangle.Points[i].X) < Eps)
+               rectangle.Points[i] = new Point(0, rectangle.Points[i].Y);
+            if (Math.Abs(rectangle.Points[i].Y) < Eps)
+               rectangle.Points[i] = new Point(rectangle.Points[i].X, 0);
+         }
+
+         var points = new PointCollection()
+         {
+            new Point(0, 0),
+            new Point(0, 4),
+            new Point(4, 4),
+            new Point(4, 0)
+         };
+
+         Assert.True(points.SequenceEqual(rectangle.Points));
+      }
+
+      [Fact]
+      public void ScaleTriangleTest()
+      {
+         var pointA = new Point(0, 0);
+         var pointB = new Point(3, 0);
+         var pointC = new Point(0, 3);
+         var scale = new Point(2, 2);
+         var scalePoint = new Point(0, 0);
+         var triangle = PolygonBuilder.CreateTriangle(pointA, pointB, pointC);
+
+         triangle.Scale(scale, scalePoint);
+
+         for (var i = 0; i < triangle.Points.Count; i++)
+         {
+            if (Math.Abs(triangle.Points[i].X) < Eps)
+               triangle.Points[i] = new Point(0, triangle.Points[i].Y);
+            if (Math.Abs(triangle.Points[i].Y) < Eps)
+               triangle.Points[i] = new Point(triangle.Points[i].X, 0);
+         }
+
+         var points = new PointCollection()
+         {
+            new Point(0, 0),
+            new Point(6, 0),
+            new Point(0, 6)
+         };
+
+         Assert.True(points.SequenceEqual(triangle.Points));
+      }
    }
 }
