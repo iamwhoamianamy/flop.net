@@ -19,7 +19,7 @@ namespace flop.net.Save
       
       public JsonSaver(string fullFileName)
       {
-         FilePath = Path.GetDirectoryName(fullFileName);
+         FilePath = Path.GetDirectoryName(fullFileName) + "\\\\";
          FileName = Path.GetFileNameWithoutExtension(fullFileName);
       }
 
@@ -30,7 +30,7 @@ namespace flop.net.Save
          CompressJson();
       }
 
-      public ObservableCollection<Layer> Restore()
+      public TrulyObservableCollection<Layer> Restore()
       {
          DecompressJson();
          var result = RestoreLayersFromJson();
@@ -51,7 +51,7 @@ namespace flop.net.Save
 
       public TrulyObservableCollection<Layer> RestoreLayersFromJson()
       {
-         string jsonString = File.ReadAllText(FilePath + "\\" + FileName + ".json");
+         string jsonString = File.ReadAllText(FilePath + FileName + ".json");
          var settings = new JsonSerializerSettings();
          settings.TypeNameHandling = TypeNameHandling.Objects;
          TrulyObservableCollection<Layer> layers = (TrulyObservableCollection<Layer>)JsonConvert.DeserializeObject<ObservableCollection<Layer>>(jsonString, settings);

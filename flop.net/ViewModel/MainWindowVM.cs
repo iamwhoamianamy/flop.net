@@ -677,15 +677,16 @@ public class MainWindowVM : INotifyPropertyChanged
                   //TODO: Открыть svg
                   break;
                case OpenTypes.Flp:
-                  //TODO: Сделать чтобы в этот flp что-то сохранялось
+                  var flpSaver = new JsonSaver(parameters.FileName);
+                  Layers = flpSaver.Restore();
+                  ActiveLayer = Layers[0];
                   break;
                case OpenTypes.Json:
                   var jsonSaver = new JsonSaver(parameters.FileName);
-                  TrulyObservableCollection<Layer> layers = jsonSaver.RestoreLayersFromJson();
-                  Layers.Add(new Layer());
-                  ActiveLayer = layers.Last();
+                  Layers = jsonSaver.RestoreLayersFromJson();
                   break;
             }
+            OnPropertyChanged();
          });
          return open;
       }

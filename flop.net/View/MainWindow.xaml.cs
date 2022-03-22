@@ -70,6 +70,12 @@ namespace flop.net
 
          Save.MouseLeftButtonDown += SaveOnMouseLeftButtonDown;
          Open.MouseLeftButtonDown += OpenOnMouseLeftButtonDown;
+         MainWindowVM.PropertyChanged += MainWindowVM_PropertyChanged;
+         DrawAll();
+      }
+
+      private void MainWindowVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+      {
          DrawAll();
       }
 
@@ -97,7 +103,7 @@ namespace flop.net
             Filter = OpenDialogFilter.GetFilter(),
             RestoreDirectory = true,
             FileName = string.Empty
-      };
+         };
          if (openDialog.ShowDialog() != true) return;
 
          MainWindowVM.Open.Execute(new OpenParameters
