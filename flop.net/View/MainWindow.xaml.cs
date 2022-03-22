@@ -18,6 +18,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
+using System.IO;
 using flop.net.Model;
 using flop.net.Enums;
 using flop.net.Save;
@@ -76,7 +78,18 @@ namespace flop.net
 
       private void SaveOnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
       {
-         MainWindowVM.Save.Execute(new SaveParameters { Format = "svg" , Width = (int)MainCanvas.ActualWidth, Height = (int)MainCanvas.ActualHeight });
+
+         var saveDialog = new SaveFileDialog
+         {
+            Filter = SaveDialogFilter.GetFilter(),
+            RestoreDirectory = true,
+            FileName = "Новая шлёпа"
+         };
+         if(saveDialog.ShowDialog() != true) return;
+
+         MainWindowVM.Save.Execute(new SaveParameters { Format = System.IO.Path.GetExtension(saveDialog.FileName).Replace(".", "") , 
+            Width = (int)MainCanvas.ActualWidth, Height = (int)MainCanvas.ActualHeight, Canv = MainCanvas,
+            FileName = saveDialog.FileName});
       }
 
       private void Figures_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

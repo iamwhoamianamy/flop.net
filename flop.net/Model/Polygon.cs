@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Media;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace flop.net.Model
@@ -35,7 +36,7 @@ namespace flop.net.Model
          RotationAngle = rotationAngle;
       }
 
-      public Rectangle BoundingBox
+      public Rectangle BoundingBoxRotated
       {
          get
          {
@@ -57,10 +58,10 @@ namespace flop.net.Model
             var minY = defaultPoints.Min(y => y.Y);
             var points = new PointCollection()
             {
-               new Point(minX, minY),
-               new Point(maxX, minY),
-               new Point(maxX, maxY),
                new Point(minX, maxY),
+               new Point(maxX, maxY),
+               new Point(maxX, minY),
+               new Point(minX, minY)
             };
             var localPoints = new PointCollection()
             {
@@ -72,7 +73,7 @@ namespace flop.net.Model
 
             // Разворот BoundingBox обратно к исходному положению
             Point rectangleCenter = new((points[0].X + points[2].X) / 2, (points[0].Y + points[2].Y) / 2);
-            for (var i = 0; i < Points.Count; i++)
+            for (var i = 0; i < points.Count; i++)
             {
                var point = Point.Subtract(points[i], (Vector)rectangleCenter);
                var oldX = point.X;
@@ -82,6 +83,25 @@ namespace flop.net.Model
                points[i] = Point.Add(point, (Vector)rectangleCenter);
             }
             return new Rectangle(points, localPoints);
+         }
+      }
+
+      public Rectangle BoundingBox 
+      {
+         get
+         {
+            var maxX = Points.Max(x => x.X);
+            var maxY = Points.Max(y => y.Y);
+            var minX = Points.Min(x => x.X);
+            var minY = Points.Min(y => y.Y);
+            var points = new PointCollection()
+            {
+               new Point(minX, maxY),
+               new Point(maxX, maxY),
+               new Point(maxX, minY),
+               new Point(minX, minY)
+            };
+            return new Rectangle(points);
          }
       }
 
@@ -158,7 +178,7 @@ namespace flop.net.Model
          }
       }
 
-      public void Scale(Point scale, Point? scalePoint=null)
+      public virtual void Scale(Point scale, Point? scalePoint=null)
       {
          var shift = scalePoint.HasValue ? scalePoint : Center;
          for (var i = 0; i < Points.Count; i++)
@@ -169,6 +189,46 @@ namespace flop.net.Model
             point = Point.Add(point, (Vector)shift);
             Points[i] = point;
          }
+      }
+
+      public virtual Polygon AddPoint(Point newPoint)
+      {
+         var minPoint = Points.OrderBy(x => Math.Sqrt((x.X - newPoint.X) * (x.X - newPoint.X) + (x.Y - newPoint.Y) * (x.Y - newPoint.Y))).First();
+         var index = Points.IndexOf(minPoint);
+         int index_prev = index - 1;
+         int index_next = index + 1;
+         int indexNewPoint = 0;
+
+         if (IsClosed)
+         {
+            if (index == 0)
+            {
+               index_prev = Points.Count - 1;
+            }
+            else if (index == Points.Count - 1)
+            {
+               index_next = 0;
+            }
+
+            var points_distance = new List<double>()
+            {
+               Math.Sqrt((Points[index_prev].X - newPoint.X) * (Points[index_prev].X - newPoint.X) + (Points[index_prev].Y - newPoint.Y) * (Points[index_prev].Y - newPoint.Y)),
+               Math.Sqrt((Points[index_next].X - newPoint.X) * (Points[index_next].X - newPoint.X) + (Points[index_next].Y - newPoint.Y) * (Points[index_next].Y - newPoint.Y))
+            };
+
+            if (points_distance.IndexOf(points_distance.Min(x=>x)) == 0)
+            {
+               indexNewPoint = index;
+            }  
+            else
+            {
+               indexNewPoint = index_next;
+            }
+         }
+
+         var newPoints = Points.Clone();
+         newPoints.Insert(indexNewPoint, newPoint);
+         return new Polygon(newPoints, IsClosed, RotationAngle);
       }
    }
 }
