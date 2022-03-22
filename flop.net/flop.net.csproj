@@ -116,6 +116,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="View\ThumbsBox.cs" />
     <Page Include="Styles\EditorTextElements.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -194,6 +194,7 @@ public class MainWindowVM : INotifyPropertyChanged
             else if (WorkingMode == ViewMode.Moving)
                WorkingMode = ViewMode.Default;
             СurrentFigureType = FigureCreationMode.None;
+            OnPropertyChanged();
          }, isModifyingAvailable);
          if (!palletCommands.Contains(toggleMoving))
             palletCommands.Add(toggleMoving);
@@ -214,6 +215,7 @@ public class MainWindowVM : INotifyPropertyChanged
             else if (WorkingMode == ViewMode.Scaling)
                WorkingMode = ViewMode.Default;
             СurrentFigureType = FigureCreationMode.None;
+            OnPropertyChanged();
          }, isModifyingAvailable);
          if (!palletCommands.Contains(toggleScaling))
             palletCommands.Add(toggleScaling);
@@ -676,6 +678,13 @@ public class MainWindowVM : INotifyPropertyChanged
       palletCommands = new List<RelayCommand> { };
       CreationDrawingParameters = new DrawingParameters();
       summary_moving_delta = new Vector();
+
+      Layers.CollectionChanged += Layers_CollectionChanged;
+   }
+
+   private void Layers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+   {
+      OnPropertyChanged();
    }
 
    public event PropertyChangedEventHandler PropertyChanged;
