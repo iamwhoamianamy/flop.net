@@ -33,7 +33,7 @@ namespace flop.net.Model
          RotationAngle = rotationAngle;
       }
 
-      public Rectangle BoundingBox
+      public Rectangle BoundingBoxRotated
       {
          get
          {
@@ -72,6 +72,25 @@ namespace flop.net.Model
                point.Y = oldX * Math.Sin(RotationAngle) + oldY * Math.Cos(RotationAngle);
                points[i] = Point.Add(point, (Vector)rectangleCenter);
             }
+            return new Rectangle(points);
+         }
+      }
+
+      public Rectangle BoundingBox 
+      {
+         get
+         {
+            var maxX = Points.Max(x => x.X);
+            var maxY = Points.Max(y => y.Y);
+            var minX = Points.Min(x => x.X);
+            var minY = Points.Min(y => y.Y);
+            var points = new PointCollection()
+            {
+               new Point(minX, maxY),
+               new Point(maxX, maxY),
+               new Point(maxX, minY),
+               new Point(minX, minY)
+            };
             return new Rectangle(points);
          }
       }
