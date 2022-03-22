@@ -108,129 +108,7 @@ namespace flop.net
                }
             }            
          }
-
-         //if(MainWindowVM.ActiveFigure != null && 
-         //   MainWindowVM.WorkingMode == ViewMode.Scaling)
-         //{
-         //   DrawBoundaryBox(MainWindowVM.ActiveFigure);
-         //}
-      }
-      public void DrawBoundaryBox(Figure figure)
-      {
-         //  0----1----2
-         //  |         |
-         //  3         4
-         //  |         |
-         //  5----6----7
-         List<Thumb> thumbs = new List<Thumb>();
-         Thumb TopLeft = new Thumb();
-         Thumb TopCenter = new Thumb();
-         Thumb TopRight = new Thumb();
-         Thumb LeftCenter = new Thumb();
-         Thumb RightCenter = new Thumb();
-         Thumb BotLeft = new Thumb();
-         Thumb BotCenter = new Thumb();
-         Thumb BotRight = new Thumb();
-
-         TopLeft.Margin = new Thickness(
-            figure.Geometric.BoundingBox.TopLeft.X - 10,
-            figure.Geometric.BoundingBox.TopLeft.Y - 10,
-            -figure.Geometric.BoundingBox.TopLeft.X + 10,
-            -figure.Geometric.BoundingBox.TopLeft.Y + 10
-            );
-         TopCenter.Margin = new Thickness(
-            figure.Geometric.BoundingBox.TopCenter.X - 5,
-            figure.Geometric.BoundingBox.TopCenter.Y - 10,
-            -figure.Geometric.BoundingBox.TopCenter.X + 5,
-            -figure.Geometric.BoundingBox.TopCenter.Y + 10
-            );
-         TopRight.Margin = new Thickness(
-            figure.Geometric.BoundingBox.TopRight.X,
-            figure.Geometric.BoundingBox.TopRight.Y - 10,
-            -figure.Geometric.BoundingBox.TopRight.X,
-            -figure.Geometric.BoundingBox.TopRight.Y + 10
-            );
-         LeftCenter.Margin = new Thickness(
-            figure.Geometric.BoundingBox.LeftCenter.X - 10,
-            figure.Geometric.BoundingBox.LeftCenter.Y - 5,
-            -figure.Geometric.BoundingBox.LeftCenter.X + 10,
-            -figure.Geometric.BoundingBox.LeftCenter.Y + 5
-            );
-         RightCenter.Margin = new Thickness(
-            figure.Geometric.BoundingBox.RightCenter.X,
-            figure.Geometric.BoundingBox.RightCenter.Y - 5,
-            -figure.Geometric.BoundingBox.RightCenter.X,
-            -figure.Geometric.BoundingBox.RightCenter.Y + 5
-            );
-         BotLeft.Margin = new Thickness(
-            figure.Geometric.BoundingBox.BotLeft.X - 10,
-            figure.Geometric.BoundingBox.BotLeft.Y,
-            -figure.Geometric.BoundingBox.BotLeft.X + 10,
-            -figure.Geometric.BoundingBox.BotLeft.Y
-            );
-         BotCenter.Margin = new Thickness(
-            figure.Geometric.BoundingBox.BotCenter.X - 5,
-            figure.Geometric.BoundingBox.BotCenter.Y,
-            -figure.Geometric.BoundingBox.BotCenter.X + 5,
-            -figure.Geometric.BoundingBox.BotCenter.Y
-            );
-         BotRight.Margin = new Thickness(
-           figure.Geometric.BoundingBox.BotRight.X,
-           figure.Geometric.BoundingBox.BotRight.Y,
-           -figure.Geometric.BoundingBox.BotRight.X,
-           -figure.Geometric.BoundingBox.BotRight.Y
-           );
-
-         TopLeft.Cursor = Cursors.SizeNESW;
-         TopCenter.Cursor = Cursors.SizeNS;
-         TopRight.Cursor = Cursors.SizeNWSE;
-         LeftCenter.Cursor = Cursors.SizeWE;
-         RightCenter.Cursor = Cursors.SizeWE;
-         BotLeft.Cursor = Cursors.SizeNWSE;
-         BotCenter.Cursor = Cursors.SizeNS;
-         BotRight.Cursor = Cursors.SizeNESW;
-
-         TopLeft.VerticalAlignment = VerticalAlignment.Top;
-         TopCenter.VerticalAlignment = VerticalAlignment.Top;
-         TopRight.VerticalAlignment = VerticalAlignment.Top;
-         LeftCenter.VerticalAlignment = VerticalAlignment.Center;
-         RightCenter.VerticalAlignment = VerticalAlignment.Center;
-         BotLeft.VerticalAlignment = VerticalAlignment.Bottom;
-         BotCenter.VerticalAlignment = VerticalAlignment.Bottom;
-         BotRight.VerticalAlignment = VerticalAlignment.Bottom;
-
-         TopLeft.HorizontalAlignment = HorizontalAlignment.Left;
-         TopCenter.HorizontalAlignment = HorizontalAlignment.Center;
-         TopRight.HorizontalAlignment = HorizontalAlignment.Right;
-         LeftCenter.HorizontalAlignment = HorizontalAlignment.Left;
-         RightCenter.HorizontalAlignment = HorizontalAlignment.Right;
-         BotLeft.HorizontalAlignment = HorizontalAlignment.Left;
-         BotCenter.HorizontalAlignment = HorizontalAlignment.Center;
-         BotRight.HorizontalAlignment = HorizontalAlignment.Right;
-
-         thumbs.Add(TopLeft);
-         thumbs.Add(TopCenter);
-         thumbs.Add(TopRight);
-         thumbs.Add(LeftCenter);
-         thumbs.Add(RightCenter);
-         thumbs.Add(BotLeft);
-         thumbs.Add(BotCenter);
-         thumbs.Add(BotRight);
-
-         foreach (var thumb in thumbs)
-         {
-            thumb.Width = 10;
-            thumb.Height = 10;
-            thumb.Background = Brushes.LightGreen;
-            thumb.BorderBrush = Brushes.DarkGreen;
-
-            MainCanvas.Children.Add(thumb);
-         }
-      }
-      private void OnDragDelta(object sender, DragDeltaEventArgs e)
-      {
-         
-      }
+      }            
       private void OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
       {
          MousePosition1 = e.GetPosition(MainCanvas);
@@ -297,55 +175,125 @@ namespace flop.net
       private void OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
       {
          mainWindowVM.SetActiveFigure.Execute(e.GetPosition(MainCanvas));
-         //if (mainWindowVM.ActiveFigure != null)
-         //{
-         //   DrawBoundaryBox(mainWindowVM.ActiveFigure);
-         //}
       }
 
-      private void TopEdgeThumb_DragCompleted(object sender, DragCompletedEventArgs e)
+      private double previousHorizontal;
+      private double previousVertical;
+      private void OnDragDelta(object sender, DragDeltaEventArgs e)
       {
-         Point delta = new Point(e.HorizontalChange, e.VerticalChange);
-         Point scalePoint = new Point(0, 0);
+         Point delta = new Point();
+         Point scalePoint = new Point();
+
+         double h = e.HorizontalChange - previousHorizontal;
+         double v = e.VerticalChange - previousVertical;
 
          var box = MainWindowVM.ActiveFigure.Geometric.BoundingBox;
 
-         Point size = (Point)(box.TopLeft - box.BotRight);
+         Point size = new Point();
          var thumb = e.OriginalSource as Thumb;
+
+         // Top Left Corner
+         if (thumb.VerticalAlignment == VerticalAlignment.Top &&
+            thumb.HorizontalAlignment == HorizontalAlignment.Left)
+         {
+            size = (Point)(box.TopLeft - box.BotRight);
+            delta.X = h;
+            delta.Y = v;
+            scalePoint = box.BotRight;
+         }
+         // Top Edge
+         if (thumb.VerticalAlignment == VerticalAlignment.Top &&
+            thumb.HorizontalAlignment == HorizontalAlignment.Stretch)
+         {
+            size = (Point)(box.TopCenter - box.BotCenter);
+            delta.X = 0;
+            delta.Y = v;
+            scalePoint = box.BotCenter;
+         }
+         // Top Right Corner
+         if (thumb.VerticalAlignment == VerticalAlignment.Top &&
+            thumb.HorizontalAlignment == HorizontalAlignment.Right)
+         {
+            size = (Point)(box.TopRight - box.BotLeft);
+            delta.X =h;
+            delta.Y = v;
+            scalePoint = box.BotLeft;
+         }
+         // Left Edge
+         if (thumb.VerticalAlignment == VerticalAlignment.Stretch &&
+            thumb.HorizontalAlignment == HorizontalAlignment.Left)
+         {
+            size = (Point)(box.LeftCenter - box.RightCenter);
+            delta.X = h;
+            delta.Y = 0;
+            scalePoint = box.RightCenter;
+         }
+         // Right Edge
+         if (thumb.VerticalAlignment == VerticalAlignment.Stretch &&
+            thumb.HorizontalAlignment == HorizontalAlignment.Right)
+         {
+            size = (Point)(box.RightCenter - box.LeftCenter);
+            delta.X = h;
+            delta.Y = 0;
+            scalePoint = box.LeftCenter;
+         }
+         // Bottom Left Corner
+         if (thumb.VerticalAlignment == VerticalAlignment.Bottom &&
+            thumb.HorizontalAlignment == HorizontalAlignment.Left)
+         {
+            size = (Point)(box.BotLeft - box.TopRight);
+            delta.X = h;
+            delta.Y = v;
+            scalePoint = box.TopRight;
+         }
+         // Bottom Edge
+         if (thumb.VerticalAlignment == VerticalAlignment.Bottom &&
+            thumb.HorizontalAlignment == HorizontalAlignment.Stretch)
+         {
+            size = (Point)(box.BotCenter - box.TopCenter);
+            delta.X = 0;
+            delta.Y = v;
+            scalePoint = box.TopCenter;
+         }
+         // Bottom Right Corner
+         if (thumb.VerticalAlignment == VerticalAlignment.Bottom &&
+            thumb.HorizontalAlignment == HorizontalAlignment.Right)
+         {
+            size = (Point)(box.BotRight - box.TopLeft);
+            delta.X = h;
+            delta.Y = v;
+            scalePoint = box.TopLeft;
+         }
 
          Point scale = new Point((size.X + delta.X) / size.X, (size.Y + delta.Y) / size.Y);
 
-         switch (thumb.VerticalAlignment)
-         {
-            case VerticalAlignment.Top:
-               scalePoint.Y = box.BotCenter.Y;
-               break;
-            case VerticalAlignment.Center:
-               scale.Y = 1;
-               break;
-            case VerticalAlignment.Bottom:
-               scalePoint.Y = box.TopCenter.Y;
-               break;
-         }
-
-         switch (thumb.HorizontalAlignment)
-         {
-            case HorizontalAlignment.Left:
-               scalePoint.X = box.RightCenter.X;
-               break;
-            case HorizontalAlignment.Center:
-               scale.X = 1;
-               break;
-            case HorizontalAlignment.Right:
-               scalePoint.Y = box.LeftCenter.Y;
-               break;
-         }
+         if (thumb.HorizontalAlignment == HorizontalAlignment.Stretch) scale.X = 1;
+         if (thumb.VerticalAlignment == VerticalAlignment.Stretch) scale.Y = 1;
 
          if (MainWindowVM.WorkingMode == ViewMode.Scaling)
          {
             MainWindowVM.OnActiveFigureScaling.Execute((scale, scalePoint));
+            previousHorizontal += h;
+            previousVertical += v;
+         }
+      }      
+      private void OnDragCompleted(object sender, DragCompletedEventArgs e)
+      {         
+         if (MainWindowVM.WorkingMode == ViewMode.Scaling)
+         {
+            MainWindowVM.OnFigureScalingFinished.Execute(null);
          }
       }
 
+      private void Thumb_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+      {
+         if (MainWindowVM.WorkingMode == ViewMode.Scaling &&
+            MainWindowVM.ActiveFigure != null)
+         {
+            MainWindowVM.BeginActiveFigureScaling.Execute(null);
+            previousHorizontal = 0;
+            previousVertical = 0;
+         }
+      }
    }
 }

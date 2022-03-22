@@ -23,7 +23,10 @@ namespace flop.net.Model
          }
       }
 
-      public Polygon() { Points = new PointCollection(); }
+      public Polygon() 
+      { 
+         Points = new PointCollection();
+      }
 
       public Polygon(PointCollection points, bool isClosed, double rotationAngle=0)
       {

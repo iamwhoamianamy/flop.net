@@ -366,7 +366,7 @@
               PreviewMouseLeftButtonDown="OnPreviewMouseDown"
               PreviewMouseMove="OnPreviewMouseMove"
               PreviewMouseRightButtonDown="OnPreviewMouseRightButtonDown">
-      <ItemsControl ItemsSource="{Binding ActiveFigureAsCollection}">
+      <ItemsControl ItemsSource="{Binding ActiveFigureAsCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
         <ItemsControl.ItemsPanel>
           <ItemsPanelTemplate>
             <Canvas IsItemsHost="True"/>
@@ -376,32 +376,50 @@
           <DataTemplate>
             <Grid>
               <Grid>
-                <Thumb Height="3"
-                       Cursor="SizeNS"
-                       Margin="0 -4 0 0" 
-                       VerticalAlignment="Top" 
-                       HorizontalAlignment="Stretch"
-                       Background="Black"
-                       DragDelta="OnDragDelta"
-                       DragCompleted="TopEdgeThumb_DragCompleted"/>
+                <!--Top Edge-->
+                <Thumb Height="3" Cursor="SizeNS" Margin="0 -4 0 0" 
+                       VerticalAlignment="Top" HorizontalAlignment="Stretch"
+                       DragDelta="OnDragDelta" DragCompleted="OnDragCompleted"
+                       PreviewMouseDown="Thumb_PreviewMouseDown"/>
+                <!--Left Edge-->
                 <Thumb Width="3" Cursor="SizeWE" Margin="-4 0 0 0"
-                       VerticalAlignment="Stretch" HorizontalAlignment="Left" DragDelta="OnDragDelta"/>
+                       VerticalAlignment="Stretch" HorizontalAlignment="Left"
+                       DragDelta="OnDragDelta" DragCompleted="OnDragCompleted"
+                       PreviewMouseDown="Thumb_PreviewMouseDown"/>
+                <!--Right Edge-->
                 <Thumb Width="3" Cursor="SizeWE" Margin="0 0 -4 0"
-                       VerticalAlignment="Stretch" HorizontalAlignment="Right" DragDelta="OnDragDelta"/>
+                       VerticalAlignment="Stretch" HorizontalAlignment="Right" 
+                       DragDelta="OnDragDelta" DragCompleted="OnDragCompleted"
+                       PreviewMouseDown="Thumb_PreviewMouseDown"/>
+                <!--Bottom Edge-->
                 <Thumb Height="3" Cursor="SizeNS" Margin="0 0 0 -4"
-                       VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" DragDelta="OnDragDelta"/>
+                       VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" 
+                       DragDelta="OnDragDelta" DragCompleted="OnDragCompleted"
+                       PreviewMouseDown="Thumb_PreviewMouseDown"/>
+                <!--Top Left Corner-->
                 <Thumb Width="7" Height="7" Cursor="SizeNWSE" Margin="-6 -6 0 0"
-                       VerticalAlignment="Top" HorizontalAlignment="Left" DragDelta="OnDragDelta"/>
+                       VerticalAlignment="Top" HorizontalAlignment="Left" 
+                       DragDelta="OnDragDelta" DragCompleted="OnDragCompleted"
+                       PreviewMouseDown="Thumb_PreviewMouseDown"/>
+                <!--Top Right Corner-->
                 <Thumb Width="7" Height="7" Cursor="SizeNESW" Margin="0 -6 -6 0"
-                       VerticalAlignment="Top" HorizontalAlignment="Right" DragDelta="OnDragDelta"/>
+                       VerticalAlignment="Top" HorizontalAlignment="Right" 
+                       DragDelta="OnDragDelta" DragCompleted="OnDragCompleted"
+                       PreviewMouseDown="Thumb_PreviewMouseDown"/>
+                <!--Bottom Left Corner-->
                 <Thumb Width="7" Height="7" Cursor="SizeNESW" Margin="-6 0 0 -6"
-                       VerticalAlignment="Bottom" HorizontalAlignment="Left" DragDelta="OnDragDelta"/>
+                       VerticalAlignment="Bottom" HorizontalAlignment="Left" 
+                       DragDelta="OnDragDelta" DragCompleted="OnDragCompleted"
+                       PreviewMouseDown="Thumb_PreviewMouseDown"/>
+                <!--Bottom Right Corner-->
                 <Thumb Width="7" Height="7" Cursor="SizeNWSE" Margin="0 0 -6 -6"
-                       VerticalAlignment="Bottom" HorizontalAlignment="Right" DragDelta="OnDragDelta"/>
+                       VerticalAlignment="Bottom" HorizontalAlignment="Right" 
+                       DragDelta="OnDragDelta" DragCompleted="OnDragCompleted"
+                       PreviewMouseDown="Thumb_PreviewMouseDown"/>
               </Grid>
 
-              <Polygon x:Name="hiddenBoundaryBox" 
-                       Points="{Binding Geometric.BoundingBox.LocalPoints}" 
+              <Polygon x:Name="HiddenBoundaryBox"
+                       Points="{Binding Geometric.BoundingBox.LocalPoints, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                        Fill="Green"
                        Opacity="0.5"/>
             </Grid>
