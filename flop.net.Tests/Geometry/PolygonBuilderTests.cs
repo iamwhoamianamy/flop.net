@@ -67,27 +67,7 @@ namespace flop.net.Tests
          Assert.Equal(rectangle.Points[0], new Point(0, 0));
          Assert.Equal(rectangle.Points[1], new Point(0, 2));
          Assert.Equal(rectangle.Points[2], new Point(1, 2));
-      }
-      [Fact]
-      public void CreateCircleTest()
-      {
-         var pointCenter = new Point(0, 0);
-         var pointCount = 4;
-         var radius = 1;
-         var circle = PolygonBuilder.CreateCircle(pointCenter, radius);
-
-         for (int i = 0; i < pointCount; i++)
-         {
-            if (Math.Abs(circle.Points[i].X) < Eps)
-               circle.Points[i] = new Point(0, circle.Points[i].Y);
-            if (Math.Abs(circle.Points[i].Y) < Eps)
-               circle.Points[i] = new Point(circle.Points[i].X, 0);
-         }
-
-         Assert.Equal(circle.Points[0], new Point(1, 0));
-         Assert.Equal(circle.Points[1], new Point(0, 1));
-         Assert.Equal(circle.Points[2], new Point(-1, 0));
-         Assert.Equal(circle.Points[3], new Point(0, -1));
+         Assert.Equal(rectangle.Points[3], new Point(1, 0));
       }
    }
 }
