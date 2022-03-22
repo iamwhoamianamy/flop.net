@@ -18,6 +18,7 @@ namespace flop.net.Model
       bool IsClosed { get; }
       Point Center { get; }
       bool IsIn(Point position, double eps);
+      Rectangle BoundingBoxRotated { get; }
       Rectangle BoundingBox { get; }
    }
 }
