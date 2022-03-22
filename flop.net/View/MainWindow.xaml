@@ -366,7 +366,7 @@
               PreviewMouseLeftButtonDown="OnPreviewMouseDown"
               PreviewMouseMove="OnPreviewMouseMove"
               PreviewMouseRightButtonDown="OnPreviewMouseRightButtonDown">
-      <ItemsControl ItemsSource="{Binding ActiveLayer.Figures}">
+      <ItemsControl ItemsSource="{Binding ActiveFigureAsCollection}">
         <ItemsControl.ItemsPanel>
           <ItemsPanelTemplate>
             <Canvas IsItemsHost="True"/>

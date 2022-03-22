@@ -346,5 +346,6 @@ namespace flop.net
             MainWindowVM.OnActiveFigureScaling.Execute((scale, scalePoint));
          }
       }
+
    }
 }

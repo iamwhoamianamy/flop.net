@@ -31,9 +31,21 @@ public class MainWindowVM : INotifyPropertyChanged
       set
       {
          activeFigure = value;
+         activeFigureAsCollection.Clear();
+         activeFigureAsCollection.Add(ActiveFigure);
          OnPropertyChanged();
       }
    }
+
+   ObservableCollection<Figure> activeFigureAsCollection = new();
+   public ObservableCollection<Figure> ActiveFigureAsCollection
+   {
+      get
+      {
+         return activeFigureAsCollection;
+      }
+   }
+
    public Layer ActiveLayer { get; set; }
    public ObservableCollection<Layer> Layers { get; set; }
    public Figure FigureOnCreating { get; set; }
