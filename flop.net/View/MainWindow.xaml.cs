@@ -108,11 +108,11 @@ namespace flop.net
             }            
          }
 
-         if(MainWindowVM.ActiveFigure != null && 
-            MainWindowVM.WorkingMode == ViewMode.Scaling)
-         {
-            DrawBoundaryBox(MainWindowVM.ActiveFigure);
-         }
+         //if(MainWindowVM.ActiveFigure != null && 
+         //   MainWindowVM.WorkingMode == ViewMode.Scaling)
+         //{
+         //   DrawBoundaryBox(MainWindowVM.ActiveFigure);
+         //}
       }
       public void DrawBoundaryBox(Figure figure)
       {
@@ -336,10 +336,10 @@ namespace flop.net
       private void OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
       {
          mainWindowVM.SetActiveFigure.Execute(e.GetPosition(MainCanvas));
-         if (mainWindowVM.ActiveFigure != null)
-         {
-            DrawBoundaryBox(mainWindowVM.ActiveFigure);
-         }
+         //if (mainWindowVM.ActiveFigure != null)
+         //{
+         //   DrawBoundaryBox(mainWindowVM.ActiveFigure);
+         //}
       }
    }
 }

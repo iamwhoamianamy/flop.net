@@ -365,12 +365,10 @@
                 PreviewMouseRightButtonDown="OnPreviewMouseRightButtonDown">
       <Canvas x:Name="CoordinateCanvas"
               Background="White"
-              ClipToBounds="True"
-              >
-        <Canvas x:Name="MainCanvas"            
-            >
+              ClipToBounds="True">
+        <Canvas x:Name="MainCanvas">
           <!--Место для вашей рекламы-->
-          <Canvas.RenderTransform>
+          <!--<Canvas.RenderTransform>
             <TransformGroup>
               <TranslateTransform x:Name="translate">
                 <TranslateTransform.X>
@@ -390,11 +388,27 @@
                               CenterX="{Binding ElementName=translate,Path=X}"
                               CenterY="{Binding ElementName=translate,Path=Y}" />
             </TransformGroup>
-          </Canvas.RenderTransform>
+          </Canvas.RenderTransform>-->
+        </Canvas>
+        <Canvas>
+          <ItemsControl x:Name="Test" ItemsSource="{Binding ActiveLayer.Figures}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <view:BoundaryBox BoundaryBoxContainer="{Binding ElementName=BoundaryBoxContainer}" />
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <!--<ItemsControl.ItemContainerStyle>
+              <Style>
+                <Setter Property="Canvas.Left" Value="{Binding Geometric.BoundingBox.TopLeft.X}" />
+                <Setter Property="Canvas.Bottom" Value="{Binding Geometric.BoundingBox.TopLeft.Y}" />
+              </Style>
+            </ItemsControl.ItemContainerStyle>-->
+          </ItemsControl>
+          <!--<Rectangle Name="DraggedImageContainer" />-->
         </Canvas>
       </Canvas>
-
     </UserControl>
+    
     
 
     <StackPanel Grid.Column="1"
