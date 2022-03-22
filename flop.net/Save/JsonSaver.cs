@@ -19,7 +19,7 @@ namespace flop.net.Save
       
       public JsonSaver(string fullFileName)
       {
-         FilePath = Path.GetDirectoryName(fullFileName);
+         FilePath = Path.GetDirectoryName(fullFileName) + "\\\\";
          FileName = Path.GetFileNameWithoutExtension(fullFileName);
       }
 
