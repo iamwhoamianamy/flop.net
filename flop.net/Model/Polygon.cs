@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Media;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace flop.net.Model
@@ -159,6 +160,46 @@ namespace flop.net.Model
             point = Point.Add(point, (Vector)shift);
             Points[i] = point;
          }
+      }
+
+      public virtual Polygon AddPoint(Point newPoint)
+      {
+         var minPoint = Points.OrderBy(x => Math.Sqrt((x.X - newPoint.X) * (x.X - newPoint.X) + (x.Y - newPoint.Y) * (x.Y - newPoint.Y))).First();
+         var index = Points.IndexOf(minPoint);
+         int index_prev = index - 1;
+         int index_next = index + 1;
+         int indexNewPoint = 0;
+
+         if (IsClosed)
+         {
+            if (index == 0)
+            {
+               index_prev = Points.Count - 1;
+            }
+            else if (index == Points.Count - 1)
+            {
+               index_next = 0;
+            }
+
+            var points_distance = new List<double>()
+            {
+               Math.Sqrt((Points[index_prev].X - newPoint.X) * (Points[index_prev].X - newPoint.X) + (Points[index_prev].Y - newPoint.Y) * (Points[index_prev].Y - newPoint.Y)),
+               Math.Sqrt((Points[index_next].X - newPoint.X) * (Points[index_next].X - newPoint.X) + (Points[index_next].Y - newPoint.Y) * (Points[index_next].Y - newPoint.Y))
+            };
+
+            if (points_distance.IndexOf(points_distance.Min(x=>x)) == 0)
+            {
+               indexNewPoint = index;
+            }  
+            else
+            {
+               indexNewPoint = index_next;
+            }
+         }
+
+         var newPoints = Points.Clone();
+         newPoints.Insert(indexNewPoint, newPoint);
+         return new Polygon(newPoints, IsClosed, RotationAngle);
       }
    }
 }
