@@ -49,12 +49,12 @@ namespace flop.net.Save
          File.WriteAllText(FilePath + FileName + ".json", jsonString);
       }
 
-      public ObservableCollection<Layer> RestoreLayersFromJson()
+      public TrulyObservableCollection<Layer> RestoreLayersFromJson()
       {
-         string jsonString = File.ReadAllText(FilePath + FileName + ".json");
+         string jsonString = File.ReadAllText(FilePath + "\\" + FileName + ".json");
          var settings = new JsonSerializerSettings();
          settings.TypeNameHandling = TypeNameHandling.Objects;
-         ObservableCollection<Layer> layers = JsonConvert.DeserializeObject<ObservableCollection<Layer>>(jsonString, settings);
+         TrulyObservableCollection<Layer> layers = (TrulyObservableCollection<Layer>)JsonConvert.DeserializeObject<ObservableCollection<Layer>>(jsonString, settings);
          return layers;
       }
 
