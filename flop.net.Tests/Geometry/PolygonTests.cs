@@ -96,5 +96,35 @@ namespace flop.net.Tests.Geometry
          Assert.True(points.SequenceEqual(ellipse.Points));
 
       }
+      [Fact]
+      public void ScaleEllipseTest()
+      {
+         var pointA = new Point(-2, 1);
+         var pointB = new Point(2, -1);
+         var pointCount = 4;
+         var scale = new Point(0.5,0.075);
+         var scalePoint = new Point(1, 1);
+         var ellipse = PolygonBuilder.CreateEllipse(pointA, pointB, pointCount);
+
+         ellipse.Scale(scale, scalePoint);
+
+         for (var i = 0; i < pointCount; i++)
+         {
+            if (Math.Abs(ellipse.Points[i].X) < Eps)
+               ellipse.Points[i] = new Point(0, Math.Round(ellipse.Points[i].Y));
+            if (Math.Abs(ellipse.Points[i].Y) < Eps)
+               ellipse.Points[i] = new Point(Math.Round(ellipse.Points[i].X), 0);
+         }
+
+         var points = new PointCollection()
+         {
+            new Point(1.15, 1),
+            new Point(1, 1.5),
+            new Point(0.85, 1),
+            new Point(1, 0.5),
+         };
+
+         Assert.True(points.SequenceEqual(ellipse.Points));
+      }
    }
 }
