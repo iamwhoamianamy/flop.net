@@ -31,14 +31,16 @@ namespace flop.net.Model
          {
             foreach (Object item in e.NewItems)
             {
-               ((INotifyPropertyChanged)item).PropertyChanged += ItemPropertyChanged;
+               if (item != null) 
+                  ((INotifyPropertyChanged)item).PropertyChanged += ItemPropertyChanged;
             }
          }
          if (e.OldItems != null)
          {
             foreach (Object item in e.OldItems)
             {
-               ((INotifyPropertyChanged)item).PropertyChanged -= ItemPropertyChanged;
+               if (item != null)
+                  ((INotifyPropertyChanged)item).PropertyChanged -= ItemPropertyChanged;
             }
          }
       }

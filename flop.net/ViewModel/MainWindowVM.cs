@@ -37,8 +37,8 @@ public class MainWindowVM : INotifyPropertyChanged
       }
    }
 
-   private ObservableCollection<Figure> activeFigureAsCollection = new();
-   public ObservableCollection<Figure> ActiveFigureAsCollection
+   private TrulyObservableCollection<Figure> activeFigureAsCollection = new();
+   public TrulyObservableCollection<Figure> ActiveFigureAsCollection
    {
       get { return activeFigureAsCollection; }
       set

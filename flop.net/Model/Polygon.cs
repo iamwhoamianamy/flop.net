@@ -101,7 +101,14 @@ namespace flop.net.Model
                new Point(maxX, minY),
                new Point(minX, minY)
             };
-            return new Rectangle(points);
+            var localPoints = new PointCollection()
+            {
+               new Point(0, 0),
+               new Point(maxX - minX, 0),
+               new Point(maxX - minX, maxY - minY),
+               new Point(0, maxY - minY),
+            };
+            return new Rectangle(points, localPoints);
          }
       }
 
