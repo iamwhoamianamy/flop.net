@@ -59,6 +59,13 @@ namespace flop.net.Model
                new Point(maxX, maxY),
                new Point(minX, maxY),
             };
+            var localPoints = new PointCollection()
+            {
+               new Point(0, 0),
+               new Point(maxX - minX, 0),
+               new Point(maxX - minX, maxY - minY),
+               new Point(0, maxY - minY),
+            };
 
             // Разворот BoundingBox обратно к исходному положению
             Point rectangleCenter = new((points[0].X + points[2].X) / 2, (points[0].Y + points[2].Y) / 2);
@@ -71,7 +78,7 @@ namespace flop.net.Model
                point.Y = oldX * Math.Sin(RotationAngle) + oldY * Math.Cos(RotationAngle);
                points[i] = Point.Add(point, (Vector)rectangleCenter);
             }
-            return new Rectangle(points);
+            return new Rectangle(points, localPoints);
          }
       }
 

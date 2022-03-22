@@ -356,8 +356,91 @@
       </r:RibbonTabItem>
 
     </r:Ribbon>
+
     
-    <UserControl Background="Transparent"
+    <Canvas x:Name="CoordinateCanvas"
+              Background="White"
+              ClipToBounds="True"            
+              Grid.Row="1"
+              Grid.Column="0"
+              PreviewMouseLeftButtonDown="OnPreviewMouseDown"
+              PreviewMouseMove="OnPreviewMouseMove"
+              PreviewMouseRightButtonDown="OnPreviewMouseRightButtonDown">
+      <ItemsControl ItemsSource="{Binding ActiveLayer.Figures}">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <Canvas IsItemsHost="True"/>
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Grid>
+              <Grid>
+                <Thumb Height="3"
+                       Cursor="SizeNS"
+                       Margin="0 -4 0 0" 
+                       VerticalAlignment="Top" 
+                       HorizontalAlignment="Stretch"
+                       Background="Black"
+                       DragDelta="OnDragDelta"
+                       DragCompleted="TopEdgeThumb_DragCompleted"/>
+                <Thumb Width="3" Cursor="SizeWE" Margin="-4 0 0 0"
+                       VerticalAlignment="Stretch" HorizontalAlignment="Left" DragDelta="OnDragDelta"/>
+                <Thumb Width="3" Cursor="SizeWE" Margin="0 0 -4 0"
+                       VerticalAlignment="Stretch" HorizontalAlignment="Right" DragDelta="OnDragDelta"/>
+                <Thumb Height="3" Cursor="SizeNS" Margin="0 0 0 -4"
+                       VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" DragDelta="OnDragDelta"/>
+                <Thumb Width="7" Height="7" Cursor="SizeNWSE" Margin="-6 -6 0 0"
+                       VerticalAlignment="Top" HorizontalAlignment="Left" DragDelta="OnDragDelta"/>
+                <Thumb Width="7" Height="7" Cursor="SizeNESW" Margin="0 -6 -6 0"
+                       VerticalAlignment="Top" HorizontalAlignment="Right" DragDelta="OnDragDelta"/>
+                <Thumb Width="7" Height="7" Cursor="SizeNESW" Margin="-6 0 0 -6"
+                       VerticalAlignment="Bottom" HorizontalAlignment="Left" DragDelta="OnDragDelta"/>
+                <Thumb Width="7" Height="7" Cursor="SizeNWSE" Margin="0 0 -6 -6"
+                       VerticalAlignment="Bottom" HorizontalAlignment="Right" DragDelta="OnDragDelta"/>
+              </Grid>
+
+              <Polygon x:Name="hiddenBoundaryBox" 
+                       Points="{Binding Geometric.BoundingBox.LocalPoints}" 
+                       Fill="Green"
+                       Opacity="0.5"/>
+            </Grid>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+        <ItemsControl.ItemContainerStyle>
+          <Style>
+            <Setter Property="Canvas.Left" Value="{Binding Geometric.BoundingBox.TopLeft.X}" />
+            <Setter Property="Canvas.Top" Value="{Binding Geometric.BoundingBox.TopLeft.Y}" />
+           </Style>
+        </ItemsControl.ItemContainerStyle>
+      </ItemsControl>
+
+      <Canvas x:Name="MainCanvas">
+        <!--<Canvas.RenderTransform>
+          <TransformGroup>
+            <TranslateTransform x:Name="translate">
+              <TranslateTransform.X>
+                <Binding ElementName="CoordinateCanvas" 
+                           Path="ActualWidth"
+                           Converter="{StaticResource MultiplyConverter}" 
+                           ConverterParameter="0,5" />
+              </TranslateTransform.X>
+              <TranslateTransform.Y>
+                <Binding ElementName="CoordinateCanvas" 
+                           Path="ActualHeight"
+                           Converter="{StaticResource MultiplyConverter}"
+                           ConverterParameter="0,5" />
+              </TranslateTransform.Y>
+            </TranslateTransform>
+            <ScaleTransform ScaleX="1" ScaleY="-1"
+                              CenterX="{Binding ElementName=translate,Path=X}"
+                              CenterY="{Binding ElementName=translate,Path=Y}" />
+          </TransformGroup>
+        </Canvas.RenderTransform>-->
+      </Canvas>
+    </Canvas>
+
+    <!--<UserControl Background="Transparent"
                 Grid.Row="1"
                 Grid.Column="0"
                 PreviewMouseLeftButtonDown="OnPreviewMouseDown"
@@ -367,8 +450,7 @@
               Background="White"
               ClipToBounds="True">
         <Canvas x:Name="MainCanvas">
-          <!--Место для вашей рекламы-->
-          <!--<Canvas.RenderTransform>
+          <Canvas.RenderTransform>
             <TransformGroup>
               <TranslateTransform x:Name="translate">
                 <TranslateTransform.X>
@@ -388,26 +470,13 @@
                               CenterX="{Binding ElementName=translate,Path=X}"
                               CenterY="{Binding ElementName=translate,Path=Y}" />
             </TransformGroup>
-          </Canvas.RenderTransform>-->
+          </Canvas.RenderTransform>
         </Canvas>
         <Canvas>
-          <ItemsControl x:Name="Test" ItemsSource="{Binding ActiveLayer.Figures}">
-            <ItemsControl.ItemTemplate>
-              <DataTemplate>
-                <view:BoundaryBox BoundaryBoxContainer="{Binding ElementName=BoundaryBoxContainer}" />
-              </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <!--<ItemsControl.ItemContainerStyle>
-              <Style>
-                <Setter Property="Canvas.Left" Value="{Binding Geometric.BoundingBox.TopLeft.X}" />
-                <Setter Property="Canvas.Bottom" Value="{Binding Geometric.BoundingBox.TopLeft.Y}" />
-              </Style>
-            </ItemsControl.ItemContainerStyle>-->
-          </ItemsControl>
-          <!--<Rectangle Name="DraggedImageContainer" />-->
+          
         </Canvas>
       </Canvas>
-    </UserControl>
+    </UserControl>-->
     
     
 

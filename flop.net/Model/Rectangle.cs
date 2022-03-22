@@ -11,6 +11,7 @@ namespace flop.net.Model
    public class Rectangle
    {
       public PointCollection Points { get; private set; }
+      public PointCollection LocalPoints { get; set; }
       public Point TopLeft { get; set; }
       public Point TopRight { get; set; }
       public Point BotRight{ get; set; }
@@ -20,13 +21,14 @@ namespace flop.net.Model
       public Point LeftCenter => new ((TopLeft.X + BotLeft.X) / 2, (TopLeft.Y + BotLeft.Y) / 2);
       public Point RightCenter => new ((BotRight.X + TopRight.X) / 2, (BotRight.Y + TopRight.Y) / 2);
       public Point Center => new((BotRight.X + TopLeft.X) / 2, (BotRight.Y + TopLeft.Y) / 2);
-      public Rectangle(PointCollection points)
+      public Rectangle(PointCollection points, PointCollection localPoints)
       {
          Points = points.Clone();
+         LocalPoints = localPoints.Clone();
          TopLeft = points[0];
          TopRight = points[1];
          BotRight = points[2];
-         BotLeft = points[3];
+         BotLeft = points[3];         
       }
    }
 }

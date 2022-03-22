@@ -98,9 +98,6 @@
     <Compile Include="ViewModel\MainWindowVM.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="ViewModel\UserCommands.cs" />
-    <Compile Include="View\BoundaryBox.xaml.cs">
-      <DependentUpon>BoundaryBox.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\IGraphic.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -117,10 +114,6 @@
     <Page Include="Styles\MenuButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\BoundaryBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

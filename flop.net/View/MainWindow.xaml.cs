@@ -67,7 +67,8 @@ namespace flop.net
 
          DataContext = MainWindowVM;
          MainWindowVM.ActiveLayer.Figures.CollectionChanged += Figures_CollectionChanged;
-         Graphic = new Graphic(MainCanvas);
+         Graphic = new Graphic(MainCanvas);        
+         
 
          Save.MouseLeftButtonDown += SaveOnMouseLeftButtonDown; 
          DrawAll();
@@ -220,55 +221,15 @@ namespace flop.net
          {
             thumb.Width = 10;
             thumb.Height = 10;
-            thumb.DragDelta += new DragDeltaEventHandler(ResizeThumb_DragDelta);
             thumb.Background = Brushes.LightGreen;
             thumb.BorderBrush = Brushes.DarkGreen;
 
             MainCanvas.Children.Add(thumb);
          }
       }
-      private void ResizeThumb_DragDelta(object sender, DragDeltaEventArgs e)
+      private void OnDragDelta(object sender, DragDeltaEventArgs e)
       {
-         Point delta = new Point(e.HorizontalChange, e.VerticalChange);
-         Point scalePoint = new Point(0, 0);
-
-         var box = MainWindowVM.ActiveFigure.Geometric.BoundingBox;
-
-         Point size = (Point)(box.TopLeft - box.BotRight);         
-         var thumb = e.OriginalSource as Thumb;
-
-         Point scale = new Point((size.X + delta.X) / size.X, (size.Y + delta.Y) / size.Y);
-
-         switch (thumb.VerticalAlignment)
-         {
-            case VerticalAlignment.Top:
-               scalePoint.Y = box.BotCenter.Y;
-               break;
-            case VerticalAlignment.Center:
-               scale.Y = 1;
-               break;
-            case VerticalAlignment.Bottom:
-               scalePoint.Y = box.TopCenter.Y;
-               break;
-         }
-
-         switch (thumb.HorizontalAlignment)
-         {
-            case HorizontalAlignment.Left:
-               scalePoint.X = box.RightCenter.X;
-               break;
-            case HorizontalAlignment.Center:
-               scale.X = 1;
-               break;
-            case HorizontalAlignment.Right:
-               scalePoint.Y = box.LeftCenter.Y;
-               break;
-         }
-
-         if(MainWindowVM.WorkingMode == ViewMode.Scaling)
-         {
-            MainWindowVM.OnActiveFigureScaling.Execute((scale, scalePoint));
-         }
+         
       }
       private void OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
       {
@@ -340,6 +301,50 @@ namespace flop.net
          //{
          //   DrawBoundaryBox(mainWindowVM.ActiveFigure);
          //}
+      }
+
+      private void TopEdgeThumb_DragCompleted(object sender, DragCompletedEventArgs e)
+      {
+         Point delta = new Point(e.HorizontalChange, e.VerticalChange);
+         Point scalePoint = new Point(0, 0);
+
+         var box = MainWindowVM.ActiveFigure.Geometric.BoundingBox;
+
+         Point size = (Point)(box.TopLeft - box.BotRight);
+         var thumb = e.OriginalSource as Thumb;
+
+         Point scale = new Point((size.X + delta.X) / size.X, (size.Y + delta.Y) / size.Y);
+
+         switch (thumb.VerticalAlignment)
+         {
+            case VerticalAlignment.Top:
+               scalePoint.Y = box.BotCenter.Y;
+               break;
+            case VerticalAlignment.Center:
+               scale.Y = 1;
+               break;
+            case VerticalAlignment.Bottom:
+               scalePoint.Y = box.TopCenter.Y;
+               break;
+         }
+
+         switch (thumb.HorizontalAlignment)
+         {
+            case HorizontalAlignment.Left:
+               scalePoint.X = box.RightCenter.X;
+               break;
+            case HorizontalAlignment.Center:
+               scale.X = 1;
+               break;
+            case HorizontalAlignment.Right:
+               scalePoint.Y = box.LeftCenter.Y;
+               break;
+         }
+
+         if (MainWindowVM.WorkingMode == ViewMode.Scaling)
+         {
+            MainWindowVM.OnActiveFigureScaling.Execute((scale, scalePoint));
+         }
       }
    }
 }
