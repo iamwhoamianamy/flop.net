@@ -181,7 +181,7 @@ namespace flop.net.Model
          }
       }
 
-      public virtual Polygon AddPoint(Point newPoint)
+      public Polygon AddPoint(Point newPoint)
       {
          var minPoint = Points.OrderBy(x => Math.Sqrt((x.X - newPoint.X) * (x.X - newPoint.X) + (x.Y - newPoint.Y) * (x.Y - newPoint.Y))).First();
          var index = Points.IndexOf(minPoint);
