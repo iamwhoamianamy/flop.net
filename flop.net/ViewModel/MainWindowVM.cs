@@ -39,7 +39,7 @@ public class MainWindowVM : INotifyPropertyChanged
    public Figure FigureOnCreating { get; set; }
    public ViewMode WorkingMode { get; set; }
    public FigureCreationMode СurrentFigureType { get; set; }
-   public ViewMode Mode { get; set; } = ViewMode.Default;
+   public ViewMode Mode { get; set; }
 
    public RelayCommand Undo
    {
@@ -830,13 +830,9 @@ public class MainWindowVM : INotifyPropertyChanged
                   var flpSaver = new JsonSaver(parameters.FileName);
                   Layers = flpSaver.Restore();
                   ActiveLayer = Layers[0];
+                  ReloadData();
                   break;
-               //case OpenTypes.Json:
-               //   var jsonSaver = new JsonSaver(parameters.FileName);
-               //   Layers = jsonSaver.RestoreLayersFromJson();
-               //   break;
             }
-            OnPropertyChanged();
          });
          return open;
       }
@@ -870,6 +866,11 @@ public class MainWindowVM : INotifyPropertyChanged
       Layers.Add(new Layer());
       ActiveLayer = Layers.Last();
 
+      ReloadData();
+   }
+
+   private void ReloadData()
+   {
       RedoStack = new Stack<UserCommands>();
       UndoStack = new Stack<UserCommands>();
       DeletedFigures = new Stack<Figure>();
@@ -880,6 +881,7 @@ public class MainWindowVM : INotifyPropertyChanged
       palletCommands = new List<RelayCommand> { };
       CreationDrawingParameters = new DrawingParameters();
       summary_moving_delta = new Vector();
+      WorkingMode = ViewMode.Default;
 
       Layers.CollectionChanged += Layers_CollectionChanged;      
    }
