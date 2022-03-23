@@ -351,7 +351,7 @@ namespace flop.net
          if (mainWindowVM.WorkingMode == ViewMode.Rotating &&
             WorkingMode == ViewMode.Default)
          {
-            //mainWindowVM.BeginActiveFigureRotating.Execute(null);
+            mainWindowVM.BeginActiveFigureRotating.Execute(null);
             WorkingMode = ViewMode.Rotating;
 
             MousePosition1 = e.GetPosition(MainCanvas);
@@ -369,12 +369,20 @@ namespace flop.net
             Vector a = MousePosition1 - center;
             Vector b = MousePosition2 - center;
 
-            double angle = Math.Acos((a.X * b.X + a.Y * b.Y) / (a.LengthSquared * b.LengthSquared));
+            double angle = Math.Acos(Math.Round((a.X * b.X + a.Y * b.Y) / (a.Length * b.Length), 6));
 
             if (MainWindowVM.WorkingMode == ViewMode.Rotating) 
-            {
-               //MainWindowVM.OnActiveFigureRotating.Execute((angle - previousAngle));
-               previousAngle += angle;
+            {               
+               if (Math.Abs(angle - Math.PI) < 10e-2) 
+               {                  
+                  angle = 0;
+                  //previousAngle = 0;
+               }
+               MainWindowVM.OnActiveFigureRotating.Execute(new double?(angle - previousAngle));
+
+
+               previousAngle = angle;
+
             }
          }
       }
@@ -382,7 +390,7 @@ namespace flop.net
       {
          if (WorkingMode == ViewMode.Rotating) 
          {
-            //MainWindowVM.OnFigureRotatingFinished.Execute(null);
+            MainWindowVM.OnFigureRotatingFinished.Execute(null);
             previousAngle = 0;
             WorkingMode = ViewMode.Default;
          }

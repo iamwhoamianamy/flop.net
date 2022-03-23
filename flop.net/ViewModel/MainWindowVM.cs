@@ -239,6 +239,7 @@ public class MainWindowVM : INotifyPropertyChanged
             else if (WorkingMode == ViewMode.Rotating)
                WorkingMode = ViewMode.Default;
             СurrentFigureType = FigureCreationMode.None;
+            OnPropertyChanged();
          }, isModifyingAvailable);
          if (!palletCommands.Contains(toggleRotating))
             palletCommands.Add(toggleRotating);
@@ -293,6 +294,16 @@ public class MainWindowVM : INotifyPropertyChanged
          });
       }
    }
+   public RelayCommand BeginActiveFigureRotating
+   {
+      get
+      {
+         return new RelayCommand(_ =>
+         {
+            summary_rotate_angle = 0;
+         });
+      }
+   }
    public RelayCommand OnActiveFigureMoving
    {
       get
@@ -334,9 +345,9 @@ public class MainWindowVM : INotifyPropertyChanged
          return new RelayCommand(obj =>
          {
             var angle = obj as double?;
-            summary_rotate_angle = (double)angle;
+            summary_rotate_angle = angle.Value;
             if (ActiveFigure != null)
-               ActiveFigure.Geometric.Rotate((double)angle);
+               ActiveFigure.Rotate((double)angle);
          });
       }
    }

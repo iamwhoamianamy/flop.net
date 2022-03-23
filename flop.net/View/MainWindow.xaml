@@ -236,18 +236,17 @@
                     <r:ToggleButton Header="Перемещение"
                           ToolTip="Перемещение фигуры"
                           Command="{Binding ToggleMoving}"
-                          IsChecked="{Binding ToggleMoving.IsPressed}" 
-                                    
+                          IsChecked="{Binding ToggleMoving.IsPressed}"                                     
                           Style="{StaticResource RibbonMenuButton}" />
                     <r:ToggleButton Header="Масштабирование"
                           ToolTip="Масштабирование фигуры"
                           Command="{Binding ToggleScaling}"
-                          IsChecked="{Binding ToggleScaling.IsPressed}" 
-                                    
+                          IsChecked="{Binding ToggleScaling.IsPressed}"                                     
                           Style="{StaticResource RibbonMenuButton}" />
                     <r:ToggleButton Header="Поворот"
                           ToolTip="Поворот фигуры"
-                          Command="{Binding RotateFigure}"
+                          Command="{Binding ToggleRotating}"
+                          IsChecked="{Binding ToggleRotating.IsPressed}"                                     
                           Style="{StaticResource RibbonMenuButton}" />
                     <r:ToggleButton Header="Удаление"
                           ToolTip="Удаление фигуры"
