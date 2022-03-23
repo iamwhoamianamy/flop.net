@@ -350,6 +350,8 @@ public class MainWindowVM : INotifyPropertyChanged
                   throw new InvalidOperationException();
                DeletedFigures.Push(figure);
                ActiveLayer.Figures.Remove(figure);
+
+               activeFigure = null;
             };
             UndoStack.Push(new UserCommands(redo, undo));
          });
