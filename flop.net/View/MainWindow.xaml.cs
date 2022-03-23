@@ -75,6 +75,8 @@ namespace flop.net
          DataContext = MainWindowVM;
          MainWindowVM.ActiveLayer.Figures.CollectionChanged += Figures_CollectionChanged;
          MainWindowVM.PropertyChanged += MainWindowVM_PropertyChanged;
+         MainWindowVM.TempDrawingParameters.PropertyChanged += TempDrawingParametrs_PropertyChanged;
+         
          Graphic = new Graphic(MainCanvas);
 
          Save.MouseLeftButtonDown += SaveOnMouseLeftButtonDown;
@@ -85,6 +87,14 @@ namespace flop.net
 
          Open.MouseLeftButtonDown += OpenOnMouseLeftButtonDown;
          DrawAll();
+      }
+
+      private void TempDrawingParametrs_PropertyChanged(object sender, PropertyChangedEventArgs e)
+      {
+         if (FigureEditor.Visibility == Visibility.Visible) 
+         {
+            MainWindowVM.UpdateActiveFigureDrawingParameters.Execute(null);
+         }
       }
 
       private void InitScalingThumbs()
@@ -506,13 +516,7 @@ namespace flop.net
 
       private void OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
       {
-         mainWindowVM.SetActiveFigure.Execute(e.GetPosition(MainCanvas));
-
-      }
-
-      private void SelectedFillColorButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-      {
-         mainWindowVM.UpdateActiveFigureDrawingParameters.Execute(null);
+         mainWindowVM.SetActiveFigure.Execute(e.GetPosition(MainCanvas));         
       }
    }
 }

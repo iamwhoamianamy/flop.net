@@ -87,6 +87,12 @@ public class MainWindowVM : INotifyPropertyChanged
          RedoStack.Push(undoCommand);
          undoCommand.UnExecute.Execute(null);
 
+         if (ActiveFigure == null)
+         {
+            FigureEditorVisibility = Visibility.Collapsed;
+            return;
+         }
+
          OnPropertyChanged();
       }
    }
@@ -98,6 +104,12 @@ public class MainWindowVM : INotifyPropertyChanged
          var redoCommand = RedoStack.Pop();
          UndoStack.Push(redoCommand);
          redoCommand.Execute.Execute(null);
+
+         if (ActiveFigure == null)
+         {
+            FigureEditorVisibility = Visibility.Collapsed;
+            return;
+         }
 
          OnPropertyChanged();
       }
@@ -123,23 +135,48 @@ public class MainWindowVM : INotifyPropertyChanged
          return new RelayCommand(obj =>
          {
             var mouseCoords = obj as Point?;
+            bool flag = false;
 
             ActiveFigure = null;
 
             var ReverseFiguresList = ActiveLayer.Figures.Reverse<Figure>();
+
             foreach (var figure in ReverseFiguresList)
             {
                if (figure.Geometric.IsIn(mouseCoords.Value, 1e-1))
                {
                   ActiveFigure = figure;
                   ActiveFigureDrawingParameters = figure.DrawingParameters;
+                  TempDrawingParameters.Copy(figure.DrawingParameters);
+                  flag = true;
                   break;
-               }
+               }               
             }
+            FigureEditorVisibility = (flag) ? Visibility.Visible : Visibility.Collapsed;
          });
       }
    }
 
+   private DrawingParameters tempDrawingParametrs;
+   public DrawingParameters TempDrawingParameters
+   {
+      get { return tempDrawingParametrs; }
+      set
+      {
+         tempDrawingParametrs = value;
+         OnPropertyChanged();
+      }
+   }
+   private Visibility figureEditorVisibility;
+   public Visibility FigureEditorVisibility
+   {
+      get { return figureEditorVisibility; }
+      set
+      {
+         figureEditorVisibility = value;
+         OnPropertyChanged();
+      }
+   }
    private DrawingParameters ActiveFigureDrawingParameters;
    private RelayCommand updateActiveFigureDrawingParameters;
    public RelayCommand UpdateActiveFigureDrawingParameters
@@ -148,23 +185,28 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          return updateActiveFigureDrawingParameters ??= new RelayCommand( _ =>
          {
-            if (ActiveFigure.DrawingParameters != ActiveFigureDrawingParameters)
+            if(!ActiveFigure.DrawingParameters.Compare(TempDrawingParameters))
             {
                RedoStack.Clear();
                Figure figure = activeFigure;
-               DrawingParameters newDrawingParameters = new DrawingParameters(ActiveFigure.DrawingParameters);
-               DrawingParameters oldDrawingParameters = new DrawingParameters(ActiveFigureDrawingParameters);
+
+               DrawingParameters newDrawingParameters = new DrawingParameters(TempDrawingParameters);
+               DrawingParameters oldDrawingParameters = new DrawingParameters(ActiveFigure.DrawingParameters);
+
+               activeFigure.DrawingParameters.Copy(TempDrawingParameters);
 
                OnPropertyChanged();
 
                Action<object> redo = (_) =>
                {
                   figure.DrawingParameters = newDrawingParameters;
+                  TempDrawingParameters = newDrawingParameters;
                };
 
                Action<object> undo = (_) =>
                {
                   figure.DrawingParameters = oldDrawingParameters;
+                  TempDrawingParameters = oldDrawingParameters;
                };
                UndoStack.Push(new UserCommands(redo, undo));
             }
@@ -778,12 +820,20 @@ public class MainWindowVM : INotifyPropertyChanged
       UndoStack = new Stack<UserCommands>();
       DeletedFigures = new Stack<Figure>();
       activeFigure = null;
+      TempDrawingParameters = new DrawingParameters();
+      FigureEditorVisibility = Visibility.Collapsed;
       СurrentFigureType = FigureCreationMode.None;
       palletCommands = new List<RelayCommand> { };
       CreationDrawingParameters = new DrawingParameters();
       summary_moving_delta = new Vector();
 
       Layers.CollectionChanged += Layers_CollectionChanged;
+      TempDrawingParameters.PropertyChanged += TempDrawingParameters_PropertyChanged;
+   }
+
+   private void TempDrawingParameters_PropertyChanged(object sender, PropertyChangedEventArgs e)
+   {
+      OnPropertyChanged();
    }
 
    private void Layers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
