@@ -200,13 +200,13 @@ public class MainWindowVM : INotifyPropertyChanged
                Action<object> redo = (_) =>
                {
                   figure.DrawingParameters = newDrawingParameters;
-                  TempDrawingParameters = newDrawingParameters;
+                  //TempDrawingParameters = newDrawingParameters;
                };
 
                Action<object> undo = (_) =>
                {
                   figure.DrawingParameters = oldDrawingParameters;
-                  TempDrawingParameters = oldDrawingParameters;
+                  //TempDrawingParameters = oldDrawingParameters;
                };
                UndoStack.Push(new UserCommands(redo, undo));
             }
@@ -349,6 +349,7 @@ public class MainWindowVM : INotifyPropertyChanged
                case FigureCreationMode.Polygon:
                   break;
                case FigureCreationMode.Polyline:
+                  //ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreatePolyline(new Point(0, 0), new Point(0, 0)), new DrawingParameters(CreationDrawingParameters)));
                   break;
                case FigureCreationMode.Rectangle:
                   ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateRectangle(new Point(0, 0), new Point(0, 0)), new DrawingParameters(CreationDrawingParameters)));
@@ -634,14 +635,29 @@ public class MainWindowVM : INotifyPropertyChanged
          {
             switchButtonSelection(togglePolylineCreation, palletCommands);
             СurrentFigureType = СurrentFigureType == FigureCreationMode.Polyline ? FigureCreationMode.None : FigureCreationMode.Polyline;
-            WorkingMode = СurrentFigureType == FigureCreationMode.Polyline ? ViewMode.Creation : ViewMode.Default;
+            WorkingMode = СurrentFigureType == FigureCreationMode.Polyline ? ViewMode.PolylineCreation : ViewMode.Default;
          });
          if (!palletCommands.Contains(togglePolylineCreation))
             palletCommands.Add(togglePolylineCreation);
          return togglePolylineCreation;
       }
    }
-
+   private RelayCommand togglePencilDrawing;
+   public RelayCommand TogglePencilDrawing
+   {
+      get
+      {
+         togglePencilDrawing ??= new RelayCommand(_ =>
+         {
+            switchButtonSelection(togglePencilDrawing, palletCommands);
+            СurrentFigureType = СurrentFigureType == FigureCreationMode.Polyline ? FigureCreationMode.None : FigureCreationMode.Polyline;
+            WorkingMode = СurrentFigureType == FigureCreationMode.Polyline ? ViewMode.PencilDrawing : ViewMode.Default;
+         });
+         if (!palletCommands.Contains(togglePencilDrawing))
+            palletCommands.Add(togglePencilDrawing);
+         return togglePencilDrawing;
+      }
+   }
    private RelayCommand togglePolygonCreation;
    public RelayCommand TogglePolygonCreation
    {

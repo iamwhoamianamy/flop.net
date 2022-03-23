@@ -108,7 +108,6 @@ namespace flop.net
             thumb.DragCompleted += ScalingThumb_DragCompleted;
          }
       }
-
       private void ScalingThumb_PreviewMouseDown(object sender, MouseButtonEventArgs e)
       {
          if (mainWindowVM.WorkingMode == ViewMode.Scaling &&
@@ -288,7 +287,6 @@ namespace flop.net
 
          DrawAll();
       }
-
       private void InitMovingThumb()
       {
          MovingThumb = new Thumb();
@@ -305,7 +303,6 @@ namespace flop.net
          MovingThumb.PreviewMouseMove += MovingThumb_PreviewMouseMove;
          MovingThumb.PreviewMouseDown += MovingThumb_PreviewMouseDown;
       }
-
       private void MovingThumb_PreviewMouseDown(object sender, MouseButtonEventArgs e)
       {
          MousePosition1 = e.GetPosition(MainCanvas);
@@ -319,7 +316,6 @@ namespace flop.net
             MousePosition2 = e.GetPosition(MainCanvas);
          }
       }
-
       private void MovingThumb_PreviewMouseMove(object sender, MouseEventArgs e)
       {
          if (mainWindowVM.WorkingMode == ViewMode.Moving &&
@@ -335,7 +331,6 @@ namespace flop.net
          {
             WorkingMode = ViewMode.Default;
             mainWindowVM.OnFigureMovingFinished.Execute(null);
-            OnPreviewMouseUp(sender, null);
          }
       }
       private void InitRotatingThumb()
@@ -367,7 +362,6 @@ namespace flop.net
             MousePosition1 = e.GetPosition(MainCanvas);
          }
       }
-
       private void RotatingThumb_PreviewMouseMove(object sender, MouseEventArgs e)
       {
          if (WorkingMode == ViewMode.Rotating)
@@ -398,7 +392,6 @@ namespace flop.net
             WorkingMode = ViewMode.Default;
          }
       }
-
       private void SaveOnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
       {
 
@@ -414,7 +407,6 @@ namespace flop.net
             Width = (int)MainCanvas.ActualWidth, Height = (int)MainCanvas.ActualHeight, Canv = MainCanvas,
             FileName = saveDialog.FileName});
       }
-
       private void OpenOnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
       {
 
@@ -432,19 +424,10 @@ namespace flop.net
             FileName = openDialog.FileName
          });
       }
-
       private void Figures_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
       {
          DrawAll();
-      }
-
-      public event PropertyChangedEventHandler PropertyChanged;
-
-      [NotifyPropertyChangedInvocator]
-      protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-      {
-         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-      }
+      }      
       public void DrawAll()
       {
          Graphic.CleanCanvas();
@@ -472,7 +455,6 @@ namespace flop.net
             MainCanvas.Children.Add(thumb);
          }
       }
-
       private void OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
       {
          MousePosition1 = e.GetPosition(MainCanvas);
@@ -483,8 +465,19 @@ namespace flop.net
             mainWindowVM.BeginFigureCreation.Execute(null);
             WorkingMode = ViewMode.Creation;
          }
+         if (mainWindowVM.WorkingMode == ViewMode.PolylineCreation &&
+            WorkingMode == ViewMode.Default)
+         {
+            mainWindowVM.BeginFigureCreation.Execute(null);
+            WorkingMode = ViewMode.PolylineCreation;
+         }
+         if (mainWindowVM.WorkingMode == ViewMode.PencilDrawing &&
+            WorkingMode == ViewMode.Default)
+         {
+            mainWindowVM.BeginFigureCreation.Execute(null);
+            WorkingMode = ViewMode.PencilDrawing;
+         }
       }
-
       private void OnPreviewMouseMove(object sender, MouseEventArgs e)
       {
          if (mainWindowVM.WorkingMode == ViewMode.Creation &&
@@ -492,31 +485,40 @@ namespace flop.net
          {
             mainWindowVM.OnFigureCreation.Execute((MousePosition1, e.GetPosition(MainCanvas)));
          }
+         if (mainWindowVM.WorkingMode == ViewMode.PolylineCreation &&
+            WorkingMode == ViewMode.PolylineCreation)
+         {
+            //mainWindowVM.OnPolylineCreation.Execute((MousePosition1, e.GetPosition(MainCanvas)));
+         }
+         if (mainWindowVM.WorkingMode == ViewMode.PencilDrawing &&
+            WorkingMode == ViewMode.PencilDrawing)
+         {
+            //mainWindowVM.OnPencilDrawingCreation.Execute((MousePosition1, e.GetPosition(MainCanvas)));
+         }
 
-         if (e.LeftButton == MouseButtonState.Released &&
-            mainWindowVM.WorkingMode == ViewMode.Creation &&
-            WorkingMode == ViewMode.Creation)
+         bool creation = (mainWindowVM.WorkingMode == ViewMode.Creation &&
+                         WorkingMode == ViewMode.Creation) ||
+                         (mainWindowVM.WorkingMode == ViewMode.PolylineCreation &&
+                         WorkingMode == ViewMode.PolylineCreation) ||
+                         (mainWindowVM.WorkingMode == ViewMode.PencilDrawing &&
+                         WorkingMode == ViewMode.PencilDrawing);
+         if (e.LeftButton == MouseButtonState.Released && creation)
          {
             WorkingMode = ViewMode.Default;
             mainWindowVM.OnFigureCreationFinished.Execute(null);
-            OnPreviewMouseUp(sender, null);
          }
 
-         //if (e.LeftButton == MouseButtonState.Released)
-         //{
-         //   WorkingMode = ViewMode.Default;
-         //   OnPreviewMouseUp(sender, null);
-         //}
       }
-
-      private void OnPreviewMouseUp(object sender, MouseButtonEventArgs e)
-      {
-         // Место для рекламы ваших заканчивающих команд
-      }
-
       private void OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
       {
          mainWindowVM.SetActiveFigure.Execute(e.GetPosition(MainCanvas));         
+      }
+      public event PropertyChangedEventHandler PropertyChanged;
+
+      [NotifyPropertyChangedInvocator]
+      protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+      {
+         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
       }
    }
 }
