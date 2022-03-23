@@ -20,6 +20,7 @@ namespace flop.net.Model
       bool IsIn(Point position, double eps);
       Rectangle BoundingBoxRotated { get; }
       Rectangle BoundingBox { get; }
+      void MovePoint(Point pointToMove, Vector delta);
       Polygon AddPoint(Point newPoint);
    }
 }
