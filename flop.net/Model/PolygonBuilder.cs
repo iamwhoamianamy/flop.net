@@ -64,7 +64,7 @@ namespace flop.net.Model
          double w = Math.Abs(pointA.X - pointB.X);
          if(pointCount == null)
          {
-            pointCount = (int)Math.Round(4 * (Math.PI * h * w + (w - h) * (w - h)) / (w + h));
+            pointCount = (int)Math.Sqrt(Math.Round(4 * (Math.PI * h * w + (w - h) * (w - h)) / (w + h)) * 2);
          }
 
          if (pointCount.Value < 3)
