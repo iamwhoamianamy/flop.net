@@ -55,7 +55,10 @@ public class SvgSaver
       WriteBegin();
       foreach (var item in _layers.Figures)
       {
-         WritePolygon(item);
+         if (item.Geometric.IsClosed == true)
+            WritePolygon(item);
+         else
+            WritePolyline(item);
       }
       WriteEnd();
    }
@@ -89,6 +92,16 @@ public class SvgSaver
       _xmlWriter.WriteAttributeString("fill", $"{HexConverter(figure.DrawingParameters.Fill)}");
       _xmlWriter.WriteAttributeString("stroke",$"{HexConverter(figure.DrawingParameters.Stroke)}");
       _xmlWriter.WriteAttributeString("stroke-width",$"{figure.DrawingParameters.StrokeThickness}");
+      _xmlWriter.WriteEndElement();
+   }
+
+   private void WritePolyline(Model.Figure figure)
+   {
+      _xmlWriter.WriteStartElement("polyline");
+      _xmlWriter.WriteAttributeString("points", WritePoints(figure.Geometric));
+      _xmlWriter.WriteAttributeString("fill", "none");
+      _xmlWriter.WriteAttributeString("stroke", $"{HexConverter(figure.DrawingParameters.Fill)}");
+      _xmlWriter.WriteAttributeString("stroke-width", $"{figure.DrawingParameters.StrokeThickness}");
       _xmlWriter.WriteEndElement();
    }
    private String HexConverter(Color c)

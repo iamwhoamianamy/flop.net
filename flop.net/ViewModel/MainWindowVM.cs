@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Collections.Generic;
@@ -198,11 +198,13 @@ public class MainWindowVM : INotifyPropertyChanged
                Action<object> redo = (_) =>
                {
                   figure.DrawingParameters = newDrawingParameters;
+                  //TempDrawingParameters = newDrawingParameters;
                };
 
                Action<object> undo = (_) =>
                {
                   figure.DrawingParameters = oldDrawingParameters;
+                  //TempDrawingParameters = oldDrawingParameters;
                };
                UndoStack.Push(new UserCommands(redo, undo));
             }

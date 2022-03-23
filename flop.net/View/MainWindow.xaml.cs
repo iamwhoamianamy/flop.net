@@ -89,6 +89,59 @@ namespace flop.net
          Open.MouseLeftButtonDown += OpenOnMouseLeftButtonDown;
          DrawAll();
       }
+      private void MainWindowVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+      {
+         if (MainWindowVM.ActiveFigure is not null)
+         {
+            if (MainWindowVM.WorkingMode == ViewMode.Moving)
+            {
+               var center = mainWindowVM.ActiveFigure.Geometric.BoundingBox.Center;
+               MovingThumb.Margin = new Thickness(center.X, center.Y, -center.X, -center.Y);
+               MovingThumb.Visibility = Visibility.Visible;
+            }
+            else
+            {
+               MovingThumb.Visibility = Visibility.Hidden;
+            }
+
+            if (MainWindowVM.WorkingMode == ViewMode.Rotating)
+            {
+               var center = mainWindowVM.ActiveFigure.Geometric.BoundingBoxRotated.BotCenter;
+               RotatingThumb.Margin = new Thickness(center.X, center.Y, -center.X, -center.Y);
+               RotatingThumb.Visibility = Visibility.Visible;
+            }
+            else
+            {
+               RotatingThumb.Visibility = Visibility.Hidden;
+            }
+
+            if (MainWindowVM.WorkingMode == ViewMode.Scaling)
+            {
+               scalingThumbs.Visibility = Visibility.Visible;
+               scalingThumbs.Box = MainWindowVM.ActiveFigure.Geometric.BoundingBox;
+            }
+            else
+            {
+               scalingThumbs.Visibility = Visibility.Hidden;
+            }
+         }
+         else
+         {
+            MovingThumb.Visibility = Visibility.Hidden;
+            RotatingThumb.Visibility = Visibility.Hidden;
+            scalingThumbs.Visibility = Visibility.Hidden;
+         }
+
+         DrawAll();
+      }
+
+      private void TempDrawingParametrs_PropertyChanged(object sender, PropertyChangedEventArgs e)
+      {
+         if (FigureEditor.Visibility == Visibility.Visible) 
+         {
+            MainWindowVM.UpdateActiveFigureDrawingParameters.Execute(null);
+         }
+      }
 
       
 
