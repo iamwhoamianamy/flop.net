@@ -13,6 +13,7 @@ namespace flop.net.Enums
       Triangle,
       Ellipse,
       Polyline,
-      Polygon
+      Polygon,
+      Pencil
    }
 }
