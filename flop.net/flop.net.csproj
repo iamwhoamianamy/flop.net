@@ -185,6 +185,12 @@
   <ItemGroup>
     <Resource Include="Images\reset.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\breakline.png" />
+    <Resource Include="Images\delete.png" />
+    <Resource Include="Images\move.png" />
+    <Resource Include="Images\triangle.png" />
+    <Resource Include="Images\turn.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
