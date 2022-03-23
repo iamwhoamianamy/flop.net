@@ -71,12 +71,16 @@ namespace flop.net
          InitializeComponent();
 
          MainWindowVM = new MainWindowVM();
+         ReloadData();
+      }
 
+      private void ReloadData()
+      {
          DataContext = MainWindowVM;
          MainWindowVM.ActiveLayer.Figures.CollectionChanged += Figures_CollectionChanged;
          MainWindowVM.PropertyChanged += MainWindowVM_PropertyChanged;
          MainWindowVM.TempDrawingParameters.PropertyChanged += TempDrawingParametrs_PropertyChanged;
-         
+
          Graphic = new Graphic(MainCanvas);
 
          Save.MouseLeftButtonDown += SaveOnMouseLeftButtonDown;
@@ -86,8 +90,12 @@ namespace flop.net
          InitScalingThumbs();
 
          Open.MouseLeftButtonDown += OpenOnMouseLeftButtonDown;
+
+         WorkingMode = ViewMode.Default;
+
          DrawAll();
       }
+
       private void MainWindowVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
       {
          if (MainWindowVM.ActiveFigure is not null)
@@ -423,6 +431,8 @@ namespace flop.net
             Format = System.IO.Path.GetExtension(openDialog.FileName).Replace(".", ""),
             FileName = openDialog.FileName
          });
+
+         ReloadData();
       }
       private void Figures_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
       {
