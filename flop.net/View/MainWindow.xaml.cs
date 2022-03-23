@@ -250,8 +250,8 @@ namespace flop.net
 
             if (MainWindowVM.WorkingMode == ViewMode.Rotating)
             {
-               var topCenter = mainWindowVM.ActiveFigure.Geometric.BoundingBox.TopCenter;
-               RotatingThumb.Margin = new Thickness(topCenter.X + 20, topCenter.Y + 20, -topCenter.X - 20, -topCenter.Y - 20);
+               var box = mainWindowVM.ActiveFigure.Geometric.BoundingBoxRotated;
+               RotatingThumb.Margin = new Thickness(box.TopCenter.X, box.TopCenter.Y, -box.TopCenter.X, -box.TopCenter.Y);
                RotatingThumb.Visibility = Visibility.Visible;
             }
             else
@@ -372,17 +372,10 @@ namespace flop.net
             double angle = Math.Acos(Math.Round((a.X * b.X + a.Y * b.Y) / (a.Length * b.Length), 6));
 
             if (MainWindowVM.WorkingMode == ViewMode.Rotating) 
-            {               
-               if (Math.Abs(angle - Math.PI) < 10e-2) 
-               {                  
-                  angle = 0;
-                  //previousAngle = 0;
-               }
-               MainWindowVM.OnActiveFigureRotating.Execute(new double?(angle - previousAngle));
-
+            {
+               MainWindowVM.OnActiveFigureRotating.Execute(new double?((angle - previousAngle) * Math.Sign(Vector.CrossProduct(a, b))));
 
                previousAngle = angle;
-
             }
          }
       }

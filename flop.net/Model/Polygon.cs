@@ -155,7 +155,6 @@ namespace flop.net.Model
          {
             rotationCenter = Center;
          }
-         //var degToRad = angle * Math.PI / 180;
          RotationAngle += angle;
          for (var i = 0; i < Points.Count; i++)
          {

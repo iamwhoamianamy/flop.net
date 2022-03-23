@@ -345,7 +345,7 @@ public class MainWindowVM : INotifyPropertyChanged
          return new RelayCommand(obj =>
          {
             var angle = obj as double?;
-            summary_rotate_angle = angle.Value;
+            summary_rotate_angle += angle.Value;
             if (ActiveFigure != null)
                ActiveFigure.Rotate((double)angle);
          });
