@@ -236,7 +236,8 @@
                     <r:ToggleButton Header="Удаление"
                           ToolTip="Удаление фигуры"
                           Icon="/Images/delete.png"
-                          Command="{Binding DeleteFigure}"
+                          Command="{Binding ToggleDeleting}"
+                          IsChecked="{Binding ToggleDeleting.IsPressed}"
                           Style="{StaticResource RibbonMenuButton}" />
                 </r:RibbonGroupBox>
 

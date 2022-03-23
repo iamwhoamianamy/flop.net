@@ -90,6 +90,7 @@ public class SvgSaver
       _xmlWriter.WriteStartElement("polygon");
       _xmlWriter.WriteAttributeString("points", WritePoints(figure.Geometric));
       _xmlWriter.WriteAttributeString("fill", $"{HexConverter(figure.DrawingParameters.Fill)}");
+      _xmlWriter.WriteAttributeString("opacity", $"{figure.DrawingParameters.Opacity.ToString().Replace(",", ".")}");
       _xmlWriter.WriteAttributeString("stroke",$"{HexConverter(figure.DrawingParameters.Stroke)}");
       _xmlWriter.WriteAttributeString("stroke-width",$"{figure.DrawingParameters.StrokeThickness}");
       _xmlWriter.WriteEndElement();
@@ -100,6 +101,7 @@ public class SvgSaver
       _xmlWriter.WriteStartElement("polyline");
       _xmlWriter.WriteAttributeString("points", WritePoints(figure.Geometric));
       _xmlWriter.WriteAttributeString("fill", "none");
+      _xmlWriter.WriteAttributeString("opacity", $"{figure.DrawingParameters.Opacity.ToString().Replace(",", ".")}");
       _xmlWriter.WriteAttributeString("stroke", $"{HexConverter(figure.DrawingParameters.Fill)}");
       _xmlWriter.WriteAttributeString("stroke-width", $"{figure.DrawingParameters.StrokeThickness}");
       _xmlWriter.WriteEndElement();

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -63,10 +63,10 @@ namespace flop.net.Save
 
       private void DrawPolygon(XGraphics gfx, Figure figure)
       {
-         XBrush brush = new XSolidBrush(GetXColor(figure.DrawingParameters.Fill));
+         XBrush brush = new XSolidBrush(GetXColor(figure.DrawingParameters.Fill, figure.DrawingParameters.Opacity));
          if(figure.DrawingParameters.StrokeThickness > 0)
          {
-            XPen pen = new XPen(GetXColor(figure.DrawingParameters.Stroke), figure.DrawingParameters.StrokeThickness);
+            XPen pen = new XPen(GetXColor(figure.DrawingParameters.Stroke, figure.DrawingParameters.Opacity), figure.DrawingParameters.StrokeThickness);
             gfx.DrawPolygon(pen, brush, GetXPoints(figure.Geometric.Points), XFillMode.Alternate);
          }
          else
@@ -77,7 +77,7 @@ namespace flop.net.Save
 
       private void DrawPolyline(XGraphics gfx, Figure figure)
       {
-         XPen pen = new XPen(GetXColor(figure.DrawingParameters.Fill), figure.DrawingParameters.StrokeThickness);
+         XPen pen = new XPen(GetXColor(figure.DrawingParameters.Fill, figure.DrawingParameters.Opacity), figure.DrawingParameters.StrokeThickness);
          gfx.DrawLines(pen, GetXPoints(figure.Geometric.Points));
       }
 
@@ -89,9 +89,9 @@ namespace flop.net.Save
             result[i] = new XPoint(points[i].X, points[i].Y);
          return result;
       }
-      private XColor GetXColor(Color color)
+      private XColor GetXColor(Color color, double opacity)
       {
-         return XColor.FromArgb(color.A, color.R, color.G, color.B);
+         return XColor.FromArgb((int)(opacity * 255), color.R, color.G, color.B);
       }
 
    }

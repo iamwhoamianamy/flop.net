@@ -319,6 +319,57 @@ public class MainWindowVM : INotifyPropertyChanged
          return toggleRotating;
       }
    }
+   private RelayCommand toggleDeleting;
+   public RelayCommand ToggleDeleting
+   {
+      get
+      {
+         toggleDeleting ??= new RelayCommand(_ =>
+         {
+            Figure figue = activeFigure;
+            Action<object> redo = (_) =>
+            {
+               if (!ActiveLayer.Figures.Contains(figue))
+                  throw new InvalidOperationException();
+               DeletedFigures.Push(figue);
+               ActiveLayer.Figures.Remove(figue);
+               activeFigure = null;
+            };
+
+            Action<object> undo = (_) =>
+            {
+               if (DeletedFigures.Count > 0)
+               {
+                  ActiveLayer.Figures.Add(DeletedFigures.Pop());
+               }
+               else
+                  throw new InvalidOperationException();
+            };
+
+            if (activeFigure != null)
+            {
+               RedoStack.Clear();
+
+               switchButtonSelection(null, palletCommands);
+               WorkingMode = ViewMode.Default;
+               СurrentFigureType = FigureCreationMode.None;
+               OnPropertyChanged();
+
+               DeletedFigures.Push(activeFigure);
+               if (ActiveLayer.Figures.Contains(activeFigure))
+                  ActiveLayer.Figures.Remove(activeFigure);
+               else
+                  throw new InvalidOperationException();
+               UndoStack.Push(new UserCommands(redo, undo));
+               activeFigure = null;
+               FigureEditorVisibility = Visibility.Collapsed;
+            }
+         }, isModifyingAvailable);
+         if (!palletCommands.Contains(toggleDeleting))
+            palletCommands.Add(toggleDeleting);
+         return toggleDeleting;
+      }
+   }
    public RelayCommand BeginActiveFigureMoving
    {
       get
@@ -693,58 +744,7 @@ public class MainWindowVM : INotifyPropertyChanged
       }
    }
 
-   private RelayCommand deleteFigure;
-   public RelayCommand DeleteFigure
-   {
-      get
-      {
-         Action<object> redo = (_) =>
-         {
-            if (!ActiveLayer.Figures.Contains(activeFigure))
-               throw new InvalidOperationException();
-            DeletedFigures.Push(activeFigure);
-            ActiveLayer.Figures.Remove(activeFigure);
-            if (ActiveLayer.Figures.Count > 0)
-               activeFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
-            else
-               activeFigure = null;
-         };
-
-         Action<object> undo = (_) =>
-         {
-            if (DeletedFigures.Count > 0)
-            {
-               activeFigure = DeletedFigures.Pop();
-               ActiveLayer.Figures.Add(activeFigure);
-            }
-            else
-               throw new InvalidOperationException();
-         };
-
-         deleteFigure ??= new RelayCommand(_ =>
-         {
-            if (activeFigure != null)
-            {
-               RedoStack.Clear();
-               switchButtonSelection(deleteFigure, palletCommands);
-               DeletedFigures.Push(activeFigure);
-               if (ActiveLayer.Figures.Contains(activeFigure))
-                  ActiveLayer.Figures.Remove(activeFigure);
-               else
-                  throw new InvalidOperationException();
-               UndoStack.Push(new UserCommands(redo, undo));
-               if (ActiveLayer.Figures.Count > 0)
-                  activeFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
-               else
-                  activeFigure = null;
-               if (ActiveLayer.Figures.Count != 0)
-                  ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
-            }
-         }, isModifyingAvailable);
-         palletCommands.Add(deleteFigure);
-         return deleteFigure;
-      }
-   }
+   
 
    public string CurrentBaseColor
    {
