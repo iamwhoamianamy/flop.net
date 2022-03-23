@@ -365,6 +365,7 @@ public class MainWindowVM : INotifyPropertyChanged
                   throw new InvalidOperationException();
                UndoStack.Push(new UserCommands(redo, undo));
                activeFigure = null;
+               FigureEditorVisibility = Visibility.Collapsed;
             }
          }, isModifyingAvailable);
          if (!palletCommands.Contains(toggleDeleting))
