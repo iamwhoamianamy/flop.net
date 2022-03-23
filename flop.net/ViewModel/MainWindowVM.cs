@@ -259,6 +259,16 @@ public class MainWindowVM : INotifyPropertyChanged
          });
       }
    }
+   public RelayCommand BeginActiveFigureScaling
+   {
+      get
+      {
+         return new RelayCommand(_ =>
+         {
+            summary_scale_value = new Point(1, 1);
+         });
+      }
+   }
    public RelayCommand OnActiveFigureMoving
    {
       get
@@ -278,9 +288,13 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          return new RelayCommand(obj =>
          {
-            var scale = obj as Point?;
-            summary_scale_value = (Point)scale;
-            ActiveFigure.Geometric.Scale((Point)scale);
+            var scale = obj as (Point, Point)?;
+
+            ActiveFigure.Geometric.Scale(scale.Value.Item1, scale.Value.Item2);
+
+            summary_scale_value.X *= scale.Value.Item1.X;
+            summary_scale_value.Y *= scale.Value.Item1.Y;
+            scalePoint = scale.Value.Item2;
 
             ActiveLayer.Figures.Add(null);
             ActiveLayer.Figures.RemoveAt(ActiveLayer.Figures.Count - 1);
@@ -359,6 +373,7 @@ public class MainWindowVM : INotifyPropertyChanged
 
    private Vector summary_moving_delta;
    private Point summary_scale_value;
+   private Point scalePoint;
    public RelayCommand OnFigureMovingFinished
    {
       get
@@ -394,12 +409,12 @@ public class MainWindowVM : INotifyPropertyChanged
 
             Action<object> redo = (_) =>
             {
-               figure.Geometric.Scale(scale);
+               figure.Geometric.Scale(scale, scalePoint);
             };
 
             Action<object> undo = (_) =>
             {
-               figure.Geometric.Scale(new Point(1 / scale.X, 1 / scale.Y));
+               figure.Geometric.Scale(new Point(1 / scale.X, 1 / scale.Y), scalePoint);
             };
             UndoStack.Push(new UserCommands(redo, undo));
             summary_scale_value = new Point();

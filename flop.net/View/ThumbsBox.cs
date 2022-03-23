@@ -22,13 +22,22 @@ namespace flop.net.View
          set
          {
             box = value;
-            TopLeft.Margin = MakeThickness(Box.TopLeft);
-            BotRight.Margin = MakeThickness(Box.BotRight);
+            MakeThickness();
          }
       }
-
+      //  0----1----2
+      //  |         |
+      //  3         4
+      //  |         |
+      //  5----6----7
       public Thumb TopLeft => Thumbs[0];
-      public Thumb BotRight => Thumbs[1];
+      public Thumb TopCenter => Thumbs[1];
+      public Thumb TopRight => Thumbs[2];
+      public Thumb LeftCenter => Thumbs[3];
+      public Thumb RightCenter => Thumbs[4];
+      public Thumb BotLeft => Thumbs[5];
+      public Thumb BotCenter => Thumbs[6];
+      public Thumb BotRight => Thumbs[7];
 
       public Visibility Visibility
       {
@@ -47,31 +56,100 @@ namespace flop.net.View
          {
             Thumb thumb = new Thumb();
 
-            thumb.Width = 30;
-            thumb.Height = 30;
-            thumb.Cursor = Cursors.SizeNS;
+            thumb.Width = 10;
+            thumb.Height = 10;
             thumb.Background = Brushes.LightGreen;
             thumb.BorderBrush = Brushes.DarkGreen;
 
-            Thumbs.Add(new Thumb());
-         }
+            Thumbs.Add(thumb);
+         }         
+
+         TopLeft.Cursor = Cursors.SizeNESW;
+         TopCenter.Cursor = Cursors.SizeNS;
+         TopRight.Cursor = Cursors.SizeNWSE;
+         LeftCenter.Cursor = Cursors.SizeWE;
+         RightCenter.Cursor = Cursors.SizeWE;
+         BotLeft.Cursor = Cursors.SizeNWSE;
+         BotCenter.Cursor = Cursors.SizeNS;
+         BotRight.Cursor = Cursors.SizeNESW;
+
+         TopLeft.VerticalAlignment = VerticalAlignment.Top;
+         TopCenter.VerticalAlignment = VerticalAlignment.Top;
+         TopRight.VerticalAlignment = VerticalAlignment.Top;
+         LeftCenter.VerticalAlignment = VerticalAlignment.Stretch;
+         RightCenter.VerticalAlignment = VerticalAlignment.Stretch;
+         BotLeft.VerticalAlignment = VerticalAlignment.Bottom;
+         BotCenter.VerticalAlignment = VerticalAlignment.Bottom;
+         BotRight.VerticalAlignment = VerticalAlignment.Bottom;
+
+         TopLeft.HorizontalAlignment = HorizontalAlignment.Left;
+         TopCenter.HorizontalAlignment = HorizontalAlignment.Stretch;
+         TopRight.HorizontalAlignment = HorizontalAlignment.Right;
+         LeftCenter.HorizontalAlignment = HorizontalAlignment.Left;
+         RightCenter.HorizontalAlignment = HorizontalAlignment.Right;
+         BotLeft.HorizontalAlignment = HorizontalAlignment.Left;
+         BotCenter.HorizontalAlignment = HorizontalAlignment.Stretch;
+         BotRight.HorizontalAlignment = HorizontalAlignment.Right;
 
          Visibility = Visibility.Hidden;
       }
-
-      public Point OppositToThumb(Thumb thumb)
+      private void MakeThickness()
       {
-         if (thumb == TopLeft)
-            return Box.BotRight;
-         if (thumb == BotRight)
-            return Box.BotLeft;
-
-         return new Point();
-      }
-
-      private Thickness MakeThickness(Point point)
-      {
-         return new Thickness(point.X, point.Y, point.X + 20, point.Y + 20);
+         if (!double.IsNaN(Box.Center.X) && !double.IsNaN(Box.Center.Y))
+         {
+            TopLeft.Margin = new Thickness(
+               Box.TopLeft.X - 10,
+               Box.TopLeft.Y,
+               -Box.TopLeft.X + 10,
+               -Box.TopLeft.Y
+               );
+            TopCenter.Margin = new Thickness(
+               Box.TopCenter.X - 5,
+               Box.TopCenter.Y,
+               -Box.TopCenter.X + 5,
+               -Box.TopCenter.Y
+               );
+            TopRight.Margin = new Thickness(
+               Box.TopRight.X,
+               Box.TopRight.Y,
+               -Box.TopRight.X,
+               -Box.TopRight.Y
+               );
+            LeftCenter.Margin = new Thickness(
+               Box.LeftCenter.X - 10,
+               Box.LeftCenter.Y - 5,
+               -Box.LeftCenter.X + 10,
+               -Box.LeftCenter.Y + 5
+               );
+            RightCenter.Margin = new Thickness(
+               Box.RightCenter.X,
+               Box.RightCenter.Y - 5,
+               -Box.RightCenter.X,
+               -Box.RightCenter.Y + 5
+               );
+            BotLeft.Margin = new Thickness(
+               Box.BotLeft.X - 10,
+               Box.BotLeft.Y - 10,
+               -Box.BotLeft.X + 10,
+               -Box.BotLeft.Y + 10
+               );
+            BotCenter.Margin = new Thickness(
+               Box.BotCenter.X - 5,
+               Box.BotCenter.Y - 10,
+               -Box.BotCenter.X + 5,
+               -Box.BotCenter.Y + 10
+               );
+            BotRight.Margin = new Thickness(
+              Box.BotRight.X,
+              Box.BotRight.Y - 10,
+              -Box.BotRight.X,
+              -Box.BotRight.Y + 10
+              );
+         }
+         else
+         {
+            //Visibility = Visibility.Hidden;
+         }
       }
    }
 }
