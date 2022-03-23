@@ -11,4 +11,10 @@ namespace flop.net.Save
       public Canvas Canv { get; set; }
       public string FileName { get; set; }
    }
+
+   public class OpenParameters
+   {
+      public string Format { get; set; }
+      public string FileName { get; set; }
+   }
 }

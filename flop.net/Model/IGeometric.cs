@@ -15,7 +15,7 @@ namespace flop.net.Model
       void Rotate(double angle, Point? rotationCenter=null);
       void Scale(Point scale, Point? scalePoint=null);
       PointCollection Points { get; }
-      bool IsClosed { get; }
+      bool IsClosed { get; set; }
       Point Center { get; }
       bool IsIn(Point position, double eps);
       Rectangle BoundingBoxRotated { get; }

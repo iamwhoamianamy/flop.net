@@ -86,8 +86,8 @@ public class MainWindowVM : INotifyPropertyChanged
          var undoCommand = UndoStack.Pop();
          RedoStack.Push(undoCommand);
          undoCommand.UnExecute.Execute(null);
-         if (ActiveLayer.Figures.Count != 0)
-            ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
+         //if (ActiveLayer.Figures.Count != 0)
+         //   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
       }
    }
 
@@ -98,8 +98,8 @@ public class MainWindowVM : INotifyPropertyChanged
          var redoCommand = RedoStack.Pop();
          UndoStack.Push(redoCommand);
          redoCommand.Execute.Execute(null);
-         if (ActiveLayer.Figures.Count != 0)
-            ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
+         //if (ActiveLayer.Figures.Count != 0)
+         //   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
       }
    }
 
@@ -123,6 +123,8 @@ public class MainWindowVM : INotifyPropertyChanged
          return new RelayCommand(obj =>
          {
             var mouseCoords = obj as Point?;
+
+            ActiveFigure = null;
 
             foreach (var figure in ActiveLayer.Figures)
             {
@@ -277,7 +279,8 @@ public class MainWindowVM : INotifyPropertyChanged
          {
             var delta = obj as Vector?;
             summary_moving_delta += (Vector)delta;
-            ActiveFigure.Move((Vector)delta);
+            if (ActiveFigure != null)
+               ActiveFigure.Move((Vector)delta);
          });
       }
    }
@@ -365,6 +368,8 @@ public class MainWindowVM : INotifyPropertyChanged
                   throw new InvalidOperationException();
                DeletedFigures.Push(figure);
                ActiveLayer.Figures.Remove(figure);
+
+               activeFigure = null;
             };
             UndoStack.Push(new UserCommands(redo, undo));
          });
@@ -523,8 +528,8 @@ public class MainWindowVM : INotifyPropertyChanged
                UndoStack.Push(new UserCommands(
                       _ => { activeFigure.Geometric.Scale(new Point(2, 2)); },
                       _ => { activeFigure.Geometric.Scale(new Point(0.5, 0.5)); }));
-               if (ActiveLayer.Figures.Count != 0)
-                  ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
+               //if (ActiveLayer.Figures.Count != 0)
+               //   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
             }
          }, isModifyingAvailable);
          palletCommands.Add(scaleFigure);
@@ -676,6 +681,36 @@ public class MainWindowVM : INotifyPropertyChanged
             }
          });
          return save;
+      }
+   }
+
+   private RelayCommand open;
+
+   public RelayCommand Open
+   {
+      get
+      {
+         open ??= new RelayCommand(o =>
+         {
+            var parameters = (OpenParameters)o;
+            switch (Enum.Parse(typeof(OpenTypes), parameters.Format, true))
+            {
+               case OpenTypes.Svg:
+                  //TODO: Открыть svg
+                  break;
+               case OpenTypes.Flp:
+                  var flpSaver = new JsonSaver(parameters.FileName);
+                  Layers = flpSaver.Restore();
+                  ActiveLayer = Layers[0];
+                  break;
+               //case OpenTypes.Json:
+               //   var jsonSaver = new JsonSaver(parameters.FileName);
+               //   Layers = jsonSaver.RestoreLayersFromJson();
+               //   break;
+            }
+            OnPropertyChanged();
+         });
+         return open;
       }
    }
 

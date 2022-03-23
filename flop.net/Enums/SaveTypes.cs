@@ -13,4 +13,11 @@ namespace flop.net.Enums
       Png = 3,
       Pdf = 4
    }
+
+   public enum OpenTypes
+   {
+      Svg = 1,
+      Flp = 2,
+      //Json = 3
+   }
 }

@@ -96,6 +96,7 @@
     <Compile Include="Model\Polygon.cs" />
     <Compile Include="Model\PolygonBuilder.cs" />
     <Compile Include="Model\Rectangle.cs" />
+    <Compile Include="Save\OpenDialogFilter.cs" />
     <Compile Include="Save\PdfSaver.cs" />
     <Compile Include="Save\PngSaver.cs" />
     <Compile Include="Save\SaveDialogFilter.cs" />

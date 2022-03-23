@@ -95,7 +95,7 @@ namespace flop.net.Model
          }
       }
 
-      public bool IsClosed { get; private set; }
+      public bool IsClosed { get; set; }
       
       public bool IsIn(Point position, double eps = 0.001)
       {
