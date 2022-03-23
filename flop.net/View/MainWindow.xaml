@@ -31,9 +31,9 @@
       <r:Ribbon.Menu>
         <r:Backstage>
           <r:BackstageTabControl>
-            <r:BackstageTabItem Header="Создать" x:Name="NewDocument"/>
-            <r:BackstageTabItem Header="Открыть" x:Name="Open"/>
-            <r:BackstageTabItem Header="Сохранить" x:Name="Save"/>
+            <r:BackstageTabItem Header="Создать" x:Name="NewDocument"  PreviewMouseLeftButtonDown="NewDocumentOnMouseLeftButtonDown"/>
+            <r:BackstageTabItem Header="Открыть" x:Name="Open" PreviewMouseLeftButtonDown="OpenOnMouseLeftButtonDown"/>
+            <r:BackstageTabItem Header="Сохранить" x:Name="Save" PreviewMouseLeftButtonDown="SaveOnMouseLeftButtonDown"/>
             <r:SeparatorTabItem />
             <r:BackstageTabItem Header="Настройки">
               <StackPanel VerticalAlignment="Top" 

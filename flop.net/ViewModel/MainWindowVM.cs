@@ -844,17 +844,10 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          newDocument ??= new RelayCommand(o => 
          {
-            Layers.Clear();
-            RedoStack.Clear();
-            UndoStack.Clear();
-            DeletedFigures.Clear();
-            ActiveFigure = null;
-            ActiveLayer.Figures.Clear();
-            TempDrawingParameters = new DrawingParameters();
-            FigureEditorVisibility = Visibility.Collapsed;
-            СurrentFigureType = FigureCreationMode.None;
-            CreationDrawingParameters = new DrawingParameters();
-            summary_moving_delta = new Vector();
+            Layers = new TrulyObservableCollection<Layer>();
+            Layers.Add(new Layer());
+            ActiveLayer = Layers[0];
+            ReloadData();
          });
          return newDocument;
       }
@@ -883,7 +876,8 @@ public class MainWindowVM : INotifyPropertyChanged
       summary_moving_delta = new Vector();
       WorkingMode = ViewMode.Default;
 
-      Layers.CollectionChanged += Layers_CollectionChanged;      
+      Layers.CollectionChanged += Layers_CollectionChanged;
+      OnPropertyChanged();
    }
 
    private void Layers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

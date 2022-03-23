@@ -83,14 +83,9 @@ namespace flop.net
 
          Graphic = new Graphic(MainCanvas);
 
-         Save.MouseLeftButtonDown += SaveOnMouseLeftButtonDown;
-         NewDocument.MouseLeftButtonDown += NewDocumentOnMouseLeftButtonDown;
-
          InitMovingThumb();
          InitRotatingThumb();
          InitScalingThumbs();
-
-         Open.MouseLeftButtonDown += OpenOnMouseLeftButtonDown;
 
          WorkingMode = ViewMode.Default;
 
@@ -357,7 +352,6 @@ namespace flop.net
          RotatingThumb.PreviewMouseDown += RotatingThumb_PreviewMouseDown;
          RotatingThumb.DragCompleted += RotatingThumb_DragCompleted;
       }      
-
       private void RotatingThumb_PreviewMouseDown(object sender, MouseButtonEventArgs e)
       {
          if (mainWindowVM.WorkingMode == ViewMode.Rotating &&
@@ -407,6 +401,7 @@ namespace flop.net
             if (res == MessageBoxResult.OK) 
             {
                MainWindowVM.NewDocument.Execute(null);
+               ReloadData();
             }
             else
             {
@@ -416,12 +411,12 @@ namespace flop.net
          else
          {
             MainWindowVM.NewDocument.Execute(null);
+            ReloadData();
             return;
          }
       }
       private void SaveOnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
       {
-
          var saveDialog = new SaveFileDialog
          {
             Filter = SaveDialogFilter.GetFilter(),
@@ -436,7 +431,6 @@ namespace flop.net
       }
       private void OpenOnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
       {
-
          var openDialog = new OpenFileDialog
          {
             Filter = OpenDialogFilter.GetFilter(),
