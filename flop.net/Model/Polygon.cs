@@ -222,6 +222,42 @@ namespace flop.net.Model
          }
          
          return new Polygon(newPoints, IsClosed, RotationAngle);
+      } 
+      
+      public void HorizontalFlip(Point? flipPoint=null)
+      {
+         var flipAxis = flipPoint.HasValue ? flipPoint.Value : Center;
+         for (int i = 0; i < Points.Count; i++)
+         {
+            if (Points[i].X < flipAxis.X)
+            {
+               var tmp = new Point(Points[i].X + 2 * (flipAxis.X - Points[i].X), Points[i].Y);
+               Points[i] = tmp;
+            }
+            if (Points[i].X > flipAxis.X)
+            {
+               var tmp = new Point(Points[i].X - 2 * (Points[i].X - flipAxis.X), Points[i].Y);
+               Points[i] = tmp;
+            }
+         }
+      }
+
+      public void VerticalFlip(Point? flipPoint=null)
+      {
+         var flipAxis = flipPoint.HasValue ? flipPoint.Value : Center;
+         for (int i = 0; i < Points.Count; i++)
+         {
+            if (Points[i].Y < flipAxis.Y)
+            {
+               var tmp = new Point(Points[i].X, Points[i].Y + 2 * (flipAxis.Y - Points[i].Y));
+               Points[i] = tmp;
+            }
+            if (Points[i].Y > flipAxis.Y)
+            {
+               var tmp = new Point(Points[i].X, Points[i].Y - 2 * (Points[i].Y - flipAxis.Y));
+               Points[i] = tmp;
+            }
+         }
       }
 
       public void MovePoint(Point pointToMove, Vector delta)

@@ -22,5 +22,7 @@ namespace flop.net.Model
       Rectangle BoundingBox { get; }
       void MovePoint(Point pointToMove, Vector delta);
       Polygon AddPoint(Point newPoint);
+      void HorizontalFlip(Point? flipPoint=null);
+      void VerticalFlip(Point? flipPoint=null);
    }
 }
