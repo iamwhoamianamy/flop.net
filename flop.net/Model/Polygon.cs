@@ -188,6 +188,7 @@ namespace flop.net.Model
          int index_prev = index - 1;
          int index_next = index + 1;
          int indexNewPoint = 0;
+         var newPoints = Points.Clone();
 
          if (IsClosed)
          {
@@ -214,10 +215,13 @@ namespace flop.net.Model
             {
                indexNewPoint = index_next;
             }
+            newPoints.Insert(indexNewPoint, newPoint);
          }
-
-         var newPoints = Points.Clone();
-         newPoints.Insert(indexNewPoint, newPoint);
+         else
+         {
+            newPoints.Add(newPoint);
+         }
+         
          return new Polygon(newPoints, IsClosed, RotationAngle);
       }
    }
