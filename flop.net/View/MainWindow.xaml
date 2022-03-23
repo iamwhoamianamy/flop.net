@@ -267,7 +267,8 @@
 
         <r:RibbonGroupBox Header="Параметры фигуры">
           <r:DropDownButton x:Name="SelectedFillColorButton"
-                            Header="Цвет заливки">
+                            Header="Цвет заливки"
+                            PreviewMouseDown="SelectedFillColorButton_PreviewMouseDown">
             <r:DropDownButton.Icon>
               <Grid>
                 <Rectangle Width="32"

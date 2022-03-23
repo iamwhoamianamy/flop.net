@@ -141,12 +141,12 @@ public class MainWindowVM : INotifyPropertyChanged
    }
 
    private DrawingParameters ActiveFigureDrawingParameters;
-   private RelayCommand updateActiveFigureColor;
-   public RelayCommand UpdateActiveFigureColor
+   private RelayCommand updateActiveFigureDrawingParameters;
+   public RelayCommand UpdateActiveFigureDrawingParameters
    {
       get
       {
-         return updateActiveFigureColor ??= new RelayCommand( _ =>
+         return updateActiveFigureDrawingParameters ??= new RelayCommand( _ =>
          {
             if (ActiveFigure.DrawingParameters != ActiveFigureDrawingParameters)
             {

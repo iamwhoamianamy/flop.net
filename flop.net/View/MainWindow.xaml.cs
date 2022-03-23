@@ -507,6 +507,12 @@ namespace flop.net
       private void OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
       {
          mainWindowVM.SetActiveFigure.Execute(e.GetPosition(MainCanvas));
+
+      }
+
+      private void SelectedFillColorButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+      {
+         mainWindowVM.UpdateActiveFigureDrawingParameters.Execute(null);
       }
    }
 }
