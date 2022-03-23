@@ -224,5 +224,14 @@ namespace flop.net.Model
          
          return new Polygon(newPoints, IsClosed, RotationAngle);
       }
+
+      public void MovePoint(Point pointToMove, Vector delta)
+      {
+         var index = Points.IndexOf(pointToMove);
+         if (index != -1)
+         {
+            Points[index] = Point.Add(Points[index], delta);
+         }
+      }
    }
 }
