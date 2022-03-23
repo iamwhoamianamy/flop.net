@@ -9,7 +9,15 @@ namespace flop.net.Enums
    public enum SaveTypes
    {
       Svg = 1, 
-      Json = 2,
-      Png = 3
+      Flp = 2,
+      Png = 3,
+      Pdf = 4
+   }
+
+   public enum OpenTypes
+   {
+      Svg = 1,
+      Flp = 2,
+      //Json = 3
    }
 }

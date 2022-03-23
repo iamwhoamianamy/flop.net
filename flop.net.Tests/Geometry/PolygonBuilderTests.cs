@@ -57,5 +57,17 @@ namespace flop.net.Tests
          Assert.Equal(ellipse.Points[2], new Point(-2, 0));
          Assert.Equal(ellipse.Points[3], new Point(0, -1));
       }
+      [Fact]
+      public void CreateRectangleTest()
+      {
+         var pointA = new Point(0, 0);
+         var pointB = new Point(1, 2);
+         var rectangle = PolygonBuilder.CreateRectangle(pointA, pointB);
+
+         Assert.Equal(rectangle.Points[0], new Point(0, 0));
+         Assert.Equal(rectangle.Points[1], new Point(0, 2));
+         Assert.Equal(rectangle.Points[2], new Point(1, 2));
+         Assert.Equal(rectangle.Points[3], new Point(1, 0));
+      }
    }
 }

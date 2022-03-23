@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Media;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace flop.net.Model
 {
    public class Polygon : IGeometric
    {
-      public PointCollection Points { get; }
+      public double RotationAngle { get; private set; }
+      
+      public PointCollection Points { get; private set; }
+
       public Point Center { get 
          {
             var sumPoints = new Point(0, 0);
@@ -22,13 +26,57 @@ namespace flop.net.Model
 
       public Polygon() { Points = new PointCollection(); }
 
-      public Polygon(PointCollection points, bool isClosed)
+      public Polygon(PointCollection points, bool isClosed, double rotationAngle=0)
       {
          Points = points.Clone();
          IsClosed = isClosed;
+         RotationAngle = rotationAngle;
       }
 
-      public Polygon BoundingBox
+      public Rectangle BoundingBoxRotated
+      {
+         get
+         {
+            var defaultPoints = Points.Clone();
+            // Разворот фигуры к осям параллельным X и Y
+            for (var i = 0; i < Points.Count; i++)
+            {
+               var point = Point.Subtract(defaultPoints[i], (Vector)Center);
+               var oldX = point.X;
+               var oldY = point.Y;
+               point.X = oldX * Math.Cos(RotationAngle) + oldY * Math.Sin(RotationAngle);
+               point.Y = -oldX * Math.Sin(RotationAngle) + oldY * Math.Cos(RotationAngle);
+               defaultPoints[i] = Point.Add(point, (Vector)Center);
+            }
+
+            var maxX = defaultPoints.Max(x => x.X);
+            var maxY = defaultPoints.Max(y => y.Y);
+            var minX = defaultPoints.Min(x => x.X);
+            var minY = defaultPoints.Min(y => y.Y);
+            var points = new PointCollection()
+            {
+               new Point(minX, maxY),
+               new Point(maxX, maxY),
+               new Point(maxX, minY),
+               new Point(minX, minY)
+            };
+
+            // Разворот BoundingBox обратно к исходному положению
+            Point rectangleCenter = new((points[0].X + points[2].X) / 2, (points[0].Y + points[2].Y) / 2);
+            for (var i = 0; i < points.Count; i++)
+            {
+               var point = Point.Subtract(points[i], (Vector)rectangleCenter);
+               var oldX = point.X;
+               var oldY = point.Y;
+               point.X = oldX * Math.Cos(RotationAngle) - oldY * Math.Sin(RotationAngle);
+               point.Y = oldX * Math.Sin(RotationAngle) + oldY * Math.Cos(RotationAngle);
+               points[i] = Point.Add(point, (Vector)rectangleCenter);
+            }
+            return new Rectangle(points);
+         }
+      }
+
+      public Rectangle BoundingBox 
       {
          get
          {
@@ -38,16 +86,16 @@ namespace flop.net.Model
             var minY = Points.Min(y => y.Y);
             var points = new PointCollection()
             {
-               new Point(minX, minY),
                new Point(minX, maxY),
                new Point(maxX, maxY),
-               new Point(maxX, minY)
+               new Point(maxX, minY),
+               new Point(minX, minY)
             };
-            return new Polygon(points, true);
+            return new Rectangle(points);
          }
       }
 
-      public bool IsClosed { get; private set; }
+      public bool IsClosed { get; set; }
       
       public bool IsIn(Point position, double eps = 0.001)
       {
@@ -108,6 +156,7 @@ namespace flop.net.Model
             rotationCenter = Center;
          }
          var degToRad = angle * Math.PI / 180;
+         RotationAngle += degToRad;
          for (var i = 0; i < Points.Count; i++)
          {
             var point = Point.Subtract(Points[i], (Vector)rotationCenter);
@@ -119,7 +168,7 @@ namespace flop.net.Model
          }
       }
 
-      public void Scale(Point scale, Point? scalePoint=null)
+      public virtual void Scale(Point scale, Point? scalePoint=null)
       {
          var shift = scalePoint.HasValue ? scalePoint : Center;
          for (var i = 0; i < Points.Count; i++)
@@ -130,6 +179,50 @@ namespace flop.net.Model
             point = Point.Add(point, (Vector)shift);
             Points[i] = point;
          }
+      }
+
+      public virtual Polygon AddPoint(Point newPoint)
+      {
+         var minPoint = Points.OrderBy(x => Math.Sqrt((x.X - newPoint.X) * (x.X - newPoint.X) + (x.Y - newPoint.Y) * (x.Y - newPoint.Y))).First();
+         var index = Points.IndexOf(minPoint);
+         int index_prev = index - 1;
+         int index_next = index + 1;
+         int indexNewPoint = 0;
+         var newPoints = Points.Clone();
+
+         if (IsClosed)
+         {
+            if (index == 0)
+            {
+               index_prev = Points.Count - 1;
+            }
+            else if (index == Points.Count - 1)
+            {
+               index_next = 0;
+            }
+
+            var points_distance = new List<double>()
+            {
+               Math.Sqrt((Points[index_prev].X - newPoint.X) * (Points[index_prev].X - newPoint.X) + (Points[index_prev].Y - newPoint.Y) * (Points[index_prev].Y - newPoint.Y)),
+               Math.Sqrt((Points[index_next].X - newPoint.X) * (Points[index_next].X - newPoint.X) + (Points[index_next].Y - newPoint.Y) * (Points[index_next].Y - newPoint.Y))
+            };
+
+            if (points_distance.IndexOf(points_distance.Min(x=>x)) == 0)
+            {
+               indexNewPoint = index;
+            }  
+            else
+            {
+               indexNewPoint = index_next;
+            }
+            newPoints.Insert(indexNewPoint, newPoint);
+         }
+         else
+         {
+            newPoints.Add(newPoint);
+         }
+         
+         return new Polygon(newPoints, IsClosed, RotationAngle);
       }
    }
 }

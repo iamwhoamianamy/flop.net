@@ -10,6 +10,7 @@ using flop.net.Model;
 using System.Windows.Media;
 using System.Xml;
 using flop.net.Enums;
+using ControlzEx.Theming;
 using flop.net.Save;
 using Microsoft.Win32;
 
@@ -21,7 +22,7 @@ public class MainWindowVM : INotifyPropertyChanged
 
    private List<RelayCommand> palletCommands;
    public Stack<UserCommands> UndoStack { get; set; }
-   public Stack<UserCommands> RedoStack { get; set; } 
+   public Stack<UserCommands> RedoStack { get; set; }
    public Stack<Figure> DeletedFigures;
    private Figure activeFigure;
    public Figure ActiveFigure
@@ -34,7 +35,7 @@ public class MainWindowVM : INotifyPropertyChanged
       }
    }
    public Layer ActiveLayer { get; set; }
-   public ObservableCollection<Layer> Layers { get; set; }
+   public TrulyObservableCollection<Layer> Layers { get; set; }
    public Figure FigureOnCreating { get; set; }
    public ViewMode WorkingMode { get; set; }
    public FigureCreationMode СurrentFigureType { get; set; }
@@ -85,8 +86,8 @@ public class MainWindowVM : INotifyPropertyChanged
          var undoCommand = UndoStack.Pop();
          RedoStack.Push(undoCommand);
          undoCommand.UnExecute.Execute(null);
-         if (ActiveLayer.Figures.Count != 0)
-            ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
+
+         OnPropertyChanged();
       }
    }
 
@@ -97,8 +98,8 @@ public class MainWindowVM : INotifyPropertyChanged
          var redoCommand = RedoStack.Pop();
          UndoStack.Push(redoCommand);
          redoCommand.Execute.Execute(null);
-         if (ActiveLayer.Figures.Count != 0)
-            ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
+
+         OnPropertyChanged();
       }
    }
 
@@ -114,7 +115,7 @@ public class MainWindowVM : INotifyPropertyChanged
          if (selectedCommand != command)
             command.IsPressed = false;
       }
-   }   
+   }
    public RelayCommand SetActiveFigure
    {
       get
@@ -123,13 +124,49 @@ public class MainWindowVM : INotifyPropertyChanged
          {
             var mouseCoords = obj as Point?;
 
-            foreach (var figure in ActiveLayer.Figures)
+            ActiveFigure = null;
+
+            var ReverseFiguresList = ActiveLayer.Figures.Reverse<Figure>();
+            foreach (var figure in ReverseFiguresList)
             {
                if (figure.Geometric.IsIn(mouseCoords.Value, 1e-1))
                {
                   ActiveFigure = figure;
+                  ActiveFigureDrawingParameters = figure.DrawingParameters;
                   break;
                }
+            }
+         });
+      }
+   }
+
+   private DrawingParameters ActiveFigureDrawingParameters;
+   private RelayCommand updateActiveFigureColor;
+   public RelayCommand UpdateActiveFigureColor
+   {
+      get
+      {
+         return updateActiveFigureColor ??= new RelayCommand( _ =>
+         {
+            if (ActiveFigure.DrawingParameters != ActiveFigureDrawingParameters)
+            {
+               RedoStack.Clear();
+               Figure figure = activeFigure;
+               DrawingParameters newDrawingParameters = new DrawingParameters(ActiveFigure.DrawingParameters);
+               DrawingParameters oldDrawingParameters = new DrawingParameters(ActiveFigureDrawingParameters);
+
+               OnPropertyChanged();
+
+               Action<object> redo = (_) =>
+               {
+                  figure.DrawingParameters = newDrawingParameters;
+               };
+
+               Action<object> undo = (_) =>
+               {
+                  figure.DrawingParameters = oldDrawingParameters;
+               };
+               UndoStack.Push(new UserCommands(redo, undo));
             }
          });
       }
@@ -193,13 +230,14 @@ public class MainWindowVM : INotifyPropertyChanged
             else if (WorkingMode == ViewMode.Moving)
                WorkingMode = ViewMode.Default;
             СurrentFigureType = FigureCreationMode.None;
+            OnPropertyChanged();
          }, isModifyingAvailable);
          if (!palletCommands.Contains(toggleMoving))
             palletCommands.Add(toggleMoving);
          return toggleMoving;
       }
    }
-   
+
    private RelayCommand toggleScaling;
    public RelayCommand ToggleScaling
    {
@@ -213,12 +251,34 @@ public class MainWindowVM : INotifyPropertyChanged
             else if (WorkingMode == ViewMode.Scaling)
                WorkingMode = ViewMode.Default;
             СurrentFigureType = FigureCreationMode.None;
+            OnPropertyChanged();
          }, isModifyingAvailable);
          if (!palletCommands.Contains(toggleScaling))
             palletCommands.Add(toggleScaling);
          return toggleScaling;
       }
    }
+
+   private RelayCommand toggleRotating;
+   public RelayCommand ToggleRotating
+   {
+      get
+      {
+         toggleRotating ??= new RelayCommand(_ =>
+         {
+            switchButtonSelection(toggleRotating, palletCommands);
+            if (WorkingMode != ViewMode.Rotating)
+               WorkingMode = ViewMode.Rotating;
+            else if (WorkingMode == ViewMode.Rotating)
+               WorkingMode = ViewMode.Default;
+            СurrentFigureType = FigureCreationMode.None;
+         }, isModifyingAvailable);
+         if (!palletCommands.Contains(toggleRotating))
+            palletCommands.Add(toggleRotating);
+         return toggleRotating;
+      }
+   }
+
    public RelayCommand BeginActiveFigureMoving
    {
       get
@@ -256,6 +316,16 @@ public class MainWindowVM : INotifyPropertyChanged
          });
       }
    }
+   public RelayCommand BeginActiveFigureScaling
+   {
+      get
+      {
+         return new RelayCommand(_ =>
+         {
+            summary_scale_value = new Point(1, 1);
+         });
+      }
+   }
    public RelayCommand OnActiveFigureMoving
    {
       get
@@ -264,10 +334,8 @@ public class MainWindowVM : INotifyPropertyChanged
          {
             var delta = obj as Vector?;
             summary_moving_delta += (Vector)delta;
-            ActiveFigure.Geometric.Move((Vector)delta);
-
-            ActiveLayer.Figures.Add(null);
-            ActiveLayer.Figures.RemoveAt(ActiveLayer.Figures.Count - 1);
+            if (ActiveFigure != null)
+               ActiveFigure.Move((Vector)delta);
          });
       }
    }
@@ -278,12 +346,30 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          return new RelayCommand(obj =>
          {
-            var scale = obj as Point?;
-            summary_scale_value = (Point)scale;
-            ActiveFigure.Geometric.Scale((Point)scale);
+            var scale = obj as (Point, Point)?;
+
+            ActiveFigure.Geometric.Scale(scale.Value.Item1, scale.Value.Item2);
+
+            summary_scale_value.X *= scale.Value.Item1.X;
+            summary_scale_value.Y *= scale.Value.Item1.Y;
+            scalePoint = scale.Value.Item2;
 
             ActiveLayer.Figures.Add(null);
             ActiveLayer.Figures.RemoveAt(ActiveLayer.Figures.Count - 1);
+         });
+      }
+   }
+
+   public RelayCommand OnActiveFigureRotating
+   {
+      get
+      {
+         return new RelayCommand(obj =>
+         {
+            var angle = obj as double?;
+            summary_rotate_angle = (double)angle;
+            if (ActiveFigure != null)
+               ActiveFigure.Geometric.Rotate((double)angle);
          });
       }
    }
@@ -296,16 +382,16 @@ public class MainWindowVM : INotifyPropertyChanged
          {
             var points = obj as (Point, Point)?;
             var selfDrawingParametrs = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1].DrawingParameters;
-            
+
             switch (СurrentFigureType)
             {
                case FigureCreationMode.Triangle:
-                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] 
+                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1]
                   = new Figure(PolygonBuilder.CreateTriangle(points.Value.Item1, points.Value.Item2), selfDrawingParametrs);
                   ActiveFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
                   break;
                case FigureCreationMode.Ellipse:
-                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] 
+                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1]
                   = new Figure(PolygonBuilder.CreateEllipse(points.Value.Item1, points.Value.Item2), selfDrawingParametrs);
                   ActiveFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
                   break;
@@ -314,7 +400,7 @@ public class MainWindowVM : INotifyPropertyChanged
                case FigureCreationMode.Polyline:
                   break;
                case FigureCreationMode.Rectangle:
-                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] 
+                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1]
                   = new Figure(PolygonBuilder.CreateRectangle(points.Value.Item1, points.Value.Item2), selfDrawingParametrs);
                   ActiveFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
                   break;
@@ -351,14 +437,18 @@ public class MainWindowVM : INotifyPropertyChanged
                   throw new InvalidOperationException();
                DeletedFigures.Push(figure);
                ActiveLayer.Figures.Remove(figure);
+
+               activeFigure = null;
             };
             UndoStack.Push(new UserCommands(redo, undo));
          });
       }
    }
-  
+
    private Vector summary_moving_delta;
    private Point summary_scale_value;
+   private double summary_rotate_angle;
+   private Point scalePoint;
    public RelayCommand OnFigureMovingFinished
    {
       get
@@ -391,18 +481,42 @@ public class MainWindowVM : INotifyPropertyChanged
             RedoStack.Clear();
             Figure figure = activeFigure;
             Point scale = summary_scale_value;
+            Point currentScalePoint = scalePoint;
 
             Action<object> redo = (_) =>
             {
-               figure.Geometric.Scale(scale);
+               figure.Geometric.Scale(scale, currentScalePoint);
             };
 
             Action<object> undo = (_) =>
             {
-               figure.Geometric.Scale(new Point(1 / scale.X, 1 / scale.Y));
+               figure.Geometric.Scale(new Point(1 / scale.X, 1 / scale.Y), currentScalePoint);
             };
             UndoStack.Push(new UserCommands(redo, undo));
             summary_scale_value = new Point();
+         });
+      }
+   }
+   public RelayCommand OnFigureRotatingFinished
+   {
+      get
+      {
+         return new RelayCommand(obj =>
+         {
+            RedoStack.Clear();
+            Figure figure = activeFigure;
+            double angle = summary_rotate_angle;
+            Action<object> redo = (_) =>
+            {
+               figure.Geometric.Rotate(angle);
+            };
+
+            Action<object> undo = (_) =>
+            {
+               figure.Geometric.Rotate(-angle);
+            };
+            UndoStack.Push(new UserCommands(redo, undo));
+            summary_moving_delta = new Vector();
          });
       }
    }
@@ -492,57 +606,6 @@ public class MainWindowVM : INotifyPropertyChanged
       }
    }
 
-   private RelayCommand scaleFigure;
-   public RelayCommand ScaleFigure
-   {
-      get
-      {
-         scaleFigure ??= new RelayCommand(_ =>
-         {
-            if (activeFigure != null)
-            {
-               RedoStack.Clear();
-               switchButtonSelection(scaleFigure, palletCommands);
-
-               activeFigure.Geometric.Scale(new Point(2, 2));
-               UndoStack.Push(new UserCommands(
-                      _ => { activeFigure.Geometric.Scale(new Point(2, 2)); },
-                      _ => { activeFigure.Geometric.Scale(new Point(0.5, 0.5)); }));
-               if (ActiveLayer.Figures.Count != 0)
-                  ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
-            }
-         }, isModifyingAvailable);
-         palletCommands.Add(scaleFigure);
-         return scaleFigure;
-      }
-   }
-
-   private RelayCommand rotateFigure;
-   public RelayCommand RotateFigure
-   {
-      get
-      {
-         rotateFigure ??= new RelayCommand(_ =>
-         {
-            if (activeFigure != null)
-            {
-               RedoStack.Clear();
-
-               switchButtonSelection(rotateFigure, palletCommands);
-
-               activeFigure.Geometric.Rotate(30);
-               ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = activeFigure;
-               UndoStack.Push(new UserCommands(_ => { activeFigure.Geometric.Rotate(30); },
-                      _ => { activeFigure.Geometric.Rotate(-30); }));
-               if (ActiveLayer.Figures.Count != 0)
-                  ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
-            }
-         }, isModifyingAvailable);
-         palletCommands.Add(rotateFigure);
-         return rotateFigure;
-      }
-   }
-   
    private RelayCommand deleteFigure;
    public RelayCommand DeleteFigure
    {
@@ -589,10 +652,44 @@ public class MainWindowVM : INotifyPropertyChanged
                   activeFigure = null;
                if (ActiveLayer.Figures.Count != 0)
                   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
-               }
+            }
          }, isModifyingAvailable);
          palletCommands.Add(deleteFigure);
          return deleteFigure;
+      }
+   }
+
+   public string CurrentBaseColor
+   {
+      get => this.CurrentTheme.BaseColorScheme;
+
+      set
+      {
+         if (value is null)
+         {
+            return;
+         }
+
+         ThemeManager.Current.ChangeThemeBaseColor(Application.Current, value);
+         this.OnPropertyChanged();
+         this.OnPropertyChanged(nameof(this.CurrentTheme));
+      }
+   }
+
+   public Theme CurrentTheme
+   {
+      get => ThemeManager.Current.DetectTheme(Application.Current);
+
+      set
+      {
+         if (value is null)
+         {
+            return;
+         }
+
+         ThemeManager.Current.ChangeTheme(Application.Current, value);
+         this.OnPropertyChanged();
+         this.OnPropertyChanged(nameof(this.CurrentBaseColor));
       }
    }
 
@@ -604,22 +701,25 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          save ??= new RelayCommand(o =>
          {
-            var parameters = (SaveParameters) o;
-            var saveDialog = new SaveFileDialog
+            var parameters = (SaveParameters)o;
+            switch (Enum.Parse(typeof(SaveTypes), parameters.Format, true))
             {
-               Filter = $"{parameters.Format} files (.{parameters.Format})|.{parameters.Format}",
-               RestoreDirectory = true
-            };
-            if (saveDialog.ShowDialog() != true) return;
-            switch (saveDialog.FilterIndex)
-            {
-               case (int)SaveTypes.Svg:
-                  var saver = new SvgSaver(saveDialog.FileName,ActiveLayer, parameters.Width, parameters.Height);
+               case SaveTypes.Svg:
+                  var saver = new SvgSaver(parameters.FileName, ActiveLayer, parameters.Width, parameters.Height);
                   saver.Save();
                   break;
-               case (int)SaveTypes.Json:
+               case SaveTypes.Flp:
+                  var jsonSaver = new JsonSaver(parameters.FileName);
+                  //TODO: Проблема при сохранении эллипса
+                  jsonSaver.Save(Layers);
                   break;
-               case (int)SaveTypes.Png:
+               case SaveTypes.Png:
+                  var saverPng = new PngSaver(parameters.FileName, parameters.Canv, parameters.Width, parameters.Height);
+                  saverPng.Save();
+                  break;
+               case SaveTypes.Pdf:
+                  var pdfSaver = new PdfSaver(parameters.FileName, parameters.Width, parameters.Height);
+                  pdfSaver.SaveLayersToPdf(Layers);
                   break;
             }
          });
@@ -627,10 +727,42 @@ public class MainWindowVM : INotifyPropertyChanged
       }
    }
 
+   private RelayCommand open;
+
+   public RelayCommand Open
+   {
+      get
+      {
+         open ??= new RelayCommand(o =>
+         {
+            var parameters = (OpenParameters)o;
+            switch (Enum.Parse(typeof(OpenTypes), parameters.Format, true))
+            {
+               case OpenTypes.Svg:
+                  //TODO: Открыть svg
+                  break;
+               case OpenTypes.Flp:
+                  var flpSaver = new JsonSaver(parameters.FileName);
+                  Layers = flpSaver.Restore();
+                  ActiveLayer = Layers[0];
+                  break;
+               //case OpenTypes.Json:
+               //   var jsonSaver = new JsonSaver(parameters.FileName);
+               //   Layers = jsonSaver.RestoreLayersFromJson();
+               //   break;
+            }
+            OnPropertyChanged();
+         });
+         return open;
+      }
+   }
+
    public MainWindowVM()
    {
-      ActiveLayer = new Layer();
-      ActiveLayer.Figures = new ObservableCollection<Figure>();
+      Layers = new TrulyObservableCollection<Layer>();
+      Layers.Add(new Layer());
+      ActiveLayer = Layers.Last();
+
       RedoStack = new Stack<UserCommands>();
       UndoStack = new Stack<UserCommands>();
       DeletedFigures = new Stack<Figure>();
@@ -639,6 +771,13 @@ public class MainWindowVM : INotifyPropertyChanged
       palletCommands = new List<RelayCommand> { };
       CreationDrawingParameters = new DrawingParameters();
       summary_moving_delta = new Vector();
+
+      Layers.CollectionChanged += Layers_CollectionChanged;
+   }
+
+   private void Layers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+   {
+      OnPropertyChanged();
    }
 
    public event PropertyChangedEventHandler PropertyChanged;

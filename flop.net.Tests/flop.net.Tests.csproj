@@ -70,6 +70,8 @@
     <Compile Include="Geometry\BoundingBoxTests.cs" />
     <Compile Include="Geometry\PolygonBuilderTests.cs" />
     <Compile Include="Geometry\PolygonIsInTest.cs" />
+    <Compile Include="Geometry\PolygonTests.cs" />
+    <Compile Include="Geometry\PolygonMoveTests.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\MainWindowVMTests.cs" />

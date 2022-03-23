@@ -64,8 +64,11 @@ namespace flop.net.Model
          double w = Math.Abs(pointA.X - pointB.X);
          if(pointCount == null)
          {
-            pointCount = (int)Math.Round(4 * (Math.PI * h * w + (w - h) * (w - h)) / (w + h));
+            pointCount = (int)Math.Sqrt(Math.Round(4 * (Math.PI * h * w + (w - h) * (w - h)) / (w + h)) * 2);
          }
+
+         if (pointCount.Value < 3)
+            pointCount = 3;
    
          for (var i = 0; i < pointCount; i ++)
          {
@@ -73,7 +76,7 @@ namespace flop.net.Model
             double y = Math.Sin(2 * Math.PI * i / Convert.ToDouble(pointCount)) * h / 2 + center.Y;
             points.Add(new Point(x, y));
          }
-         return new Polygon(points, true);
+         return new Ellipse(points);
       }
 
       public static Polygon CreateCircle(Point center, double radius)
@@ -86,7 +89,18 @@ namespace flop.net.Model
             double y = Math.Sin(2 * Math.PI * i / pointCount) * radius + center.Y;
             points.Add(new Point(x, y));
          }
-         return new Polygon(points, true);
+         return new Ellipse(points);
+      }
+
+      public static Polygon CreatePolyline(Point pointA, Point pointB)
+      {
+         var points = new PointCollection()
+         {
+            pointA,
+            pointB
+         };
+
+         return new Polygon(points, false);
       }
    }
 }
