@@ -20,6 +20,7 @@ namespace flop.net.Model
       public Point LeftCenter => new ((TopLeft.X + BotLeft.X) / 2, (TopLeft.Y + BotLeft.Y) / 2);
       public Point RightCenter => new ((BotRight.X + TopRight.X) / 2, (BotRight.Y + TopRight.Y) / 2);
       public Point Center => new((BotRight.X + TopLeft.X) / 2, (BotRight.Y + TopLeft.Y) / 2);
+      public Rectangle() { }
       public Rectangle(PointCollection points)
       {
          Points = points.Clone();

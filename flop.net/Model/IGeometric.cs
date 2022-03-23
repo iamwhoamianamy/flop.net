@@ -14,11 +14,13 @@ namespace flop.net.Model
       void Move(Vector delta);
       void Rotate(double angle, Point? rotationCenter=null);
       void Scale(Point scale, Point? scalePoint=null);
-      PointCollection Points { get; }
+      PointCollection Points { get; set; }
       bool IsClosed { get; set; }
       Point Center { get; }
       bool IsIn(Point position, double eps);
       Rectangle BoundingBoxRotated { get; }
       Rectangle BoundingBox { get; }
+      void MovePoint(Point pointToMove, Vector delta);
+      Polygon AddPoint(Point newPoint);
    }
 }

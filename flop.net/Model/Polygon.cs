@@ -10,7 +10,7 @@ namespace flop.net.Model
    {
       public double RotationAngle { get; private set; }
       
-      public PointCollection Points { get; private set; }
+      public PointCollection Points { get; set; }
 
       public Point Center { get 
          {
@@ -155,15 +155,14 @@ namespace flop.net.Model
          {
             rotationCenter = Center;
          }
-         var degToRad = angle * Math.PI / 180;
-         RotationAngle += degToRad;
+         RotationAngle += angle;
          for (var i = 0; i < Points.Count; i++)
          {
             var point = Point.Subtract(Points[i], (Vector)rotationCenter);
             var oldX = point.X;
             var oldY = point.Y;
-            point.X = oldX * Math.Cos(degToRad) - oldY * Math.Sin(degToRad);
-            point.Y = oldX * Math.Sin(degToRad) + oldY * Math.Cos(degToRad);
+            point.X = oldX * Math.Cos(angle) - oldY * Math.Sin(angle);
+            point.Y = oldX * Math.Sin(angle) + oldY * Math.Cos(angle);
             Points[i] = Point.Add(point, (Vector)rotationCenter);
          }
       }
@@ -181,13 +180,14 @@ namespace flop.net.Model
          }
       }
 
-      public virtual Polygon AddPoint(Point newPoint)
+      public Polygon AddPoint(Point newPoint)
       {
          var minPoint = Points.OrderBy(x => Math.Sqrt((x.X - newPoint.X) * (x.X - newPoint.X) + (x.Y - newPoint.Y) * (x.Y - newPoint.Y))).First();
          var index = Points.IndexOf(minPoint);
          int index_prev = index - 1;
          int index_next = index + 1;
          int indexNewPoint = 0;
+         var newPoints = Points.Clone();
 
          if (IsClosed)
          {
@@ -214,10 +214,13 @@ namespace flop.net.Model
             {
                indexNewPoint = index_next;
             }
+            newPoints.Insert(indexNewPoint, newPoint);
          }
-
-         var newPoints = Points.Clone();
-         newPoints.Insert(indexNewPoint, newPoint);
+         else
+         {
+            newPoints.Add(newPoint);
+         }
+         
          return new Polygon(newPoints, IsClosed, RotationAngle);
       } 
       
@@ -252,6 +255,15 @@ namespace flop.net.Model
                var tmp = new Point(Points[i].X, Points[i].Y - 2 * (Points[i].Y - flipPoint.Y));
                Points[i] = tmp;
             }
+         }
+      }
+
+      public void MovePoint(Point pointToMove, Vector delta)
+      {
+         var index = Points.IndexOf(pointToMove);
+         if (index != -1)
+         {
+            Points[index] = Point.Add(Points[index], delta);
          }
       }
    }
