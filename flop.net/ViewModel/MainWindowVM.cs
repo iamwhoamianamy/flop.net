@@ -86,8 +86,8 @@ public class MainWindowVM : INotifyPropertyChanged
          var undoCommand = UndoStack.Pop();
          RedoStack.Push(undoCommand);
          undoCommand.UnExecute.Execute(null);
-         //if (ActiveLayer.Figures.Count != 0)
-         //   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
+
+         OnPropertyChanged();
       }
    }
 
@@ -98,8 +98,8 @@ public class MainWindowVM : INotifyPropertyChanged
          var redoCommand = RedoStack.Pop();
          UndoStack.Push(redoCommand);
          redoCommand.Execute.Execute(null);
-         //if (ActiveLayer.Figures.Count != 0)
-         //   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
+
+         OnPropertyChanged();
       }
    }
 
@@ -126,7 +126,8 @@ public class MainWindowVM : INotifyPropertyChanged
 
             ActiveFigure = null;
 
-            foreach (var figure in ActiveLayer.Figures)
+            var ReverseFiguresList = ActiveLayer.Figures.Reverse<Figure>();
+            foreach (var figure in ReverseFiguresList)
             {
                if (figure.Geometric.IsIn(mouseCoords.Value, 1e-1))
                {
@@ -196,6 +197,7 @@ public class MainWindowVM : INotifyPropertyChanged
             else if (WorkingMode == ViewMode.Moving)
                WorkingMode = ViewMode.Default;
             СurrentFigureType = FigureCreationMode.None;
+            OnPropertyChanged();
          }, isModifyingAvailable);
          if (!palletCommands.Contains(toggleMoving))
             palletCommands.Add(toggleMoving);
@@ -216,6 +218,7 @@ public class MainWindowVM : INotifyPropertyChanged
             else if (WorkingMode == ViewMode.Scaling)
                WorkingMode = ViewMode.Default;
             СurrentFigureType = FigureCreationMode.None;
+            OnPropertyChanged();
          }, isModifyingAvailable);
          if (!palletCommands.Contains(toggleScaling))
             palletCommands.Add(toggleScaling);
@@ -280,6 +283,16 @@ public class MainWindowVM : INotifyPropertyChanged
          });
       }
    }
+   public RelayCommand BeginActiveFigureScaling
+   {
+      get
+      {
+         return new RelayCommand(_ =>
+         {
+            summary_scale_value = new Point(1, 1);
+         });
+      }
+   }
    public RelayCommand OnActiveFigureMoving
    {
       get
@@ -300,10 +313,16 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          return new RelayCommand(obj =>
          {
-            var scale = obj as Point?;
-            summary_scale_value = (Point)scale;
-            if (ActiveFigure != null)
-               ActiveFigure.Geometric.Scale((Point)scale);
+            var scale = obj as (Point, Point)?;
+
+            ActiveFigure.Geometric.Scale(scale.Value.Item1, scale.Value.Item2);
+
+            summary_scale_value.X *= scale.Value.Item1.X;
+            summary_scale_value.Y *= scale.Value.Item1.Y;
+            scalePoint = scale.Value.Item2;
+
+            ActiveLayer.Figures.Add(null);
+            ActiveLayer.Figures.RemoveAt(ActiveLayer.Figures.Count - 1);
          });
       }
    }
@@ -396,6 +415,7 @@ public class MainWindowVM : INotifyPropertyChanged
    private Vector summary_moving_delta;
    private Point summary_scale_value;
    private double summary_rotate_angle;
+   private Point scalePoint;
    public RelayCommand OnFigureMovingFinished
    {
       get
@@ -428,15 +448,16 @@ public class MainWindowVM : INotifyPropertyChanged
             RedoStack.Clear();
             Figure figure = activeFigure;
             Point scale = summary_scale_value;
+            Point currentScalePoint = scalePoint;
 
             Action<object> redo = (_) =>
             {
-               figure.Geometric.Scale(scale);
+               figure.Geometric.Scale(scale, currentScalePoint);
             };
 
             Action<object> undo = (_) =>
             {
-               figure.Geometric.Scale(new Point(1 / scale.X, 1 / scale.Y));
+               figure.Geometric.Scale(new Point(1 / scale.X, 1 / scale.Y), currentScalePoint);
             };
             UndoStack.Push(new UserCommands(redo, undo));
             summary_scale_value = new Point();
@@ -717,6 +738,13 @@ public class MainWindowVM : INotifyPropertyChanged
       palletCommands = new List<RelayCommand> { };
       CreationDrawingParameters = new DrawingParameters();
       summary_moving_delta = new Vector();
+
+      Layers.CollectionChanged += Layers_CollectionChanged;
+   }
+
+   private void Layers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+   {
+      OnPropertyChanged();
    }
 
    public event PropertyChangedEventHandler PropertyChanged;
