@@ -221,24 +221,38 @@ namespace flop.net.Model
          return new Polygon(newPoints, IsClosed, RotationAngle);
       } 
       
-      public void HorizontalFlip(PointCollection points)
+      public void HorizontalFlip(Point flipPoint)
       {
-         Points flipped = Points[points.Count];
-         for (int i = 0; i < points.Count; i++)
+         for (int i = 0; i < Points.Count; i++)
          {
-            flipped[i] = new Points(-1 * points[i].X, points[i].Y);
+            if (Points[i].X < flipPoint.X)
+            {
+               var tmp = new Point(Points[i].X + 2 * (flipPoint.X - Points[i].X), Points[i].Y);
+               Points[i] = tmp;
+            }
+            if (Points[i].X > flipPoint.X)
+            {
+               var tmp = new Point(Points[i].X - 2 * (Points[i].X - flipPoint.X), Points[i].Y);
+               Points[i] = tmp;
+            }
          }
-         return flipped;
       }
 
-      public void VerticalFlip(PointCollection points)
+      public void VerticalFlip(Point flipPoint)
       {
-         Points flipped = Points[points.Count];
-         for (int i = 0; i < points.Count; i++)
+         for (int i = 0; i < Points.Count; i++)
          {
-            flipped[i] = new Points(points[i].X, -1 * points[i].Y);
+            if (Points[i].Y < flipPoint.Y)
+            {
+               var tmp = new Point(Points[i].X, Points[i].Y + 2 * (flipPoint.Y - Points[i].Y));
+               Points[i] = tmp;
+            }
+            if (Points[i].Y > flipPoint.Y)
+            {
+               var tmp = new Point(Points[i].X, Points[i].Y - 2 * (Points[i].Y - flipPoint.Y));
+               Points[i] = tmp;
+            }
          }
-         return flipped;
       }
    }
 }
