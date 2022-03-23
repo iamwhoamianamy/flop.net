@@ -91,5 +91,16 @@ namespace flop.net.Model
          }
          return new Ellipse(points);
       }
+
+      public static Polygon CreatePolyline(Point pointA, Point pointB)
+      {
+         var points = new PointCollection()
+         {
+            pointA,
+            pointB
+         };
+
+         return new Polygon(points, false);
+      }
    }
 }
