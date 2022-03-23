@@ -6,7 +6,9 @@ using System.Text;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Xml;
+using flop.net.Enums;
 using flop.net.Model;
+using Figure=flop.net.Model.Figure;
 
 namespace flop.net.Save;
 
@@ -41,8 +43,7 @@ public class SvgSaver
    /// <param name="newLineChars"></param>
    /// <param name="newLineHandling"></param>
    /// <param name="newLineOnAttributes"></param>
-   public void SetXmlWriterFormatSettings(Encoding encoding, bool indent, NewLineHandling newLineHandling,
-      bool newLineOnAttributes)
+   public void SetXmlWriterFormatSettings(Encoding encoding, bool indent, NewLineHandling newLineHandling, bool newLineOnAttributes)
    {
       _settings.Encoding = encoding;
       _settings.Indent = indent;
@@ -55,7 +56,20 @@ public class SvgSaver
       WriteBegin();
       foreach (var item in _layers.Figures)
       {
-         WritePolygon(item);
+         switch (item.Geometric)
+         {
+            case Ellipse:
+               WriteEllipse(item);
+               break;
+            case Polygon:
+               if(item.Geometric.IsClosed)
+                  WritePolygon(item);
+               else
+                  
+               break;
+            
+         }
+         
       }
       WriteEnd();
    }
@@ -82,7 +96,7 @@ public class SvgSaver
       _xmlWriter.Flush();
       _xmlWriter.Close();
    }
-   private void WritePolygon(Model.Figure figure)
+   private void WritePolygon(Figure figure)
    {
       _xmlWriter.WriteStartElement("polygon");
       _xmlWriter.WriteAttributeString("points", WritePoints(figure.Geometric));
@@ -105,28 +119,30 @@ public class SvgSaver
       }
       return result;
    }
-   // inactive methods
-   private void WriteRectangle(IGeometric geometric)
+   private string WritePoint(IGeometric geometric)
    {
-      _xmlWriter.WriteStartElement("rect");
-      _xmlWriter.WriteAttributeString("x", "123");
-      _xmlWriter.WriteAttributeString("y", "123");
-      _xmlWriter.WriteAttributeString("width", "123");
-      _xmlWriter.WriteAttributeString("height", 500.ToString());
-      _xmlWriter.WriteAttributeString("fill", "red");
-      _xmlWriter.WriteEndElement();
+      string result = null;
+      var xMi = geometric.Points.Min();
+      
+      return result;
+   }
+   private void WriteEllipse(Figure figure)
+   {
+      _xmlWriter.Settings.NewLineOnAttributes = false;
+      _xmlWriter.WriteStartElement("ellipse");
+      _xmlWriter.WriteAttributeString("cx", String.Format("{0:0}",figure.Geometric.Center.X));
+      _xmlWriter.WriteAttributeString("cy", String.Format("{0:0}",figure.Geometric.Center.Y));
+      string rx = String.Format("{0:0}", (int) ((figure.Geometric as Ellipse).Width / 2));
+      _xmlWriter.WriteAttributeString("rx", rx);
+      string ry = String.Format("{0:0}", (int) ((figure.Geometric as Ellipse).Height / 2));
+      _xmlWriter.WriteAttributeString("ry", ry);
+      _xmlWriter.WriteAttributeString("fill", $"{HexConverter(figure.DrawingParameters.Fill)}");
+      _xmlWriter.WriteAttributeString("stroke",$"{HexConverter(figure.DrawingParameters.Stroke)}");
+      _xmlWriter.WriteAttributeString("stroke-width",figure.DrawingParameters.StrokeThickness.ToString());
    }
 
-   private void WriteTriangle()
+   private void WritePolyline(Figure figure)
    {
-   }
-   
- 
-   private void WriteEllipse()
-   {
-   }
-
-   private void WriteCircle()
-   {
+      
    }
 }
