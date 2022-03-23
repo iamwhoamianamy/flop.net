@@ -10,6 +10,8 @@ namespace flop.net.Enums
    {
       Default,
       Creation,
+      PolylineCreation,
+      PencilDrawing,
       Moving,
       Rotating,
       Scaling,

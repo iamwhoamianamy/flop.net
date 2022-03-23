@@ -74,6 +74,7 @@
     <Compile Include="Geometry\PolygonMoveTests.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Save\SvgSaverTests.cs" />
     <Compile Include="ViewModel\MainWindowVMTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +89,11 @@
       <Project>{82a310bb-66cc-4a40-bf59-aa2133782cb2}</Project>
       <Name>flop.net</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Save\Answers\SvgAnswer.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -103,7 +103,26 @@ namespace flop.net.Model
          this.ZIndex = parameters.ZIndex;
          this.PenLineCap = parameters.PenLineCap;
       }
-
+      public void Copy(DrawingParameters parameters)
+      {
+         this.Fill = parameters.Fill;
+         this.Stroke = parameters.Stroke;
+         this.StrokeThickness = parameters.StrokeThickness;
+         this.StrokeDashArray = parameters.StrokeDashArray;
+         this.Opacity = parameters.Opacity;
+         this.ZIndex = parameters.ZIndex;
+         this.PenLineCap = parameters.PenLineCap;
+      }
+      public bool Compare(DrawingParameters parameters)
+      {
+         return this.Fill == parameters.Fill
+            && this.Stroke == parameters.Stroke
+            && this.StrokeThickness == parameters.StrokeThickness
+            && this.StrokeDashArray == parameters.StrokeDashArray
+            && this.Opacity == parameters.Opacity
+            && this.ZIndex == parameters.ZIndex
+            && this.PenLineCap == parameters.PenLineCap;   
+      }
 
 
       public event PropertyChangedEventHandler PropertyChanged;

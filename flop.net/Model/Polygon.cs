@@ -10,7 +10,7 @@ namespace flop.net.Model
    {
       public double RotationAngle { get; private set; }
       
-      public PointCollection Points { get; private set; }
+      public PointCollection Points { get; set; }
 
       public Point Center { get 
          {
@@ -155,15 +155,14 @@ namespace flop.net.Model
          {
             rotationCenter = Center;
          }
-         var degToRad = angle * Math.PI / 180;
-         RotationAngle += degToRad;
+         RotationAngle += angle;
          for (var i = 0; i < Points.Count; i++)
          {
             var point = Point.Subtract(Points[i], (Vector)rotationCenter);
             var oldX = point.X;
             var oldY = point.Y;
-            point.X = oldX * Math.Cos(degToRad) - oldY * Math.Sin(degToRad);
-            point.Y = oldX * Math.Sin(degToRad) + oldY * Math.Cos(degToRad);
+            point.X = oldX * Math.Cos(angle) - oldY * Math.Sin(angle);
+            point.Y = oldX * Math.Sin(angle) + oldY * Math.Cos(angle);
             Points[i] = Point.Add(point, (Vector)rotationCenter);
          }
       }

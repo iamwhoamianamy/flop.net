@@ -36,7 +36,10 @@ namespace flop.net.Save
          {
             foreach(var figure in layer.Figures)
             {
-               DrawPolygon(gfx, figure);
+               if (figure.Geometric.IsClosed == true)
+                  DrawPolygon(gfx, figure);
+               else
+                  DrawPolyline(gfx, figure);
             }
          }
          document.Save(FullFileName);
@@ -71,6 +74,13 @@ namespace flop.net.Save
             gfx.DrawPolygon(brush, GetXPoints(figure.Geometric.Points), XFillMode.Alternate);
          }
       }
+
+      private void DrawPolyline(XGraphics gfx, Figure figure)
+      {
+         XPen pen = new XPen(GetXColor(figure.DrawingParameters.Fill), figure.DrawingParameters.StrokeThickness);
+         gfx.DrawLines(pen, GetXPoints(figure.Geometric.Points));
+      }
+
 
       private XPoint[] GetXPoints(PointCollection points)
       {
