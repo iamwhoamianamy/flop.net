@@ -132,8 +132,41 @@ public class MainWindowVM : INotifyPropertyChanged
                if (figure.Geometric.IsIn(mouseCoords.Value, 1e-1))
                {
                   ActiveFigure = figure;
+                  ActiveFigureDrawingParameters = figure.DrawingParameters;
                   break;
                }
+            }
+         });
+      }
+   }
+
+   private DrawingParameters ActiveFigureDrawingParameters;
+   private RelayCommand updateActiveFigureColor;
+   public RelayCommand UpdateActiveFigureColor
+   {
+      get
+      {
+         return updateActiveFigureColor ??= new RelayCommand( _ =>
+         {
+            if (ActiveFigure.DrawingParameters != ActiveFigureDrawingParameters)
+            {
+               RedoStack.Clear();
+               Figure figure = activeFigure;
+               DrawingParameters newDrawingParameters = new DrawingParameters(ActiveFigure.DrawingParameters);
+               DrawingParameters oldDrawingParameters = new DrawingParameters(ActiveFigureDrawingParameters);
+
+               OnPropertyChanged();
+
+               Action<object> redo = (_) =>
+               {
+                  figure.DrawingParameters = newDrawingParameters;
+               };
+
+               Action<object> undo = (_) =>
+               {
+                  figure.DrawingParameters = oldDrawingParameters;
+               };
+               UndoStack.Push(new UserCommands(redo, undo));
             }
          });
       }
