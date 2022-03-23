@@ -219,6 +219,26 @@ namespace flop.net.Model
          var newPoints = Points.Clone();
          newPoints.Insert(indexNewPoint, newPoint);
          return new Polygon(newPoints, IsClosed, RotationAngle);
+      } 
+      
+      public void HorizontalFlip(PointCollection points)
+      {
+         Points flipped = Points[points.Count];
+         for (int i = 0; i < points.Count; i++)
+         {
+            flipped[i] = new Points(-1 * points[i].X, points[i].Y);
+         }
+         return flipped;
+      }
+
+      public void VerticalFlip(PointCollection points)
+      {
+         Points flipped = Points[points.Count];
+         for (int i = 0; i < points.Count; i++)
+         {
+            flipped[i] = new Points(points[i].X, -1 * points[i].Y);
+         }
+         return flipped;
       }
    }
 }
