@@ -370,7 +370,6 @@ public class MainWindowVM : INotifyPropertyChanged
          return toggleDeleting;
       }
    }
-
    public RelayCommand BeginActiveFigureMoving
    {
       get

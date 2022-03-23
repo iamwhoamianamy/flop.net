@@ -318,11 +318,12 @@
                        Grid.Row="1"
                        Margin="10 10 0 0"/>
             <r:Spinner Value="{Binding TempDrawingParameters.Opacity, Mode=TwoWay}"
-                       Maximum="0"
+                       Maximum="1"
                        Grid.Column="1"
                        Grid.Row="1"
                        Margin="10 10 0 0"
-                       Width="90"/>
+                       Width="90" 
+                       Increment="0.1"/>
           </Grid>
         </r:RibbonGroupBox>
       </r:RibbonTabItem>
