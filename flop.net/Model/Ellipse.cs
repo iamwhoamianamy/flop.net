@@ -10,8 +10,8 @@ namespace flop.net.Model
 {
    public class Ellipse : Polygon
    {
-      public double Height { get; set; }
-      public double Width { get; set; }
+      private double Height { get; set; }
+      private double Width { get; set; }
       public Ellipse() : base() { }
 
       public Ellipse(PointCollection points) : base(points, true) 

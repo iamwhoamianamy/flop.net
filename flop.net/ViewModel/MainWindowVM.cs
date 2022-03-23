@@ -795,7 +795,7 @@ public class MainWindowVM : INotifyPropertyChanged
             switch (Enum.Parse(typeof(SaveTypes), parameters.Format, true))
             {
                case SaveTypes.Svg:
-                  var saver = new SvgSaver(parameters.FileName, ActiveLayer, parameters.Width, parameters.Height);
+                  var saver = new SvgIO(parameters.FileName, ActiveLayer, parameters.Width, parameters.Height);
                   saver.Save();
                   break;
                case SaveTypes.Flp:
@@ -829,7 +829,10 @@ public class MainWindowVM : INotifyPropertyChanged
             switch (Enum.Parse(typeof(OpenTypes), parameters.Format, true))
             {
                case OpenTypes.Svg:
-                  //TODO: Открыть svg
+                  //TODO: Проблема отрисовки карандаша и ломаных линий
+                  var svgSaver = new SvgIO(parameters.FileName);
+                  ActiveLayer=svgSaver.Open();
+                  ReloadData();
                   break;
                case OpenTypes.Flp:
                   var flpSaver = new JsonSaver(parameters.FileName);
