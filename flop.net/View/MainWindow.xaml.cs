@@ -61,8 +61,10 @@ namespace flop.net
       public Point MousePosition2 { get; set; }
       private double previousHorizontal;
       private double previousVertical;
+      private double previousAngle;
        
       Thumb MovingThumb { get; set; }
+      Thumb RotatingThumb { get; set; }
       ThumbsBox scalingThumbs;
       public MainWindow()
       {
@@ -78,6 +80,7 @@ namespace flop.net
          Save.MouseLeftButtonDown += SaveOnMouseLeftButtonDown;
 
          InitMovingThumb();
+         InitRotatingThumb();
          InitScalingThumbs();
 
          Open.MouseLeftButtonDown += OpenOnMouseLeftButtonDown;
@@ -217,7 +220,6 @@ namespace flop.net
                {
                   MainWindowVM.OnActiveFigureScaling.Execute((new Point(1, 1), scalePoint));
                }
-
             }
          }
       }
@@ -246,6 +248,17 @@ namespace flop.net
                MovingThumb.Visibility = Visibility.Hidden;
             }
 
+            if (MainWindowVM.WorkingMode == ViewMode.Rotating)
+            {
+               var topCenter = mainWindowVM.ActiveFigure.Geometric.BoundingBox.TopCenter;
+               RotatingThumb.Margin = new Thickness(topCenter.X + 20, topCenter.Y + 20, -topCenter.X - 20, -topCenter.Y - 20);
+               RotatingThumb.Visibility = Visibility.Visible;
+            }
+            else
+            {
+               RotatingThumb.Visibility = Visibility.Hidden;
+            }
+
             if (MainWindowVM.WorkingMode == ViewMode.Scaling)
             {
                scalingThumbs.Visibility = Visibility.Visible;
@@ -259,6 +272,7 @@ namespace flop.net
          else
          {
             MovingThumb.Visibility = Visibility.Hidden;
+            RotatingThumb.Visibility = Visibility.Hidden;
             scalingThumbs.Visibility = Visibility.Hidden;
          }
 
@@ -271,7 +285,7 @@ namespace flop.net
 
          MovingThumb.Width = 10;
          MovingThumb.Height = 10;
-         MovingThumb.Cursor = Cursors.SizeNS;
+         MovingThumb.Cursor = Cursors.SizeAll;
 
          MovingThumb.Background = Brushes.LightGreen;
          MovingThumb.BorderBrush = Brushes.DarkGreen;
@@ -312,6 +326,65 @@ namespace flop.net
             WorkingMode = ViewMode.Default;
             mainWindowVM.OnFigureMovingFinished.Execute(null);
             OnPreviewMouseUp(sender, null);
+         }
+      }
+      private void InitRotatingThumb()
+      {
+         RotatingThumb = new Thumb();
+
+         RotatingThumb.Width = 10;
+         RotatingThumb.Height = 10;
+         RotatingThumb.Cursor = Cursors.Hand;
+
+         RotatingThumb.Background = Brushes.LightSkyBlue;
+         RotatingThumb.BorderBrush = Brushes.SkyBlue;
+
+         RotatingThumb.Visibility = Visibility.Hidden;
+
+         RotatingThumb.PreviewMouseMove += RotatingThumb_PreviewMouseMove;
+         RotatingThumb.PreviewMouseDown += RotatingThumb_PreviewMouseDown;
+         RotatingThumb.DragCompleted += RotatingThumb_DragCompleted;
+      }      
+
+      private void RotatingThumb_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+      {
+         if (mainWindowVM.WorkingMode == ViewMode.Rotating &&
+            WorkingMode == ViewMode.Default)
+         {
+            //mainWindowVM.BeginActiveFigureRotating.Execute(null);
+            WorkingMode = ViewMode.Rotating;
+
+            MousePosition1 = e.GetPosition(MainCanvas);
+         }
+      }
+
+      private void RotatingThumb_PreviewMouseMove(object sender, MouseEventArgs e)
+      {
+         if (WorkingMode == ViewMode.Rotating)
+         {
+            MousePosition2 = e.GetPosition(MainCanvas);
+
+            var center = MainWindowVM.ActiveFigure.Geometric.Center;
+
+            Vector a = MousePosition1 - center;
+            Vector b = MousePosition2 - center;
+
+            double angle = Math.Acos((a.X * b.X + a.Y * b.Y) / (a.LengthSquared * b.LengthSquared));
+
+            if (MainWindowVM.WorkingMode == ViewMode.Rotating) 
+            {
+               //MainWindowVM.OnActiveFigureRotating.Execute((angle - previousAngle));
+               previousAngle += angle;
+            }
+         }
+      }
+      private void RotatingThumb_DragCompleted(object sender, DragCompletedEventArgs e)
+      {
+         if (WorkingMode == ViewMode.Rotating) 
+         {
+            //MainWindowVM.OnFigureRotatingFinished.Execute(null);
+            previousAngle = 0;
+            WorkingMode = ViewMode.Default;
          }
       }
 
@@ -381,6 +454,7 @@ namespace flop.net
          }
 
          MainCanvas.Children.Add(MovingThumb);
+         MainCanvas.Children.Add(RotatingThumb);
 
          foreach (var thumb in scalingThumbs.Thumbs)
          {
