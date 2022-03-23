@@ -86,8 +86,8 @@ public class MainWindowVM : INotifyPropertyChanged
          var undoCommand = UndoStack.Pop();
          RedoStack.Push(undoCommand);
          undoCommand.UnExecute.Execute(null);
-         //if (ActiveLayer.Figures.Count != 0)
-         //   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
+
+         OnPropertyChanged();
       }
    }
 
@@ -98,8 +98,8 @@ public class MainWindowVM : INotifyPropertyChanged
          var redoCommand = RedoStack.Pop();
          UndoStack.Push(redoCommand);
          redoCommand.Execute.Execute(null);
-         //if (ActiveLayer.Figures.Count != 0)
-         //   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
+
+         OnPropertyChanged();
       }
    }
 
@@ -411,15 +411,16 @@ public class MainWindowVM : INotifyPropertyChanged
             RedoStack.Clear();
             Figure figure = activeFigure;
             Point scale = summary_scale_value;
+            Point currentScalePoint = scalePoint;
 
             Action<object> redo = (_) =>
             {
-               figure.Geometric.Scale(scale, scalePoint);
+               figure.Geometric.Scale(scale, currentScalePoint);
             };
 
             Action<object> undo = (_) =>
             {
-               figure.Geometric.Scale(new Point(1 / scale.X, 1 / scale.Y), scalePoint);
+               figure.Geometric.Scale(new Point(1 / scale.X, 1 / scale.Y), currentScalePoint);
             };
             UndoStack.Push(new UserCommands(redo, undo));
             summary_scale_value = new Point();

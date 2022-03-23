@@ -57,8 +57,8 @@ namespace flop.net
       }
       public ViewMode WorkingMode { get; set; }
       public FigureCreationMode СurrentFigureType { get; set; }
-      public Point MousePosition1;
-      public Point MousePosition2;
+      public Point MousePosition1 { get; set; }
+      public Point MousePosition2 { get; set; }
       private double previousHorizontal;
       private double previousVertical;
        
@@ -95,6 +95,7 @@ namespace flop.net
             thumb.DragCompleted += ScalingThumb_DragCompleted;
          }
       }
+
       private void ScalingThumb_PreviewMouseDown(object sender, MouseButtonEventArgs e)
       {
          if (mainWindowVM.WorkingMode == ViewMode.Scaling &&
@@ -218,7 +219,7 @@ namespace flop.net
                }
 
             }
-         }         
+         }
       }
       private void ScalingThumb_DragCompleted(object sender, DragCompletedEventArgs e)
       {
@@ -237,9 +238,8 @@ namespace flop.net
             if (MainWindowVM.WorkingMode == ViewMode.Moving)
             {
                var center = mainWindowVM.ActiveFigure.Geometric.BoundingBox.Center;
-               MovingThumb.Margin = new Thickness(center.X, center.Y, center.X, center.Y);
+               MovingThumb.Margin = new Thickness(center.X, center.Y, -center.X, -center.Y);
                MovingThumb.Visibility = Visibility.Visible;
-               return;
             }
             else
             {
@@ -250,13 +250,18 @@ namespace flop.net
             {
                scalingThumbs.Visibility = Visibility.Visible;
                scalingThumbs.Box = MainWindowVM.ActiveFigure.Geometric.BoundingBox;
-               return;
             }
             else
             {
                scalingThumbs.Visibility = Visibility.Hidden;
             }
          }
+         else
+         {
+            MovingThumb.Visibility = Visibility.Hidden;
+            scalingThumbs.Visibility = Visibility.Hidden;
+         }
+
          DrawAll();
       }
 
@@ -275,9 +280,6 @@ namespace flop.net
 
          MovingThumb.PreviewMouseMove += MovingThumb_PreviewMouseMove;
          MovingThumb.PreviewMouseDown += MovingThumb_PreviewMouseDown;
-
-         MovingThumb.HorizontalAlignment = HorizontalAlignment.Center;
-         MovingThumb.VerticalAlignment = VerticalAlignment.Center;
       }
 
       private void MovingThumb_PreviewMouseDown(object sender, MouseButtonEventArgs e)
