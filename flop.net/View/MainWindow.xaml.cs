@@ -80,6 +80,7 @@ namespace flop.net
          Graphic = new Graphic(MainCanvas);
 
          Save.MouseLeftButtonDown += SaveOnMouseLeftButtonDown;
+         NewDocument.MouseLeftButtonDown += NewDocumentOnMouseLeftButtonDown;
 
          InitMovingThumb();
          InitRotatingThumb();
@@ -88,6 +89,9 @@ namespace flop.net
          Open.MouseLeftButtonDown += OpenOnMouseLeftButtonDown;
          DrawAll();
       }
+
+      
+
       private void MainWindowVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
       {
          if (MainWindowVM.ActiveFigure is not null)
@@ -390,6 +394,26 @@ namespace flop.net
             MainWindowVM.OnFigureRotatingFinished.Execute(null);
             previousAngle = 0;
             WorkingMode = ViewMode.Default;
+         }
+      }
+      private void NewDocumentOnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+      {
+         if (MainWindowVM.ActiveLayer.Figures.Count > 0) 
+         {
+            var res = MessageBox.Show("Вы уверены, что хотите начать с нуля?", "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+            if (res == MessageBoxResult.OK) 
+            {
+               MainWindowVM.NewDocument.Execute(null);
+            }
+            else
+            {
+               return;
+            }
+         }
+         else
+         {
+            MainWindowVM.NewDocument.Execute(null);
+            return;
          }
       }
       private void SaveOnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

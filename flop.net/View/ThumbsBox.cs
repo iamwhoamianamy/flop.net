@@ -64,14 +64,14 @@ namespace flop.net.View
             Thumbs.Add(thumb);
          }         
 
-         TopLeft.Cursor = Cursors.SizeNWSE;
+         TopLeft.Cursor = Cursors.SizeNESW;
          TopCenter.Cursor = Cursors.SizeNS;
-         TopRight.Cursor = Cursors.SizeNESW;
+         TopRight.Cursor = Cursors.SizeNWSE;
          LeftCenter.Cursor = Cursors.SizeWE;
          RightCenter.Cursor = Cursors.SizeWE;
-         BotLeft.Cursor = Cursors.SizeNESW;
+         BotLeft.Cursor = Cursors.SizeNWSE;
          BotCenter.Cursor = Cursors.SizeNS;
-         BotRight.Cursor = Cursors.SizeNWSE;
+         BotRight.Cursor = Cursors.SizeNESW;
 
          TopLeft.VerticalAlignment = VerticalAlignment.Top;
          TopCenter.VerticalAlignment = VerticalAlignment.Top;

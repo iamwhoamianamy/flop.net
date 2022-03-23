@@ -32,7 +32,7 @@
       <r:Ribbon.Menu>
         <r:Backstage>
           <r:BackstageTabControl>
-            <r:BackstageTabItem Header="Создать" />
+            <r:BackstageTabItem Header="Создать" x:Name="NewDocument"/>
             <r:BackstageTabItem Header="Открыть" x:Name="Open"/>
             <r:BackstageTabItem Header="Сохранить" x:Name="Save"/>
             <r:SeparatorTabItem />
@@ -176,21 +176,7 @@
                        Grid.Column="1"
                        Grid.Row="0"
                        Margin="0 10 0 0"
-                       Width="90"/>
-            <TextBlock Text="Тип границы"
-                       Grid.Column="0"
-                       Grid.Row="1"
-                       Margin="0 10 0 0"/>
-            <ComboBox Grid.Column="1"
-                      Grid.Row="1"
-                      Margin="0 10 0 0"
-                      Width="90"
-                      SelectedItem="{Binding CreationDrawingParameters.PenLineCap}">
-              <ComboBoxItem Content="Flat"/>
-              <ComboBoxItem Content="Square"/>
-              <ComboBoxItem Content="Round"/>
-              <ComboBoxItem Content="Triangle"/>
-            </ComboBox>
+                       Width="90"/>                      
           </Grid>
         </r:RibbonGroupBox>
 
@@ -202,7 +188,7 @@
                           IsChecked="{Binding TogglePencilDrawing.IsPressed}"
                           Style="{StaticResource RibbonMenuButton}" />
           <r:ToggleButton Header="Ломанная линия"
-                          ToolTip="Рисование ломанной линии произвольной толщины"                            
+                          ToolTip="Рисование ломанной линии произвольной толщины, завершение рисование при нажатии ПКМ"                            
                           Icon="/Images/breakline.png"
                           Command="{Binding TogglePolylineCreation}"
                           IsChecked="{Binding TogglePolylineCreation.IsPressed}" 
@@ -255,17 +241,15 @@
                           Style="{StaticResource RibbonMenuButton}" />
                 </r:RibbonGroupBox>
 
-                <r:RibbonGroupBox Header="Режим трансформации">
+        <!--<r:RibbonGroupBox Header="Режим трансформации">
           <r:ToggleButton Header="Добавление вершины"
                           ToolTip="Добавить вершину"/>
           <r:ToggleButton Header="Удаление вершины"
                           ToolTip="Удалить вершину"/>
-        </r:RibbonGroupBox>
+        </r:RibbonGroupBox>-->
       </r:RibbonTabItem>
 
       <r:RibbonTabItem x:Name="FigureEditor" Header="Фигура" Visibility="{Binding FigureEditorVisibility, Mode=TwoWay}">
-        <!--DataContext="{Binding ElementName=MainWin, Path=MainWindowVM.SelectedFigure}"-->
-
         <r:RibbonGroupBox Header="Параметры фигуры">
           <r:DropDownButton x:Name="SelectedFillColorButton"
                             Header="Цвет заливки">
@@ -317,42 +301,26 @@
               <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="auto" />
-              <ColumnDefinition Width="auto" />
-              <ColumnDefinition Width="auto" />
+              <ColumnDefinition Width="Auto" />
               <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
             <TextBlock Text="Толщина границы"
                        Grid.Column="0"
                        Grid.Row="0"
-                       Margin="0 10 0 0"/>
+                       Margin="10 10 0 0"/>
             <r:Spinner Value="{Binding TempDrawingParameters.StrokeThickness, Mode=TwoWay}"
                        Grid.Column="1"
                        Grid.Row="0"
-                       Margin="0 5 0 0"
-                       Width="90"/>
-            <TextBlock Text="Тип границы"
+                       Margin="10 10 0 0"
+                       Width="90"/>                      
+            <TextBlock Text="Прозрачность"
                        Grid.Column="0"
                        Grid.Row="1"
-                       Margin="0 10 0 0"/>
-            <ComboBox Grid.Column="1"
-                      Grid.Row="1"
-                      Margin="0 5 0 0"
-                      Width="90"
-                      SelectedItem="{Binding TempDrawingParameters.PenLineCap, Mode=TwoWay}">
-              <ComboBoxItem Content="Flat"/>
-              <ComboBoxItem Content="Square"/>
-              <ComboBoxItem Content="Round"/>
-              <ComboBoxItem Content="Triangle"/>
-            </ComboBox>
-            <TextBlock Text="Прозрачность"
-                       Grid.Column="2"
-                       Grid.Row="0"
                        Margin="10 10 0 0"/>
             <r:Spinner Value="{Binding TempDrawingParameters.Opacity, Mode=TwoWay}"
-                       Maximum="1"
-                       Grid.Column="3"
-                       Grid.Row="0"
+                       Maximum="0"
+                       Grid.Column="1"
+                       Grid.Row="1"
                        Margin="10 10 0 0"
                        Width="90"/>
           </Grid>

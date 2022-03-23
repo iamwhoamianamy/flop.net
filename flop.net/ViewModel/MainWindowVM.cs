@@ -145,8 +145,7 @@ public class MainWindowVM : INotifyPropertyChanged
             {
                if (figure.Geometric.IsIn(mouseCoords.Value, 1e-1))
                {
-                  ActiveFigure = figure;
-                  ActiveFigureDrawingParameters = figure.DrawingParameters;
+                  ActiveFigure = figure;                  
                   TempDrawingParameters.Copy(figure.DrawingParameters);
                   flag = true;
                   break;
@@ -177,7 +176,6 @@ public class MainWindowVM : INotifyPropertyChanged
          OnPropertyChanged();
       }
    }
-   private DrawingParameters ActiveFigureDrawingParameters;
    private RelayCommand updateActiveFigureDrawingParameters;
    public RelayCommand UpdateActiveFigureDrawingParameters
    {
@@ -200,13 +198,11 @@ public class MainWindowVM : INotifyPropertyChanged
                Action<object> redo = (_) =>
                {
                   figure.DrawingParameters = newDrawingParameters;
-                  //TempDrawingParameters = newDrawingParameters;
                };
 
                Action<object> undo = (_) =>
                {
                   figure.DrawingParameters = oldDrawingParameters;
-                  //TempDrawingParameters = oldDrawingParameters;
                };
                UndoStack.Push(new UserCommands(redo, undo));
             }
@@ -321,7 +317,6 @@ public class MainWindowVM : INotifyPropertyChanged
          return toggleRotating;
       }
    }
-
    public RelayCommand BeginActiveFigureMoving
    {
       get
@@ -784,7 +779,6 @@ public class MainWindowVM : INotifyPropertyChanged
    }
 
    private RelayCommand save;
-
    public RelayCommand Save
    {
       get
@@ -818,7 +812,6 @@ public class MainWindowVM : INotifyPropertyChanged
    }
 
    private RelayCommand open;
-
    public RelayCommand Open
    {
       get
@@ -846,6 +839,28 @@ public class MainWindowVM : INotifyPropertyChanged
          return open;
       }
    }
+   private RelayCommand newDocument;
+   public RelayCommand NewDocument
+   {
+      get
+      {
+         newDocument ??= new RelayCommand(o => 
+         {
+            Layers.Clear();
+            RedoStack.Clear();
+            UndoStack.Clear();
+            DeletedFigures.Clear();
+            ActiveFigure = null;
+            ActiveLayer.Figures.Clear();
+            TempDrawingParameters = new DrawingParameters();
+            FigureEditorVisibility = Visibility.Collapsed;
+            СurrentFigureType = FigureCreationMode.None;
+            CreationDrawingParameters = new DrawingParameters();
+            summary_moving_delta = new Vector();
+         });
+         return newDocument;
+      }
+   }
 
    public MainWindowVM()
    {
@@ -864,13 +879,7 @@ public class MainWindowVM : INotifyPropertyChanged
       CreationDrawingParameters = new DrawingParameters();
       summary_moving_delta = new Vector();
 
-      Layers.CollectionChanged += Layers_CollectionChanged;
-      TempDrawingParameters.PropertyChanged += TempDrawingParameters_PropertyChanged;
-   }
-
-   private void TempDrawingParameters_PropertyChanged(object sender, PropertyChangedEventArgs e)
-   {
-      OnPropertyChanged();
+      Layers.CollectionChanged += Layers_CollectionChanged;      
    }
 
    private void Layers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
