@@ -338,6 +338,7 @@ public class MainWindowVM : INotifyPropertyChanged
       {
          return new RelayCommand(_ =>
          {
+            var firstPoint = _ as Point?;
             switch (СurrentFigureType)
             {
                case FigureCreationMode.Triangle:
@@ -349,11 +350,14 @@ public class MainWindowVM : INotifyPropertyChanged
                case FigureCreationMode.Polygon:
                   break;
                case FigureCreationMode.Polyline:
-                  //ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreatePolyline(new Point(0, 0), new Point(0, 0)), new DrawingParameters(CreationDrawingParameters)));
+                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreatePolyline((Point)firstPoint, (Point)firstPoint), new DrawingParameters(CreationDrawingParameters)));
+                  break;
+               case FigureCreationMode.Pencil:
+                  ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreatePolyline((Point)firstPoint, (Point)firstPoint), new DrawingParameters(CreationDrawingParameters)));
                   break;
                case FigureCreationMode.Rectangle:
                   ActiveLayer.Figures.Add(new Figure(PolygonBuilder.CreateRectangle(new Point(0, 0), new Point(0, 0)), new DrawingParameters(CreationDrawingParameters)));
-                  break;
+                  break;               
                case FigureCreationMode.None:
                   break;
             }
@@ -393,7 +397,6 @@ public class MainWindowVM : INotifyPropertyChanged
          });
       }
    }
-
    public RelayCommand OnActiveFigureScaling
    {
       get
@@ -413,7 +416,6 @@ public class MainWindowVM : INotifyPropertyChanged
          });
       }
    }
-
    public RelayCommand OnActiveFigureRotating
    {
       get
@@ -427,7 +429,6 @@ public class MainWindowVM : INotifyPropertyChanged
          });
       }
    }
-
    public RelayCommand OnFigureCreation
    {
       get
@@ -452,6 +453,12 @@ public class MainWindowVM : INotifyPropertyChanged
                case FigureCreationMode.Polygon:
                   break;
                case FigureCreationMode.Polyline:
+                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1]
+                  = new Figure(PolygonBuilder.CreatePolyline(points.Value.Item1, points.Value.Item2), selfDrawingParametrs);
+                  ActiveFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
+                  break;
+               case FigureCreationMode.Pencil:
+                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1].Geometric.AddPoint(points.Value.Item1);
                   break;
                case FigureCreationMode.Rectangle:
                   ActiveLayer.Figures[ActiveLayer.Figures.Count - 1]
@@ -464,7 +471,18 @@ public class MainWindowVM : INotifyPropertyChanged
          });
       }
    }
+   public RelayCommand OnPolylineCreation
+   {
+      get
+      {
+         return new RelayCommand(obj =>
+         {
+            var point = obj as Point?;
 
+            ActiveLayer.Figures[ActiveLayer.Figures.Count - 1].Geometric.AddPoint(point.Value);
+         });
+      }
+   }
    public RelayCommand OnFigureCreationFinished
    {
       get
@@ -497,8 +515,7 @@ public class MainWindowVM : INotifyPropertyChanged
             UndoStack.Push(new UserCommands(redo, undo));
          });
       }
-   }
-
+   }   
    private Vector summary_moving_delta;
    private Point summary_scale_value;
    private double summary_rotate_angle;
@@ -650,8 +667,8 @@ public class MainWindowVM : INotifyPropertyChanged
          togglePencilDrawing ??= new RelayCommand(_ =>
          {
             switchButtonSelection(togglePencilDrawing, palletCommands);
-            СurrentFigureType = СurrentFigureType == FigureCreationMode.Polyline ? FigureCreationMode.None : FigureCreationMode.Polyline;
-            WorkingMode = СurrentFigureType == FigureCreationMode.Polyline ? ViewMode.PencilDrawing : ViewMode.Default;
+            СurrentFigureType = СurrentFigureType == FigureCreationMode.Pencil ? FigureCreationMode.None : FigureCreationMode.Pencil;
+            WorkingMode = СurrentFigureType == FigureCreationMode.Pencil ? ViewMode.PencilDrawing : ViewMode.Default;
          });
          if (!palletCommands.Contains(togglePencilDrawing))
             palletCommands.Add(togglePencilDrawing);

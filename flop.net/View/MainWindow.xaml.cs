@@ -488,24 +488,29 @@ namespace flop.net
          if (mainWindowVM.WorkingMode == ViewMode.PolylineCreation &&
             WorkingMode == ViewMode.PolylineCreation)
          {
-            //mainWindowVM.OnPolylineCreation.Execute((MousePosition1, e.GetPosition(MainCanvas)));
+            mainWindowVM.OnFigureCreation.Execute((MousePosition1, e.GetPosition(MainCanvas)));
          }
          if (mainWindowVM.WorkingMode == ViewMode.PencilDrawing &&
             WorkingMode == ViewMode.PencilDrawing)
          {
-            //mainWindowVM.OnPencilDrawingCreation.Execute((MousePosition1, e.GetPosition(MainCanvas)));
+            mainWindowVM.OnFigureCreation.Execute((MousePosition1, e.GetPosition(MainCanvas)));
          }
 
-         bool creation = (mainWindowVM.WorkingMode == ViewMode.Creation &&
-                         WorkingMode == ViewMode.Creation) ||
-                         (mainWindowVM.WorkingMode == ViewMode.PolylineCreation &&
-                         WorkingMode == ViewMode.PolylineCreation) ||
-                         (mainWindowVM.WorkingMode == ViewMode.PencilDrawing &&
-                         WorkingMode == ViewMode.PencilDrawing);
-         if (e.LeftButton == MouseButtonState.Released && creation)
+         
+         if (e.LeftButton == MouseButtonState.Released)
          {
-            WorkingMode = ViewMode.Default;
-            mainWindowVM.OnFigureCreationFinished.Execute(null);
+            bool creation = (mainWindowVM.WorkingMode == ViewMode.Creation && WorkingMode == ViewMode.Creation) ||
+                         (mainWindowVM.WorkingMode == ViewMode.PencilDrawing && WorkingMode == ViewMode.PencilDrawing);
+
+            if (creation)
+            {
+               WorkingMode = ViewMode.Default;
+               mainWindowVM.OnFigureCreationFinished.Execute(null);
+            }
+            if(mainWindowVM.WorkingMode == ViewMode.PolylineCreation && WorkingMode == ViewMode.PolylineCreation)
+            {
+               mainWindowVM.OnFigureCreationFinished.Execute(null);
+            }            
          }
 
       }

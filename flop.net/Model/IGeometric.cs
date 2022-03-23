@@ -20,5 +20,6 @@ namespace flop.net.Model
       bool IsIn(Point position, double eps);
       Rectangle BoundingBoxRotated { get; }
       Rectangle BoundingBox { get; }
+      Polygon AddPoint(Point newPoint);
    }
 }
