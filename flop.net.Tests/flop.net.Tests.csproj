@@ -43,6 +43,7 @@
       <HintPath>..\packages\Microsoft.CodeCoverage.17.1.0\lib\net45\Microsoft.VisualStudio.CodeCoverage.Shim.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows" />
@@ -74,6 +75,7 @@
     <Compile Include="Geometry\PolygonMoveTests.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Save\PdfSaverTests.cs" />
     <Compile Include="Save\SvgSaverTests.cs" />
     <Compile Include="ViewModel\MainWindowVMTests.cs" />
   </ItemGroup>
@@ -91,7 +93,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Save\Answers\SvgAnswer.txt">
+    <Content Include="Save\Answers\SvgAnswerEllipse.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Save\Answers\SvgAnswerRectangle.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Save\Answers\SvgAnswerTriangle.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
