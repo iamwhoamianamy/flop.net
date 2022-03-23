@@ -81,12 +81,6 @@ namespace flop.net
          InitScalingThumbs();
 
          Open.MouseLeftButtonDown += OpenOnMouseLeftButtonDown;
-         MainWindowVM.PropertyChanged += MainWindowVM_PropertyChanged;
-         DrawAll();
-      }
-
-      private void MainWindowVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
-      {
          DrawAll();
       }
 
@@ -263,6 +257,7 @@ namespace flop.net
                scalingThumbs.Visibility = Visibility.Hidden;
             }
          }
+         DrawAll();
       }
 
       private void InitMovingThumb()
