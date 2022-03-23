@@ -86,9 +86,9 @@ namespace flop.net.Model
       }
       public DrawingParameters()
       {
-         this.Fill = Colors.Black;
-         this.Stroke = Colors.White;
-         this.StrokeThickness = 0;
+         this.Fill = Colors.Green;
+         this.Stroke = Colors.Black;
+         this.StrokeThickness = 1;
          this.StrokeDashArray = new List<double>();
          this.Opacity = 1;
          this.PenLineCap = PenLineCap.Flat;
@@ -105,13 +105,20 @@ namespace flop.net.Model
       }
       public void Copy(DrawingParameters parameters)
       {
-         this.Fill = parameters.Fill;
-         this.Stroke = parameters.Stroke;
-         this.StrokeThickness = parameters.StrokeThickness;
-         this.StrokeDashArray = parameters.StrokeDashArray;
-         this.Opacity = parameters.Opacity;
-         this.ZIndex = parameters.ZIndex;
-         this.PenLineCap = parameters.PenLineCap;
+         fill = parameters.Fill;
+         stroke = parameters.Stroke;                
+         strokeThickness = parameters.StrokeThickness;
+         strokeDashArray = parameters.StrokeDashArray;
+         opacity = parameters.Opacity;
+         zIndex = parameters.ZIndex;
+         penLineCap = parameters.PenLineCap;
+         OnPropertyChanged("Fill");
+         OnPropertyChanged("Stroke");
+         OnPropertyChanged("StrokeThickness");
+         OnPropertyChanged("StrokeDashArray");
+         OnPropertyChanged("Opacity");
+         OnPropertyChanged("ZIndex");
+         OnPropertyChanged("PenLineCap");
       }
       public bool Compare(DrawingParameters parameters)
       {
