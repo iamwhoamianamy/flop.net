@@ -66,6 +66,9 @@ namespace flop.net.Model
          {
             pointCount = (int)Math.Round(4 * (Math.PI * h * w + (w - h) * (w - h)) / (w + h));
          }
+
+         if (pointCount.Value < 3)
+            pointCount = 3;
    
          for (var i = 0; i < pointCount; i ++)
          {
