@@ -222,6 +222,27 @@ public class MainWindowVM : INotifyPropertyChanged
          return toggleScaling;
       }
    }
+
+   private RelayCommand toggleRotating;
+   public RelayCommand ToggleRotating
+   {
+      get
+      {
+         toggleRotating ??= new RelayCommand(_ =>
+         {
+            switchButtonSelection(toggleRotating, palletCommands);
+            if (WorkingMode != ViewMode.Rotating)
+               WorkingMode = ViewMode.Rotating;
+            else if (WorkingMode == ViewMode.Rotating)
+               WorkingMode = ViewMode.Default;
+            СurrentFigureType = FigureCreationMode.None;
+         }, isModifyingAvailable);
+         if (!palletCommands.Contains(toggleRotating))
+            palletCommands.Add(toggleRotating);
+         return toggleRotating;
+      }
+   }
+
    public RelayCommand BeginActiveFigureMoving
    {
       get
@@ -283,6 +304,20 @@ public class MainWindowVM : INotifyPropertyChanged
             summary_scale_value = (Point)scale;
             if (ActiveFigure != null)
                ActiveFigure.Geometric.Scale((Point)scale);
+         });
+      }
+   }
+
+   public RelayCommand OnActiveFigureRotating
+   {
+      get
+      {
+         return new RelayCommand(obj =>
+         {
+            var angle = obj as double?;
+            summary_rotate_angle = (double)angle;
+            if (ActiveFigure != null)
+               ActiveFigure.Geometric.Rotate((double)angle);
          });
       }
    }
@@ -360,6 +395,7 @@ public class MainWindowVM : INotifyPropertyChanged
 
    private Vector summary_moving_delta;
    private Point summary_scale_value;
+   private double summary_rotate_angle;
    public RelayCommand OnFigureMovingFinished
    {
       get
@@ -404,6 +440,29 @@ public class MainWindowVM : INotifyPropertyChanged
             };
             UndoStack.Push(new UserCommands(redo, undo));
             summary_scale_value = new Point();
+         });
+      }
+   }
+   public RelayCommand OnFigureRotatingFinished
+   {
+      get
+      {
+         return new RelayCommand(obj =>
+         {
+            RedoStack.Clear();
+            Figure figure = activeFigure;
+            double angle = summary_rotate_angle;
+            Action<object> redo = (_) =>
+            {
+               figure.Geometric.Rotate(angle);
+            };
+
+            Action<object> undo = (_) =>
+            {
+               figure.Geometric.Rotate(-angle);
+            };
+            UndoStack.Push(new UserCommands(redo, undo));
+            summary_moving_delta = new Vector();
          });
       }
    }
@@ -493,56 +552,56 @@ public class MainWindowVM : INotifyPropertyChanged
       }
    }
 
-   private RelayCommand scaleFigure;
-   public RelayCommand ScaleFigure
-   {
-      get
-      {
-         scaleFigure ??= new RelayCommand(_ =>
-         {
-            if (activeFigure != null)
-            {
-               RedoStack.Clear();
-               switchButtonSelection(scaleFigure, palletCommands);
+   //private RelayCommand scaleFigure;
+   //public RelayCommand ScaleFigure
+   //{
+   //   get
+   //   {
+   //      scaleFigure ??= new RelayCommand(_ =>
+   //      {
+   //         if (activeFigure != null)
+   //         {
+   //            RedoStack.Clear();
+   //            switchButtonSelection(scaleFigure, palletCommands);
 
-               activeFigure.Geometric.Scale(new Point(2, 2));
-               UndoStack.Push(new UserCommands(
-                      _ => { activeFigure.Geometric.Scale(new Point(2, 2)); },
-                      _ => { activeFigure.Geometric.Scale(new Point(0.5, 0.5)); }));
-               //if (ActiveLayer.Figures.Count != 0)
-               //   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
-            }
-         }, isModifyingAvailable);
-         palletCommands.Add(scaleFigure);
-         return scaleFigure;
-      }
-   }
+   //            activeFigure.Geometric.Scale(new Point(2, 2));
+   //            UndoStack.Push(new UserCommands(
+   //                   _ => { activeFigure.Geometric.Scale(new Point(2, 2)); },
+   //                   _ => { activeFigure.Geometric.Scale(new Point(0.5, 0.5)); }));
+   //            //if (ActiveLayer.Figures.Count != 0)
+   //            //   ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
+   //         }
+   //      }, isModifyingAvailable);
+   //      palletCommands.Add(scaleFigure);
+   //      return scaleFigure;
+   //   }
+   //}
 
-   private RelayCommand rotateFigure;
-   public RelayCommand RotateFigure
-   {
-      get
-      {
-         rotateFigure ??= new RelayCommand(_ =>
-         {
-            if (activeFigure != null)
-            {
-               RedoStack.Clear();
+   //private RelayCommand rotateFigure;
+   //public RelayCommand RotateFigure
+   //{
+   //   get
+   //   {
+   //      rotateFigure ??= new RelayCommand(_ =>
+   //      {
+   //         if (activeFigure != null)
+   //         {
+   //            RedoStack.Clear();
 
-               switchButtonSelection(rotateFigure, palletCommands);
+   //            switchButtonSelection(rotateFigure, palletCommands);
 
-               activeFigure.Geometric.Rotate(30);
-               ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = activeFigure;
-               UndoStack.Push(new UserCommands(_ => { activeFigure.Geometric.Rotate(30); },
-                      _ => { activeFigure.Geometric.Rotate(-30); }));
-               if (ActiveLayer.Figures.Count != 0)
-                  ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
-            }
-         }, isModifyingAvailable);
-         palletCommands.Add(rotateFigure);
-         return rotateFigure;
-      }
-   }
+   //            activeFigure.Geometric.Rotate(30);
+   //            ActiveLayer.Figures[ActiveLayer.Figures.Count - 1] = activeFigure;
+   //            UndoStack.Push(new UserCommands(_ => { activeFigure.Geometric.Rotate(30); },
+   //                   _ => { activeFigure.Geometric.Rotate(-30); }));
+   //            if (ActiveLayer.Figures.Count != 0)
+   //               ActiveLayer.Figures.Move(0, 0); // simulation of a collection change 
+   //         }
+   //      }, isModifyingAvailable);
+   //      palletCommands.Add(rotateFigure);
+   //      return rotateFigure;
+   //   }
+   //}
 
    private RelayCommand deleteFigure;
    public RelayCommand DeleteFigure
