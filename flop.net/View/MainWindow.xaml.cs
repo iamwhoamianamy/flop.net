@@ -88,6 +88,51 @@ namespace flop.net
          Open.MouseLeftButtonDown += OpenOnMouseLeftButtonDown;
          DrawAll();
       }
+      private void MainWindowVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+      {
+         if (MainWindowVM.ActiveFigure is not null)
+         {
+            if (MainWindowVM.WorkingMode == ViewMode.Moving)
+            {
+               var center = mainWindowVM.ActiveFigure.Geometric.BoundingBox.Center;
+               MovingThumb.Margin = new Thickness(center.X, center.Y, -center.X, -center.Y);
+               MovingThumb.Visibility = Visibility.Visible;
+            }
+            else
+            {
+               MovingThumb.Visibility = Visibility.Hidden;
+            }
+
+            if (MainWindowVM.WorkingMode == ViewMode.Rotating)
+            {
+               var center = mainWindowVM.ActiveFigure.Geometric.BoundingBoxRotated.BotCenter;
+               RotatingThumb.Margin = new Thickness(center.X, center.Y, -center.X, -center.Y);
+               RotatingThumb.Visibility = Visibility.Visible;
+            }
+            else
+            {
+               RotatingThumb.Visibility = Visibility.Hidden;
+            }
+
+            if (MainWindowVM.WorkingMode == ViewMode.Scaling)
+            {
+               scalingThumbs.Visibility = Visibility.Visible;
+               scalingThumbs.Box = MainWindowVM.ActiveFigure.Geometric.BoundingBox;
+            }
+            else
+            {
+               scalingThumbs.Visibility = Visibility.Hidden;
+            }
+         }
+         else
+         {
+            MovingThumb.Visibility = Visibility.Hidden;
+            RotatingThumb.Visibility = Visibility.Hidden;
+            scalingThumbs.Visibility = Visibility.Hidden;
+         }
+
+         DrawAll();
+      }
 
       private void TempDrawingParametrs_PropertyChanged(object sender, PropertyChangedEventArgs e)
       {
@@ -241,52 +286,7 @@ namespace flop.net
             previousVertical = 0;
             WorkingMode = ViewMode.Default;
          }
-      }
-      private void MainWindowVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
-      {
-         if(MainWindowVM.ActiveFigure is not null)
-         {
-            if (MainWindowVM.WorkingMode == ViewMode.Moving)
-            {
-               var center = mainWindowVM.ActiveFigure.Geometric.BoundingBox.Center;
-               MovingThumb.Margin = new Thickness(center.X, center.Y, -center.X, -center.Y);
-               MovingThumb.Visibility = Visibility.Visible;
-            }
-            else
-            {
-               MovingThumb.Visibility = Visibility.Hidden;
-            }
-
-            if (MainWindowVM.WorkingMode == ViewMode.Rotating)
-            {
-               var box = mainWindowVM.ActiveFigure.Geometric.BoundingBoxRotated;
-               RotatingThumb.Margin = new Thickness(box.TopCenter.X, box.TopCenter.Y, -box.TopCenter.X, -box.TopCenter.Y);
-               RotatingThumb.Visibility = Visibility.Visible;
-            }
-            else
-            {
-               RotatingThumb.Visibility = Visibility.Hidden;
-            }
-
-            if (MainWindowVM.WorkingMode == ViewMode.Scaling)
-            {
-               scalingThumbs.Visibility = Visibility.Visible;
-               scalingThumbs.Box = MainWindowVM.ActiveFigure.Geometric.BoundingBox;
-            }
-            else
-            {
-               scalingThumbs.Visibility = Visibility.Hidden;
-            }
-         }
-         else
-         {
-            MovingThumb.Visibility = Visibility.Hidden;
-            RotatingThumb.Visibility = Visibility.Hidden;
-            scalingThumbs.Visibility = Visibility.Hidden;
-         }
-
-         DrawAll();
-      }
+      }      
       private void InitMovingThumb()
       {
          MovingThumb = new Thumb();
@@ -455,6 +455,7 @@ namespace flop.net
             MainCanvas.Children.Add(thumb);
          }
       }
+      private bool polylineStarted;
       private void OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
       {
          MousePosition1 = e.GetPosition(MainCanvas);
@@ -466,16 +467,21 @@ namespace flop.net
             WorkingMode = ViewMode.Creation;
          }
          if (mainWindowVM.WorkingMode == ViewMode.PolylineCreation &&
-            WorkingMode == ViewMode.Default)
+            WorkingMode == ViewMode.Default && !polylineStarted)
          {
-            mainWindowVM.BeginFigureCreation.Execute(null);
+            mainWindowVM.BeginFigureCreation.Execute(MousePosition1);
             WorkingMode = ViewMode.PolylineCreation;
+            polylineStarted = false;
          }
          if (mainWindowVM.WorkingMode == ViewMode.PencilDrawing &&
             WorkingMode == ViewMode.Default)
          {
-            mainWindowVM.BeginFigureCreation.Execute(null);
+            mainWindowVM.BeginFigureCreation.Execute(MousePosition1);
             WorkingMode = ViewMode.PencilDrawing;
+         }
+         if (WorkingMode == ViewMode.PolylineCreation && polylineStarted)
+         {
+            mainWindowVM.OnPolylineCreation.Execute(e.GetPosition(MainCanvas));
          }
       }
       private void OnPreviewMouseMove(object sender, MouseEventArgs e)
@@ -487,8 +493,8 @@ namespace flop.net
          }
          if (mainWindowVM.WorkingMode == ViewMode.PolylineCreation &&
             WorkingMode == ViewMode.PolylineCreation)
-         {
-            mainWindowVM.OnFigureCreation.Execute((MousePosition1, e.GetPosition(MainCanvas)));
+         {            
+            polylineStarted = true;
          }
          if (mainWindowVM.WorkingMode == ViewMode.PencilDrawing &&
             WorkingMode == ViewMode.PencilDrawing)
@@ -496,27 +502,27 @@ namespace flop.net
             mainWindowVM.OnFigureCreation.Execute((MousePosition1, e.GetPosition(MainCanvas)));
          }
 
-         
-         if (e.LeftButton == MouseButtonState.Released)
+         if (e.LeftButton == MouseButtonState.Released && 
+            ((mainWindowVM.WorkingMode == ViewMode.Creation && WorkingMode == ViewMode.Creation) ||
+            (mainWindowVM.WorkingMode == ViewMode.PencilDrawing && WorkingMode == ViewMode.PencilDrawing)))
          {
-            bool creation = (mainWindowVM.WorkingMode == ViewMode.Creation && WorkingMode == ViewMode.Creation) ||
-                         (mainWindowVM.WorkingMode == ViewMode.PencilDrawing && WorkingMode == ViewMode.PencilDrawing);
-
-            if (creation)
-            {
-               WorkingMode = ViewMode.Default;
-               mainWindowVM.OnFigureCreationFinished.Execute(null);
-            }
-            if(mainWindowVM.WorkingMode == ViewMode.PolylineCreation && WorkingMode == ViewMode.PolylineCreation)
-            {
-               mainWindowVM.OnFigureCreationFinished.Execute(null);
-            }            
+            WorkingMode = ViewMode.Default;
+            mainWindowVM.OnFigureCreationFinished.Execute(null);
          }
 
       }
       private void OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
       {
-         mainWindowVM.SetActiveFigure.Execute(e.GetPosition(MainCanvas));         
+         if (WorkingMode == ViewMode.PolylineCreation) 
+         {
+            mainWindowVM.OnFigureCreationFinished.Execute(null);
+            WorkingMode = ViewMode.Default;
+            polylineStarted = false;
+         }
+         else
+         {
+            mainWindowVM.SetActiveFigure.Execute(e.GetPosition(MainCanvas));
+         }
       }
       public event PropertyChangedEventHandler PropertyChanged;
 

@@ -458,7 +458,9 @@ public class MainWindowVM : INotifyPropertyChanged
                   ActiveFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
                   break;
                case FigureCreationMode.Pencil:
-                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1].Geometric.AddPoint(points.Value.Item1);
+                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1].Geometric.Points = 
+                  ActiveLayer.Figures[ActiveLayer.Figures.Count - 1].Geometric.AddPoint(points.Value.Item2).Points;
+                  ActiveFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
                   break;
                case FigureCreationMode.Rectangle:
                   ActiveLayer.Figures[ActiveLayer.Figures.Count - 1]
@@ -479,7 +481,9 @@ public class MainWindowVM : INotifyPropertyChanged
          {
             var point = obj as Point?;
 
-            ActiveLayer.Figures[ActiveLayer.Figures.Count - 1].Geometric.AddPoint(point.Value);
+            ActiveLayer.Figures[ActiveLayer.Figures.Count - 1].Geometric.Points = 
+            ActiveLayer.Figures[ActiveLayer.Figures.Count - 1].Geometric.AddPoint(point.Value).Points;
+            ActiveFigure = ActiveLayer.Figures[ActiveLayer.Figures.Count - 1];
          });
       }
    }

@@ -13,10 +13,6 @@
                 Title="flop.net" Height="800" Width="1000"
                 Name="MainWin"
                 d:DataContext="{Binding ElementName=MainWin, Path=MainWindowVM}">
-  <Window.Resources>
-    <view:MultiplyConverter x:Key="MultiplyConverter" />
-  </Window.Resources>
-  
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
@@ -365,37 +361,11 @@
                 PreviewMouseLeftButtonDown="OnPreviewMouseDown"
                 PreviewMouseMove="OnPreviewMouseMove"
                 PreviewMouseRightButtonDown="OnPreviewMouseRightButtonDown">
-      <Canvas x:Name="CoordinateCanvas"
-              Background="White"
-              ClipToBounds="True"
-              >
-        <Canvas x:Name="MainCanvas"            
-            >
-          <!--Место для вашей рекламы-->
-          <Canvas.RenderTransform>
-            <TransformGroup>
-              <TranslateTransform x:Name="translate">
-                <TranslateTransform.X>
-                  <Binding ElementName="CoordinateCanvas" 
-                           Path="ActualWidth"
-                           Converter="{StaticResource MultiplyConverter}" 
-                           ConverterParameter="0,5" />
-                </TranslateTransform.X>
-                <TranslateTransform.Y>
-                  <Binding ElementName="CoordinateCanvas" 
-                           Path="ActualHeight"
-                           Converter="{StaticResource MultiplyConverter}"
-                           ConverterParameter="0,5" />
-                </TranslateTransform.Y>
-              </TranslateTransform>
-              <ScaleTransform ScaleX="1" ScaleY="-1"
-                              CenterX="{Binding ElementName=translate,Path=X}"
-                              CenterY="{Binding ElementName=translate,Path=Y}" />
-            </TransformGroup>
-          </Canvas.RenderTransform>
-        </Canvas>
+      <Canvas x:Name="MainCanvas"
+                Background="White"
+                ClipToBounds="True">
+        <!--Место для вашей рекламы-->
       </Canvas>
-
     </UserControl>
 
 

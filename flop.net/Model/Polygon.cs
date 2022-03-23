@@ -10,7 +10,7 @@ namespace flop.net.Model
    {
       public double RotationAngle { get; private set; }
       
-      public PointCollection Points { get; private set; }
+      public PointCollection Points { get; set; }
 
       public Point Center { get 
          {
