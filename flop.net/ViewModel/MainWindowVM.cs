@@ -126,7 +126,8 @@ public class MainWindowVM : INotifyPropertyChanged
 
             ActiveFigure = null;
 
-            foreach (var figure in ActiveLayer.Figures)
+            var ReverseFiguresList = ActiveLayer.Figures.Reverse<Figure>();
+            foreach (var figure in ReverseFiguresList)
             {
                if (figure.Geometric.IsIn(mouseCoords.Value, 1e-1))
                {
