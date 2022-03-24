@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:r="urn:fluent-ribbon">
+    <Style x:Key="RibbonMenuButton" TargetType="{x:Type r:ToggleButton}">
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Header" Value="{Binding Header, RelativeSource={RelativeSource TemplatedParent}}" />
+        <Setter Property="Icon" Value="/Images/icon.ico" />
+    </Style>
+</ResourceDictionary>
