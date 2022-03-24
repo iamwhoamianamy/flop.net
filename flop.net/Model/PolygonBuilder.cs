@@ -21,7 +21,7 @@ namespace flop.net.Model
       public static Polygon CreateTriangle(Point pointA, Point pointB)
       {
          PointCollection points;
-         if (pointA.Y > pointB.Y)
+         if (pointA.Y < pointB.Y)
          {
             points = new PointCollection()
             {
@@ -64,7 +64,7 @@ namespace flop.net.Model
          double w = Math.Abs(pointA.X - pointB.X);
          if(pointCount == null)
          {
-            pointCount = (int)Math.Sqrt(Math.Round(4 * (Math.PI * h * w + (w - h) * (w - h)) / (w + h)) * 2);
+            pointCount = (int)Math.Sqrt(Math.Round(4 * (Math.PI * h * w + (w - h) * (w - h)) / (w + h)) * 2) * 2;
          }
 
          if (pointCount.Value < 3)
@@ -76,7 +76,7 @@ namespace flop.net.Model
             double y = Math.Sin(2 * Math.PI * i / Convert.ToDouble(pointCount)) * h / 2 + center.Y;
             points.Add(new Point(x, y));
          }
-         return new Ellipse(points, h, w);
+         return new Polygon(points, true);
       }
 
       public static Polygon CreateCircle(Point center, double radius)
@@ -89,7 +89,7 @@ namespace flop.net.Model
             double y = Math.Sin(2 * Math.PI * i / pointCount) * radius + center.Y;
             points.Add(new Point(x, y));
          }
-         return new Ellipse(points, 2*radius, 2*radius);
+         return new Polygon(points, true);
       }
 
       public static Polygon CreatePolyline(Point pointA, Point pointB)
