@@ -14,10 +14,10 @@ namespace flop.net.Model
       private double Width { get; set; }
       public Ellipse() : base() { }
 
-      public Ellipse(PointCollection points) : base(points, true) 
+      public Ellipse(PointCollection points, double height, double width) : base(points, true) 
       {
-         Height = points.Max(x => x.Y) - points.Min(x => x.Y);
-         Width = points.Max(x => x.X) - points.Min(x => x.X);
+         Height = height;
+         Width = width;
       }
 
       public override void Scale(Point scale, Point? scalePoint = null)
